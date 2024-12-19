@@ -18,31 +18,36 @@ class Logger {
 		struct tm tmbuf;
 		time_t now = time (NULL);
 		localtime_s (&tmbuf, &now);
-		strftime (timestrbuf, sizeof(timestrbuf), "%d-%m-%Y %X", &tmbuf);
+		strftime (timestrbuf, sizeof (timestrbuf), "%d-%m-%Y %X", &tmbuf);
 		return std::string {timestrbuf};
 	}
 
 	template<typename... _Args>
-	void dowrite (std::format_string<_Args...> __fmt, _Args&&... __args) {
-		std::string msg = std::format ("{} | {}{}\n",
+	std::string make_message (const std::string& prefix, std::format_string<_Args...> __fmt, _Args&&... __args) {
+		return std::format ("{} | {}{}{}\n",
 			get_date_time(),
-			std::string(depth, '\t'),
+			std::string (depth, '\t'),
+			prefix,
 			std::format (__fmt, std::forward<_Args>(__args)...));
-		std::print(logfile, "{}", msg);
-		if (console) std::print("{}", msg);
+	}
+
+	inline void dowrite (const std::string msg, bool to_stderr = false) {
+		std::print (logfile, "{}", msg);
+		if (console && !to_stderr) std::print ("{}", msg);
+		if (to_stderr) std::print(stderr, "{}", msg);
 	}
 
 public:
 	Logger (const char *filename) : name(filename) {
 		logfile = fopen (filename, "w");
 		if (!logfile)
-			throw std::runtime_error(std::format("Can't open {} for write", name));
-		dowrite ("Created log {}", name);
+			throw std::runtime_error (make_message ("", "Can't open {} for write", name));
+		dowrite (make_message ("", "Created log {}", name));
 	}
 
 	~Logger () {
 		depth = 1;
-		dowrite ("Closing log {}", name);
+		dowrite (make_message ("", "Closing log {}", name));
 		fclose (logfile);
 	}
 
@@ -50,7 +55,7 @@ public:
 	inline void inc_depth () { if (depth < 8) depth++; }
 	inline void dec_depth () { if (depth > 1) depth--; }
 
-#define DOWRITE { dowrite (__fmt, std::forward<_Args>(__args)...); }
+#define DOWRITE { dowrite (make_message ("", __fmt, std::forward<_Args>(__args)...)); }
 #define LOGGER_FUNCTION(name) template<typename... _Args> void name (std::format_string<_Args...> __fmt, _Args&&... __args)
 
 	LOGGER_FUNCTION(write)  {
@@ -59,17 +64,36 @@ public:
 
 	LOGGER_FUNCTION(write_inc)  { // print and increase depth
 		DOWRITE;
-		inc_depth ();
+		inc_depth();
+	}
+
+	LOGGER_FUNCTION(inc_write)  { // increase depth and print
+		inc_depth();
+		DOWRITE;
 	}
 
 	LOGGER_FUNCTION(write_dec)  { // print and decrease depth
 		DOWRITE;
-		dec_depth ();
+		dec_depth();
 	}
 
 	LOGGER_FUNCTION(dec_write)  { // decrease depth and print
-		dec_depth ();
+		dec_depth();
 		DOWRITE;
+	}
+
+	LOGGER_FUNCTION(warn) {
+		auto depth_save = depth;
+		depth = 1;
+		dowrite (make_message ("WARN: ", __fmt, std::forward<_Args>(__args)...), true);
+		depth = depth_save;
+	}
+
+	LOGGER_FUNCTION(fatal) {
+		depth = 1;
+		std::string msg = make_message ("ERROR: ", __fmt, std::forward<_Args>(__args)...);
+		dowrite (msg, true);
+		throw std::runtime_error (msg);
 	}
 
 #undef LOGGER_FUNCTION
