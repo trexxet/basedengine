@@ -5,6 +5,7 @@ set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
+	Window.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)
 

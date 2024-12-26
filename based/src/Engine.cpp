@@ -1,3 +1,5 @@
+#include "Engine.hpp"
+
 #define IMPLEMENT
 #include "Logger.hpp"
 #undef IMPLEMENT
