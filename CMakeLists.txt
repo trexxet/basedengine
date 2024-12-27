@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 include(cmake/getSDL.cmake)
 include(cmake/getLua.cmake)
+include(cmake/getSol.cmake)
 
 add_subdirectory(based)
 add_subdirectory(demo)

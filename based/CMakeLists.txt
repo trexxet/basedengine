@@ -5,6 +5,7 @@ set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
+	LuaFile.cpp
 	Window.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)
@@ -14,6 +15,7 @@ target_include_directories(based PUBLIC include/)
 
 target_link_libraries(based PUBLIC 
 	SDL3::SDL3
-	lua
+	lua::lua
+	sol2::sol2
 	-lstdc++exp
 )

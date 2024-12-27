@@ -57,3 +57,7 @@ if(WIN32)
 	target_compile_definitions(lua PRIVATE LUA_BUILD_AS_DLL)
 endif()
 target_include_directories(lua INTERFACE ${LUA_PREFIX_INCLUDE})
+set_target_properties(lua PROPERTIES VERSION 5.4.7 SOVERSION 547)
+set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
+add_library(lua::lua ALIAS lua)
+
