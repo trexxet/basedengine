@@ -8,4 +8,12 @@ namespace Based {
 
 Logger log ("log.txt");
 
+Engine::_Lua::_Lua () {
+
+}
+
+Engine::_Lua::~_Lua () {
+
+}
+
 }

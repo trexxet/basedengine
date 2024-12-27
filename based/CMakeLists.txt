@@ -14,5 +14,6 @@ target_include_directories(based PUBLIC include/)
 
 target_link_libraries(based PUBLIC 
 	SDL3::SDL3
+	lua
 	-lstdc++exp
 )
