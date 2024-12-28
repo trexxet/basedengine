@@ -1,4 +1,7 @@
 #include "LuaFile.hpp"
+
+#include <filesystem>
+
 #include "Logger.hpp"
 
 namespace Based {
@@ -13,6 +16,16 @@ File::File (const std::string &filename) : name(filename) {
 		log.fatal ("Error while executing Lua file {}: {}", filename, e.what());
 	}
 	log.write ("Loaded Lua file {}", filename);
+}
+
+File File::loadIfExists (const std::string &filename, const std::string &fallbackFilename)
+{
+	if (std::filesystem::exists (filename))
+		return File (filename);
+	else {
+		log.write ("Can't find lua file {}, fallback to {}", filename, fallbackFilename);
+		return File (fallbackFilename);
+	}
 }
 
 }
