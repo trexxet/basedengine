@@ -1,10 +1,3 @@
 -- The default game configuration file.
 
-Config = {
-	screen = {
-		width = 800,
-		height = 600
-	}
-}
-
-return Config
+window = Size2D.new(800, 600)

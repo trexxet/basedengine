@@ -4,7 +4,8 @@ namespace Based {
 
 template <typename T>
 struct Point2D {
-	T x, y;
+	union { T x, width; };
+	union { T y, height; };
 
 	template<typename U>
 	inline bool operator== (const Point2D<U> &compar) const {
@@ -28,11 +29,11 @@ struct Point2D {
 		x -= source.x;
 		y -= source.y;
 	}
+
+	Point2D (T _x, T _y) : x(_x), y(_y) {}
 };
 
 template <typename T>
-struct Size2D {
-	T width, height;
-};
+using Size2D = Point2D<T>;
 
 }

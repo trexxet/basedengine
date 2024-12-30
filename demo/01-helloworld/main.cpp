@@ -9,18 +9,17 @@
 
 #define CONFIG_PATH "../cfg/01-helloworld/config.lua"
 
-int main(int argv, char** args) {
+int main (int argv, char** args) {
 	Based::log.console = true;
 	Based::log.write ("Demo 01-helloworld");
 
-	Based::Lua::File conf (CONFIG_PATH);
-	sol::table screen_conf = conf["Config"]["screen"];
-	Based::Size2D<int> screen {screen_conf["width"], screen_conf["height"]}; 
+	Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
+	Based::Size2D<int> window = conf["window"]; 
 
 	Based::Engine engine;
 
 	Based::EngineClient client;
-	client.create_window ("Based hello world", screen.width, screen.height);
+	client.create_window ("Based hello world", window.width, window.height);
 
 	return 0;
 }
