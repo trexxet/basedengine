@@ -17,7 +17,7 @@ class EngineClient {
 	Window window;
 public:
 	EngineClient ();
-	~EngineClient () = default;
+	~EngineClient ();
 
 	void create_window (const std::string& title, int w, int h);
 };

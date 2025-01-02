@@ -6,6 +6,7 @@ set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
 	LuaFile.cpp
+	Scene.cpp
 	Window.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)

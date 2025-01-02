@@ -1,11 +1,13 @@
+#define _BASED_IMPLEMENT
 #include "Engine.hpp"
-
-#define IMPLEMENT
 #include "Logger.hpp"
-#undef IMPLEMENT
+#include "Scene.hpp"
+#undef _BASED_IMPLEMENT
 
 namespace Based {
 
 Logger log ("log.txt");
+Engine engine;
+SceneManager sceneManager;
 
 }

@@ -4,8 +4,11 @@
 
 #include "Engine.hpp"
 #include "EngineClient.hpp"
-#include "LuaFile.hpp"
 #include "Geometry.hpp"
+#include "LuaFile.hpp"
+#include "Scene.hpp"
+
+#include "sceneMain.hpp"
 
 #define CONFIG_PATH "../cfg/01-helloworld/config.lua"
 
@@ -16,10 +19,15 @@ int main (int argv, char** args) {
 	Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
 	Based::Size2D<int> window = conf["window"]; 
 
-	Based::Engine engine;
-
 	Based::EngineClient client;
 	client.create_window ("Based hello world", window.width, window.height);
+
+	SceneMain sceneMain;
+	Based::sceneManager.currentScene = &sceneMain;
+
+	Based::sceneManager.update();
+	Based::sceneManager.render();
+	Based::sceneManager.handleEvents();
 
 	return 0;
 }

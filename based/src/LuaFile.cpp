@@ -2,8 +2,8 @@
 
 #include <filesystem>
 
-#include "Logger.hpp"
 #include "Geometry.hpp"
+#include "Logger.hpp"
 
 namespace Based::Lua {
 

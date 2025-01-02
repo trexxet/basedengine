@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 
+#include "Engine.hpp"
 #include "Logger.hpp"
 
 namespace Based {
@@ -22,6 +23,11 @@ EngineClient::_SDL::~_SDL () {
 
 EngineClient::EngineClient () {
 	sdl = std::make_unique<_SDL>();
+	engine.hasClient = true;
+}
+
+EngineClient::~EngineClient () {
+	engine.hasClient = false;
 }
 
 void EngineClient::create_window (const std::string &title, int w, int h)
