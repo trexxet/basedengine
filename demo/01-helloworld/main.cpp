@@ -19,15 +19,14 @@ int main (int argv, char** args) {
 	Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
 	Based::Size2D<int> window = conf["window"]; 
 
-	Based::EngineClient client;
-	client.create_window ("Based hello world", window.width, window.height);
+	Based::Engine engine;
+	engine.enable_client();
+	engine.client->create_window ("Based hello world", window.width, window.height);
 
 	SceneMain sceneMain;
-	Based::sceneManager.currentScene = &sceneMain;
+	engine.sceneManager.currentScene = &sceneMain;
 
-	Based::sceneManager.update();
-	Based::sceneManager.render();
-	Based::sceneManager.handleEvents();
+	while (engine.tick());
 
 	return 0;
 }

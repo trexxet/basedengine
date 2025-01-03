@@ -2,15 +2,19 @@
 
 #include <memory>
 
+#include "EngineClient.hpp"
+#include "Scene.hpp"
+
 namespace Based {
 
 class Engine {
-	friend class EngineClient;
-	bool hasClient = false;
-};
+	bool tickUpdate ();
+public:
+	std::unique_ptr<EngineClient> client {nullptr};
+	SceneManager sceneManager;
 
-#ifndef _BASED_IMPLEMENT
-extern Engine engine;
-#endif
+	void enable_client ();
+	bool tick ();
+};
 
 }

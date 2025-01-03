@@ -4,10 +4,11 @@
 
 #include "Engine.hpp"
 #include "Logger.hpp"
+#include "Scene.hpp"
 
 namespace Based {
 
-EngineClient::_SDL::_SDL () {
+EngineClient::SDL::SDL () {
 	if (!SDL_Init (SDL_INIT_VIDEO))
 		log.fatal("SDL init error: {}", SDL_GetError());
 	SDL_GL_SetAttribute (SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -17,22 +18,30 @@ EngineClient::_SDL::_SDL () {
 	log.write("SDL initialized");
 }
 
-EngineClient::_SDL::~_SDL () {
+EngineClient::SDL::~SDL () {
+	if (window)
+		window.reset();
 	SDL_Quit();
 }
 
-EngineClient::EngineClient () {
-	sdl = std::make_unique<_SDL>();
-	engine.hasClient = true;
-}
-
-EngineClient::~EngineClient () {
-	engine.hasClient = false;
+EngineClient::EngineClient (Engine *_engine) : engine(_engine) {
+	sdl = std::make_unique<SDL>();
 }
 
 void EngineClient::create_window (const std::string &title, int w, int h)
 {
-	window = std::make_unique<_Window> (title, w, h);
+	if (sdl->window)
+		log.fatal ("Can't create multiple windows!");
+	sdl->window = std::make_unique<Window> (title, w, h);
+}
+
+bool EngineClient::tickEvents () {
+	engine->sceneManager.handle_events();
+	return false;
+}
+
+void EngineClient::tickRender () {
+	engine->sceneManager.render();
 }
 
 }

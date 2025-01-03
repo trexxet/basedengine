@@ -6,19 +6,22 @@
 
 namespace Based {
 
+class Engine;
 class EngineClient {
-	struct _SDL {
-		_SDL ();
-		~_SDL ();
+	friend class Engine;
+	Engine *engine = nullptr;
+
+	struct SDL {
+		SDL ();
+		~SDL ();
+		std::unique_ptr<Window> window {nullptr};
 	};
-	using SDL = std::unique_ptr<_SDL>;
-	SDL sdl;
+	std::unique_ptr<SDL> sdl {nullptr};
 
-	Window window;
+	bool tickEvents ();
+	void tickRender ();
 public:
-	EngineClient ();
-	~EngineClient ();
-
+	EngineClient (Engine *_engine);
 	void create_window (const std::string& title, int w, int h);
 };
 
