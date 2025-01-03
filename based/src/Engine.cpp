@@ -28,8 +28,7 @@ bool Engine::tick () {
 }
 
 bool Engine::tickUpdate () {
-	sceneManager.update();
-	return false;
+	return sceneManager.update();
 }
 
 }

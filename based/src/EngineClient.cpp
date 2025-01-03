@@ -36,8 +36,21 @@ void EngineClient::create_window (const std::string &title, int w, int h)
 }
 
 bool EngineClient::tickEvents () {
-	engine->sceneManager.handle_events();
-	return false;
+	bool result = true;
+
+	SDL_Event event;
+	while (SDL_PollEvent (&event)) {
+		switch (event.type) {
+			[[unlikely]]
+			case SDL_EVENT_QUIT:
+				result = false;
+				break;
+			default: break;
+		}
+		result &= engine->sceneManager.handle_events (&event);
+	}
+
+	return result;
 }
 
 void EngineClient::tickRender () {

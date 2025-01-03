@@ -1,18 +1,20 @@
 #pragma once
 
+#include <SDL3/SDL_events.h>
+
 namespace Based {
 
 class Scene {
 public:
-	virtual void handle_events () = 0;
-	virtual void update () = 0;
+	virtual bool handle_events (SDL_Event *event) = 0;
+	virtual bool update () = 0;
 	virtual void render () = 0;
 };
 
 struct SceneManager {
 	Scene *currentScene = nullptr;
-	void handle_events ();
-	void update ();
+	bool handle_events (SDL_Event *event);
+	bool update ();
 	void render ();
 };
 

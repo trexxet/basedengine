@@ -2,12 +2,13 @@
 
 #include "Logger.hpp"
 
-void SceneMain::handle_events () {
-	Based::log.write ("Scene main events");
+bool SceneMain::handle_events (SDL_Event *event) {
+	return true;
 }
 
-void SceneMain::update () {
+bool SceneMain::update () {
 	Based::log.write ("Scene main update");
+	return true;
 }
 
 void SceneMain::render () {

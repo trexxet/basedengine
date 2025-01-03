@@ -4,7 +4,7 @@
 
 class SceneMain : public Based::Scene {
 public:
-	void handle_events () override final;
-	void update () override final;
+	bool handle_events (SDL_Event *event) override final;
+	bool update () override final;
 	void render () override final;
 };

@@ -2,14 +2,16 @@
 
 namespace Based {
 
-void SceneManager::handle_events () {
+bool SceneManager::handle_events (SDL_Event *event) {
 	if (currentScene)
-		currentScene->handle_events();
+		return currentScene->handle_events (event);
+	return false;
 }
 
-void SceneManager::update () {
+bool SceneManager::update () {
 	if (currentScene)
-		currentScene->update();
+		return currentScene->update();
+	return false;
 }
 
 void SceneManager::render () {
