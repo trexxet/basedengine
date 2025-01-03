@@ -7,10 +7,10 @@ bool SceneMain::handle_events (SDL_Event *event) {
 }
 
 bool SceneMain::update () {
-	Based::log.write ("Scene main update");
+	//Based::log.write ("Scene main update");
 	return true;
 }
 
 void SceneMain::render () {
-	Based::log.write ("Scene main render");
+	//Based::log.write ("Scene main render");
 }

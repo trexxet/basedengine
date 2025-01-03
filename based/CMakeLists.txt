@@ -15,6 +15,7 @@ target_sources(based PRIVATE ${BASED_SOURCES})
 target_include_directories(based PUBLIC include/)
 
 target_link_libraries(based PUBLIC 
+	glad
 	SDL3::SDL3
 	lua::lua
 	sol2::sol2
