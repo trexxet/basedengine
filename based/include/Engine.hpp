@@ -13,6 +13,8 @@ public:
 	std::unique_ptr<EngineClient> client {nullptr};
 	SceneManager sceneManager;
 
+	Engine ();
+
 	void enable_client ();
 	bool tick ();
 };

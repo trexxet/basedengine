@@ -7,7 +7,8 @@
 namespace Based {
 
 struct Window {
-	SDL_Window *sdl_window;
+	SDL_Window *sdlWindow;
+	void render ();
 
 	Window (const std::string& title, int w, int h);
 	~Window ();

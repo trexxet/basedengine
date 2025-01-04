@@ -9,8 +9,9 @@
 * To be continued
 
 ## Components
-* OpenGL 3.3
-* SDL 3.0
+* OpenGL >= 3.3
+* glad 2.0.8
+* SDL 3.1.7
 * Lua 5.4.7
 * Sol 3.3.0
 * Nuklear
