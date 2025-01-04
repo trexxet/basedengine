@@ -40,25 +40,30 @@ void EngineClient::create_window (const std::string &title, int w, int h)
 }
 
 bool EngineClient::tickEvents () {
-	bool result = true;
-
+	bool keepRunning = true;
 	SDL_Event event;
+	nk_context *nk_ctx = sdl->window->nk->ctx;
+
+	nk_input_begin (nk_ctx);
 	while (SDL_PollEvent (&event)) {
 		switch (event.type) {
 			[[unlikely]]
 			case SDL_EVENT_QUIT:
-				result = false;
+				keepRunning = false;
 				break;
-			default: break;
+			default:
+				nk_sdl_handle_event (&event);
 		}
-		result &= engine->sceneManager.handle_events (&event);
+		keepRunning &= engine->sceneManager.handle_events (&event);
 	}
+	nk_input_end (nk_ctx);
 
-	return result;
+	return keepRunning;
 }
 
 void EngineClient::tickRender () {
-	engine->sceneManager.render();
+	glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	engine->sceneManager.render(sdl->window.get());
 	sdl->window->render();
 }
 

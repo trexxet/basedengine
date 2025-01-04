@@ -8,6 +8,7 @@ set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
 	LuaFile.cpp
+	NuklearImplement.c
 	Scene.cpp
 	Window.cpp
 )
@@ -21,5 +22,6 @@ target_link_libraries(based PUBLIC
 	SDL3::SDL3
 	lua::lua
 	sol2::sol2
+	nuklear::nk
 	-lstdc++exp
 )

@@ -13,8 +13,8 @@
 * glad 2.0.8
 * SDL 3.1.7
 * Lua 5.4.7
-* Sol 3.3.0
-* Nuklear
+* Sol 3.2.3
+* Nuklear 4.12.3
 
 #### Code style (which I may forget)
 * Tabs are used for indentation. Spaces are used for alignment. Thus, tab width is not important.

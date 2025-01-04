@@ -14,9 +14,9 @@ bool SceneManager::update () {
 	return false;
 }
 
-void SceneManager::render () {
+void SceneManager::render (Window* window) {
 	if (currentScene)
-		currentScene->render();
+		currentScene->render(window);
 }
 
 }

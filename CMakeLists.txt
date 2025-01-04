@@ -8,6 +8,7 @@ include(cmake/getGlad.cmake)
 include(cmake/getSDL.cmake)
 include(cmake/getLua.cmake)
 include(cmake/getSol.cmake)
+include(cmake/getNuklear.cmake)
 
 add_subdirectory(based)
 add_subdirectory(demo)
