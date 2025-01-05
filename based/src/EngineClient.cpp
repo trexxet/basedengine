@@ -10,16 +10,16 @@ namespace Based {
 
 EngineClient::SDL::SDL () {
 	if (!SDL_Init (SDL_INIT_VIDEO))
-		log.fatal("SDL init error: {}", SDL_GetError());
+		log.fatal ("SDL init error: {}", SDL_GetError());
 	SDL_GL_SetAttribute (SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute (SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute (SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 	SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
 	int sdlVersion = SDL_GetVersion();
 	log.write("SDL {}.{}.{} initialized",
-	          SDL_VERSIONNUM_MAJOR(sdlVersion),
-	          SDL_VERSIONNUM_MINOR(sdlVersion),
-	          SDL_VERSIONNUM_MICRO(sdlVersion));
+	          SDL_VERSIONNUM_MAJOR (sdlVersion),
+	          SDL_VERSIONNUM_MINOR (sdlVersion),
+	          SDL_VERSIONNUM_MICRO (sdlVersion));
 }
 
 EngineClient::SDL::~SDL () {
@@ -32,11 +32,11 @@ EngineClient::EngineClient (Engine *_engine) : engine(_engine) {
 	sdl = std::make_unique<SDL>();
 }
 
-void EngineClient::create_window (const std::string &title, int w, int h)
+void EngineClient::create_window (const std::string &title, const Size2D<int>& size)
 {
 	if (sdl->window)
 		log.fatal ("Can't create multiple windows!");
-	sdl->window = std::make_unique<Window> (title, w, h);
+	sdl->window = std::make_unique<Window> (title, size);
 }
 
 bool EngineClient::tickEvents () {
@@ -63,7 +63,7 @@ bool EngineClient::tickEvents () {
 
 void EngineClient::tickRender () {
 	glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	engine->sceneManager.render(sdl->window.get());
+	engine->sceneManager.render (window());
 	sdl->window->render();
 }
 

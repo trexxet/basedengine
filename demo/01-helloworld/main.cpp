@@ -14,16 +14,16 @@
 
 int main (int argv, char** args) {
 	Based::log.console = true;
-	Based::log.write ("Demo 01-helloworld");
+	Based::log.write (DEMO_NAME);
 
 	Based::Engine engine;
 	engine.enable_client();
 
 	Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
-	Based::Size2D<int> window = conf["window"]; 
-	engine.client->create_window ("Based hello world", window.width, window.height);
+	Based::Size2D<int> windowSize = conf["window"]; 
+	engine.client->create_window (DEMO_NAME, windowSize);
 
-	SceneMain sceneMain;
+	SceneMain sceneMain (engine.client->window(), conf);
 	engine.sceneManager.currentScene = &sceneMain;
 
 	while (engine.tick());

@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "Geometry.hpp"
 #include "Window.hpp"
 
 namespace Based {
@@ -22,7 +23,8 @@ class EngineClient {
 	void tickRender ();
 public:
 	EngineClient (Engine *_engine);
-	void create_window (const std::string& title, int w, int h);
+	void create_window (const std::string& title, const Size2D<int>& size);
+	inline Window* window () { return sdl->window.get(); } 
 };
 
 }
