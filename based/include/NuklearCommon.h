@@ -22,7 +22,3 @@ extern "C" {
 
 #define NK_MAX_VERTEX_MEMORY 512 * 1024
 #define NK_MAX_ELEMENT_MEMORY 128 * 1024
-
-#ifndef NK_IMPLEMENT
-extern struct nk_color NK_COLOR_TRANSPARENT;
-#endif

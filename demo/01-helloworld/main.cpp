@@ -26,6 +26,7 @@ int main (int argv, char** args) {
 	SceneMain sceneMain (engine.client->window(), conf);
 	engine.sceneManager.currentScene = &sceneMain;
 
+	Based::log.write ("Starting main loop");
 	while (engine.tick());
 
 	return 0;

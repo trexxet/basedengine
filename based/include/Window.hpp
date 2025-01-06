@@ -12,7 +12,8 @@ namespace Based {
 
 struct Window {
 	SDL_Window *sdlWindow;
-	Size2D<int> size {0, 0};
+	Size2D<int> size;
+	Rect2D<int> rect;
 
 	struct Nk {
 		nk_context *ctx;

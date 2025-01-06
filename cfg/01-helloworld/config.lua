@@ -1,4 +1,6 @@
 -- The default game configuration file.
 
 window = Size2D.new(800, 600)
-labelSize = Size2D.new(200, 20)
+
+labelRect = Rect2D.new(Size2D.new(150, 20))
+labelRect:centrify(Rect2D.new(window))

@@ -36,13 +36,30 @@ File File::loadIfExists (const std::string &filename,
 
 void File::bindBasedTypes (BindTypes types) {
 	if (types & BindTypes::Geometry) {
-		auto bindGeometry = [this] <template <typename> class C1, typename C2> (const std::string& name) {
-			this->state.new_usertype<C1<C2>>(name, sol::constructors<C1<C2>(C2, C2)>());
+		// Point2D, Size2D
+		auto bindGeometryP2D = [this] <template <typename> class C1, typename C2> (const std::string& name) {
+			this->state.new_usertype<C1<C2>>(name, sol::constructors<
+				C1<C2>(),
+				C1<C2>(C2, C2)>()
+			);
 		};
-		bindGeometry.operator()<Point2D, int> ("Point2D");
-		bindGeometry.operator()<Size2D, int> ("Size2D");
-		bindGeometry.operator()<Point2D, double> ("Point2Dd");
-		bindGeometry.operator()<Size2D, double> ("Size2Dd");
+		bindGeometryP2D.operator()<Point2D, int> ("Point2D");
+		bindGeometryP2D.operator()<Size2D, int> ("Size2D");
+		bindGeometryP2D.operator()<Point2D, double> ("Point2Dd");
+		bindGeometryP2D.operator()<Size2D, double> ("Size2Dd");
+		// Rect2D
+		auto bindGeometryR2D = [this] <typename C> (const std::string& name) {
+			this->state.new_usertype<Rect2D<C>>(name, sol::constructors<
+				Rect2D<C>(),
+				Rect2D<C>(C, C, C, C),
+				Rect2D<C>(Size2D<C>),
+				Rect2D<C>(C, C, Size2D<C>),
+				Rect2D<C>(Point2D<C>, Size2D<C>)>(),
+				"centrify", &Rect2D<C>::template centrify<C>
+			);
+		};
+		bindGeometryR2D.operator()<int> ("Rect2D");
+		bindGeometryR2D.operator()<double> ("Rect2Dd");
 	}
 }
 

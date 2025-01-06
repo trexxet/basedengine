@@ -6,7 +6,8 @@
 
 namespace Based {
 
-Window::Window (const std::string &title, const Size2D<int>& _size) : size (_size) {
+Window::Window (const std::string &title, const Size2D<int>& _size) :
+	size (_size), rect (_size) {
 	sdlWindow  = SDL_CreateWindow (title.c_str(), size.width, size.height, SDL_WINDOW_OPENGL);
 	if (!sdlWindow)
 		log.fatal ("Window \"{}\" could not be created!", title);
