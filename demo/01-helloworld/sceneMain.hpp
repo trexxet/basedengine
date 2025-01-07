@@ -3,8 +3,6 @@
 #include "NuklearAuxiliaries.hpp"
 #include "Scene.hpp"
 
-#define DEMO_NAME "Demo 01-helloworld"
-
 class SceneMain : public Based::Scene {
 	Based::Rect2D<int> labelRect;
 public:

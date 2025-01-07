@@ -1,9 +1,5 @@
 #include "Logger.hpp"
 
-/* You still need to include SDL_main.h to the source file
- * containing your `int main (int argv, char** argc)`. Note
- * that you need to declare argv and argc arguments!
- */
 #include <SDL3/SDL_main.h>
 
 #include "Engine.hpp"
@@ -33,3 +29,4 @@ int main (int argv, char** args) {
 
 	return 0;
 }
+

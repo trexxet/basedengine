@@ -1,4 +1,4 @@
-set(DEMO_TARGET 01-helloworld)
+set(DEMO_TARGET 02-image_shader)
 add_executable(${DEMO_TARGET}
 	main.cpp
 )
