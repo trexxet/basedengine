@@ -1,5 +1,11 @@
 add_library(based SHARED)
 
+include(cmake/getGlad.cmake)
+include(cmake/getSDL.cmake)
+include(cmake/getLua.cmake)
+include(cmake/getSol.cmake)
+include(cmake/getNuklear.cmake)
+
 target_compile_definitions(based PUBLIC BASED_VERSION="0.1-dev-alpha")
 set_target_properties(based PROPERTIES VERSION 0.1 SOVERSION 01)
 set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
