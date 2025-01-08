@@ -1,6 +1,7 @@
 add_library(based SHARED)
 
 include(cmake/getGlad.cmake)
+include(cmake/getGlm.cmake)
 include(cmake/getSDL.cmake)
 include(cmake/getLua.cmake)
 include(cmake/getSol.cmake)
@@ -25,6 +26,7 @@ target_include_directories(based PUBLIC include/)
 
 target_link_libraries(based PUBLIC 
 	glad
+	glm::glm
 	SDL3::SDL3
 	lua::lua
 	sol2::sol2

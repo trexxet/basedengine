@@ -11,6 +11,7 @@
 ## Components
 * OpenGL >= 3.3
 * glad 2.0.8
+* glm 1.0.1
 * SDL 3.1.7
 * Lua 5.4.7
 * Sol 3.2.3
