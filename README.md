@@ -13,6 +13,7 @@
 * glad 2.0.8
 * glm 1.0.1
 * SDL 3.1.7
+* SDL_image 3.1.0
 * Lua 5.4.7
 * Sol 3.2.3
 * Nuklear 4.12.3

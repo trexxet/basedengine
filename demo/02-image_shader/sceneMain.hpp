@@ -17,4 +17,3 @@ public:
 
 	void render (Based::Window* window) override final { }
 };
-

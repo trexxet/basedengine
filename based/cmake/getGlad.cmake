@@ -5,7 +5,7 @@ FetchContent_Declare(
 	GIT_REPOSITORY https://github.com/Dav1dde/glad.git
 	GIT_TAG        v2.0.8
 	GIT_SHALLOW    TRUE
-	GIT_PROGRESS   TRUE
+	GIT_PROGRESS   FALSE
 )
 
 FetchContent_GetProperties(glad)

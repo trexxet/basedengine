@@ -6,7 +6,7 @@ FetchContent_Declare(
 	GIT_REPOSITORY https://github.com/Immediate-Mode-UI/Nuklear.git
 	GIT_TAG ${NUKLEAR_VERSION}
 	GIT_SHALLOW TRUE
-	GIT_PROGRESS TRUE
+	GIT_PROGRESS FALSE
 )
 FetchContent_MakeAvailable(nuklear_src)
 FetchContent_GetProperties(nuklear_src)
