@@ -19,12 +19,15 @@ public:
 		return true;
 	}
 
-	void render (Based::Window* window) override final {
+	void render (Based::Window* window) override final {}
+
+	bool gui (Based::Window* window) override final {
 		nk_context *nk_ctx = window->nk_ctx();
 		if (nk_begin (nk_ctx, DEMO_NAME, nk_from_Rect2D(labelRect), NK_WINDOW_NO_SCROLLBAR)) {
 			nk_layout_row_dynamic (nk_ctx, labelRect.height, 1);
 			nk_label (nk_ctx, DEMO_NAME, NK_TEXT_CENTERED);
 		}
 		nk_end (nk_ctx);
+		return true;
 	}
 };

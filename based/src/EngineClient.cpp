@@ -64,6 +64,13 @@ bool EngineClient::tickEvents () {
 void EngineClient::tickRender () {
 	glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	engine->sceneManager.render (window());
+}
+
+bool EngineClient::tickGui () {
+	return engine->sceneManager.gui (window());
+}
+
+void EngineClient::tickFinish () {
 	sdl->window->render();
 }
 

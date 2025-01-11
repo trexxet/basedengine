@@ -25,14 +25,21 @@ void Engine::enable_client () {
 
 bool Engine::tick () {
 	bool keepRunning = true;
+
 	if (client)
 		keepRunning = client->tickEvents();
 
 	if (keepRunning)
 		keepRunning = tickUpdate();
 
-	if (client && keepRunning)
+	if (client && keepRunning) {
 		client->tickRender();
+		keepRunning = client->tickGui();
+	}
+
+	if (client) {
+		client->tickFinish();
+	}
 
 	return keepRunning;
 }

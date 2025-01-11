@@ -19,4 +19,10 @@ void SceneManager::render (Window* window) {
 		currentScene->render(window);
 }
 
+bool SceneManager::gui (Window* window) {
+	if (currentScene)
+		return currentScene->gui(window);
+	return false;
+}
+
 }

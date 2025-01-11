@@ -16,4 +16,8 @@ public:
 	}
 
 	void render (Based::Window* window) override final { }
+
+	bool gui (Based::Window* window) override final {
+		return true;
+	}
 };

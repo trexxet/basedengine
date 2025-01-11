@@ -21,6 +21,8 @@ class EngineClient {
 
 	bool tickEvents ();
 	void tickRender ();
+	bool tickGui ();
+	void tickFinish ();
 public:
 	EngineClient (Engine *_engine);
 	void create_window (const std::string& title, const Size2D<int>& size);
