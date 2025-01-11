@@ -7,6 +7,7 @@ class SceneMain : public Based::Scene {
 	Based::Rect2D<int> labelRect;
 public:
 	SceneMain (Based::Window* window, Based::Lua::File& conf) {
+		if (!window) return; // no client (headless)
 		window->nk_ctx()->style.window.fixed_background = nk_style_item_color (NK_COLOR_TRANSPARENT);
 		labelRect = conf["labelRect"];
 	}

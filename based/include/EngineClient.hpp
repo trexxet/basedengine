@@ -19,10 +19,11 @@ class EngineClient {
 	};
 	std::unique_ptr<SDL> sdl {nullptr};
 
-	bool tickEvents ();
-	void tickRender ();
-	bool tickGui ();
-	void tickFinish ();
+	bool tick ();
+	inline bool tickEvents ();
+	inline void tickRender ();
+	inline bool tickGui ();
+	inline void tickFinish ();
 public:
 	EngineClient (Engine *_engine);
 	void create_window (const std::string& title, const Size2D<int>& size);

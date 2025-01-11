@@ -39,7 +39,25 @@ void EngineClient::create_window (const std::string &title, const Size2D<int>& s
 	sdl->window = std::make_unique<Window> (title, size);
 }
 
-bool EngineClient::tickEvents () {
+bool EngineClient::tick () {
+	bool keepRunning = true;
+
+	keepRunning = tickEvents();
+
+	if (keepRunning)
+		keepRunning = engine->tickUpdate();
+
+	if (keepRunning) {
+		tickRender();
+		keepRunning = tickGui();
+	}
+
+	tickFinish();
+
+	return keepRunning;
+}
+
+inline bool EngineClient::tickEvents () {
 	bool keepRunning = true;
 	SDL_Event event;
 	nk_context *nk_ctx = sdl->window->nk->ctx;
@@ -61,16 +79,16 @@ bool EngineClient::tickEvents () {
 	return keepRunning;
 }
 
-void EngineClient::tickRender () {
+inline void EngineClient::tickRender () {
 	glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	engine->sceneManager.render (window());
 }
 
-bool EngineClient::tickGui () {
+inline bool EngineClient::tickGui () {
 	return engine->sceneManager.gui (window());
 }
 
-void EngineClient::tickFinish () {
+inline void EngineClient::tickFinish () {
 	sdl->window->render();
 }
 

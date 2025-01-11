@@ -27,19 +27,9 @@ bool Engine::tick () {
 	bool keepRunning = true;
 
 	if (client)
-		keepRunning = client->tickEvents();
-
-	if (keepRunning)
+		keepRunning = client->tick();
+	else
 		keepRunning = tickUpdate();
-
-	if (client && keepRunning) {
-		client->tickRender();
-		keepRunning = client->tickGui();
-	}
-
-	if (client) {
-		client->tickFinish();
-	}
 
 	return keepRunning;
 }
