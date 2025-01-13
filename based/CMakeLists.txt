@@ -17,7 +17,6 @@ set(BASED_SOURCES
 	EngineClient.cpp
 	LuaFile.cpp
 	NuklearImplement.c
-	Scene.cpp
 	Window.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)

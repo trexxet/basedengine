@@ -15,29 +15,31 @@ public:
 	}
 
 	// called only in client mode
-	bool handle_events (SDL_Event *event) override final {
-		if (event->type == SDL_EVENT_QUIT) {
-			Based::log.write ("Bye!");
+	void handle_events (SDL_Event *event) override final {
+		switch (event->type) {
+			case SDL_EVENT_MOUSE_BUTTON_UP:
+				engine->stop();
+				[[fallthrough]];
+			case SDL_EVENT_QUIT:
+				Based::log.write ("Bye!");
+				break;
+			default: break;
 		}
-		return true;
 	}
 
 	// called in both client and headless modes
-	bool update () override final {
-		return true;
-	}
+	void update () override final { }
 
 	// called only in client mode
-	void render () override final {}
+	void render () override final { }
 
 	// called only in client mode
-	bool gui () override final {
+	void gui () override final {
 		nk_context *nk_ctx = engine->client->window()->nk_ctx();
 		if (nk_begin (nk_ctx, DEMO_NAME, nk_from_Rect2D(labelRect), NK_WINDOW_NO_SCROLLBAR)) {
 			nk_layout_row_dynamic (nk_ctx, labelRect.height, 1);
 			nk_label (nk_ctx, DEMO_NAME, NK_TEXT_CENTERED);
 		}
 		nk_end (nk_ctx);
-		return true;
 	}
 };

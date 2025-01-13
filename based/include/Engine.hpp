@@ -9,7 +9,7 @@ namespace Based {
 
 class Engine {
 	friend class EngineClient;
-	bool tickUpdate ();
+	void tickUpdate ();
 public:
 	std::unique_ptr<EngineClient> client {nullptr};
 	SceneManager sceneManager;
@@ -18,6 +18,7 @@ public:
 
 	void enable_client ();
 	bool tick ();
+	void stop ();
 };
 
 }

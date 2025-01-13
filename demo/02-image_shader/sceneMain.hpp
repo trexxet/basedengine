@@ -7,17 +7,11 @@ class SceneMain : public Based::Scene {
 public:
 	SceneMain (Based::Engine* engine, Based::Lua::File& conf) : Based::Scene(engine)  { }
 
-	bool handle_events (SDL_Event *event) override final {
-		return true;
-	}
+	void handle_events (SDL_Event *event) override final { }
 
-	bool update () override final {
-		return true;
-	}
+	void update () override final { }
 
 	void render () override final { }
 
-	bool gui () override final {
-		return true;
-	}
+	void gui () override final { }
 };

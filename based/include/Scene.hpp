@@ -8,6 +8,7 @@
 namespace Based {
 
 class Engine;
+class EngineClient;
 
 struct Scene {
 	Engine *engine = nullptr;
@@ -17,39 +18,57 @@ struct Scene {
 /**
  * Process input events
  * \param event pointer to SDL_Event
- * \returns true if the program keeps running
  * \note Called only in client mode
  */
-	virtual bool handle_events (SDL_Event *event) = 0;
+	virtual void handle_events (SDL_Event *event) = 0;
 /**
  * Update internal game state
- * \returns true if the program keeps running
  * \note Called both in client and headless engine mode
  */
-	virtual bool update () = 0;
+	virtual void update () = 0;
 /**
  * Render
- * \param window pointer to Based::Window
  * \note Called only in client mode
  */
 	virtual void render () = 0;
 /**
  * Process Nuklear GUI
- * \param window pointer to Based::Window
- * \returns true if the program keeps running
  * \note Called only in client mode
  */
-	virtual bool gui () = 0;
+	virtual void gui () = 0;
 };
 
 class SceneManager {
 	friend class Engine;
+	friend class EngineClient;
+
+	// Scene switch scheduling
 	Scene *currentScene = nullptr;
 	Scene *scheduledScene = nullptr;
-	inline void commit_scheduled () {
+	inline bool commit_scheduled () {
 		if (scheduledScene != currentScene) [[unlikely]]
 			currentScene = scheduledScene;
+		return (currentScene != nullptr);
 	}
+
+	// Tick pipeline
+	inline void handle_events (SDL_Event *event) {
+		if (currentScene) [[likely]]
+			currentScene->handle_events (event);
+	}
+	inline void update () {
+		if (currentScene) [[likely]]
+			currentScene->update();
+	}
+	inline void render () {
+		if (currentScene) [[likely]]
+			currentScene->render();
+	}
+	inline void gui () {
+		if (currentScene) [[likely]]
+			currentScene->gui();
+	}
+
 public:
 /**
  * Set the scene for the next tick
@@ -58,11 +77,6 @@ public:
 	inline void schedule_next (Scene *nextScene) {
 		scheduledScene = nextScene;
 	}
-
-	bool handle_events (SDL_Event *event);
-	bool update ();
-	void render ();
-	bool gui ();
 };
 
 }

@@ -39,26 +39,15 @@ void EngineClient::create_window (const std::string &title, const Size2D<int>& s
 	sdl->window = std::make_unique<Window> (title, size);
 }
 
-bool EngineClient::tick () {
-	bool keepRunning = true;
-
-	keepRunning = tickEvents();
-
-	if (keepRunning)
-		keepRunning = engine->tickUpdate();
-
-	if (keepRunning) {
-		tickRender();
-		keepRunning = tickGui();
-	}
-
+void EngineClient::tick () {
+	tickEvents();
+	engine->tickUpdate();
+	tickRender();
+	tickGui();
 	tickFinish();
-
-	return keepRunning;
 }
 
-inline bool EngineClient::tickEvents () {
-	bool keepRunning = true;
+inline void EngineClient::tickEvents () {
 	SDL_Event event;
 	nk_context *nk_ctx = sdl->window->nk->ctx;
 
@@ -67,16 +56,14 @@ inline bool EngineClient::tickEvents () {
 		switch (event.type) {
 			[[unlikely]]
 			case SDL_EVENT_QUIT:
-				keepRunning = false;
+				engine->stop();
 				break;
 			default:
 				nk_sdl_handle_event (&event);
 		}
-		keepRunning &= engine->sceneManager.handle_events (&event);
+		engine->sceneManager.handle_events (&event);
 	}
 	nk_input_end (nk_ctx);
-
-	return keepRunning;
 }
 
 inline void EngineClient::tickRender () {
@@ -84,8 +71,8 @@ inline void EngineClient::tickRender () {
 	engine->sceneManager.render();
 }
 
-inline bool EngineClient::tickGui () {
-	return engine->sceneManager.gui();
+inline void EngineClient::tickGui () {
+	engine->sceneManager.gui();
 }
 
 inline void EngineClient::tickFinish () {

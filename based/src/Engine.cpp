@@ -24,20 +24,19 @@ void Engine::enable_client () {
 }
 
 bool Engine::tick () {
-	bool keepRunning;
-
 	if (client)
-		keepRunning = client->tick();
+		client->tick();
 	else
-		keepRunning = tickUpdate();
-
-	sceneManager.commit_scheduled();
-
-	return keepRunning;
+		tickUpdate();
+	return sceneManager.commit_scheduled();
 }
 
-bool Engine::tickUpdate () {
-	return sceneManager.update();
+void Engine::tickUpdate () {
+	sceneManager.update();
+}
+
+void Engine::stop () {
+	sceneManager.schedule_next (nullptr);
 }
 
 }
