@@ -5,7 +5,7 @@
 
 class SceneMain : public Based::Scene {
 public:
-	SceneMain (Based::Window* window, Based::Lua::File& conf) { }
+	SceneMain (Based::Engine* engine, Based::Lua::File& conf) : Based::Scene(engine)  { }
 
 	bool handle_events (SDL_Event *event) override final {
 		return true;
@@ -15,9 +15,9 @@ public:
 		return true;
 	}
 
-	void render (Based::Window* window) override final { }
+	void render () override final { }
 
-	bool gui (Based::Window* window) override final {
+	bool gui () override final {
 		return true;
 	}
 };

@@ -28,7 +28,7 @@ int main (int argv, char** args) {
 		engine.client->create_window (DEMO_NAME, windowSize);
 	}
 
-	SceneMain sceneMain (ENABLE_CLIENT ? engine.client->window() : nullptr, conf);
+	SceneMain sceneMain (&engine, conf);
 	engine.sceneManager.schedule_next (&sceneMain);
 
 	Based::log.write ("Starting main loop");

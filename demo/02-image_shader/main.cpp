@@ -21,7 +21,7 @@ int main (int argv, char** args) {
 	Based::Size2D<int> windowSize = conf["window"]; 
 	engine.client->create_window (DEMO_NAME, windowSize);
 
-	SceneMain sceneMain (engine.client->window(), conf);
+	SceneMain sceneMain (&engine, conf);
 	engine.sceneManager.schedule_next (&sceneMain);
 
 	Based::log.write ("Starting main loop");

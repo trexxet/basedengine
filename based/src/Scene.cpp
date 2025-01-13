@@ -14,14 +14,14 @@ bool SceneManager::update () {
 	return (scheduledScene != nullptr);
 }
 
-void SceneManager::render (Window* window) {
+void SceneManager::render () {
 	if (currentScene) [[likely]]
-		currentScene->render(window);
+		currentScene->render();
 }
 
-bool SceneManager::gui (Window* window) {
+bool SceneManager::gui () {
 	if (currentScene) [[likely]]
-		return currentScene->gui(window);
+		return currentScene->gui();
 	return (scheduledScene != nullptr);
 }
 

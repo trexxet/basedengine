@@ -2,14 +2,18 @@
 
 #include <SDL3/SDL_events.h>
 
+#include "Logger.hpp"
 #include "Window.hpp"
 
 namespace Based {
 
 class Engine;
 
-class Scene {
-public:
+struct Scene {
+	Engine *engine = nullptr;
+	Scene (Engine *engine) : engine(engine) {
+		if (!engine) log.fatal ("Can't set engine for scene!");
+	}
 /**
  * Process input events
  * \param event pointer to SDL_Event
@@ -28,14 +32,14 @@ public:
  * \param window pointer to Based::Window
  * \note Called only in client mode
  */
-	virtual void render (Window* window) = 0;
+	virtual void render () = 0;
 /**
  * Process Nuklear GUI
  * \param window pointer to Based::Window
  * \returns true if the program keeps running
  * \note Called only in client mode
  */
-	virtual bool gui (Window* window) = 0;
+	virtual bool gui () = 0;
 };
 
 class SceneManager {
@@ -57,8 +61,8 @@ public:
 
 	bool handle_events (SDL_Event *event);
 	bool update ();
-	void render (Window* window);
-	bool gui (Window* window);
+	void render ();
+	bool gui ();
 };
 
 }

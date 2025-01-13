@@ -81,11 +81,11 @@ inline bool EngineClient::tickEvents () {
 
 inline void EngineClient::tickRender () {
 	glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	engine->sceneManager.render (window());
+	engine->sceneManager.render();
 }
 
 inline bool EngineClient::tickGui () {
-	return engine->sceneManager.gui (window());
+	return engine->sceneManager.gui();
 }
 
 inline void EngineClient::tickFinish () {
