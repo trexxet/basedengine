@@ -24,12 +24,14 @@ void Engine::enable_client () {
 }
 
 bool Engine::tick () {
-	bool keepRunning = true;
+	bool keepRunning;
 
 	if (client)
 		keepRunning = client->tick();
 	else
 		keepRunning = tickUpdate();
+
+	sceneManager.commit_scheduled();
 
 	return keepRunning;
 }

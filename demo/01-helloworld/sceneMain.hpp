@@ -12,16 +12,23 @@ public:
 		labelRect = conf["labelRect"];
 	}
 
+	// called only in client mode
 	bool handle_events (SDL_Event *event) override final {
+		if (event->type == SDL_EVENT_QUIT) {
+			Based::log.write ("Bye!");
+		}
 		return true;
 	}
 
+	// called in both client and headless modes
 	bool update () override final {
 		return true;
 	}
 
+	// called only in client mode
 	void render (Based::Window* window) override final {}
 
+	// called only in client mode
 	bool gui (Based::Window* window) override final {
 		nk_context *nk_ctx = window->nk_ctx();
 		if (nk_begin (nk_ctx, DEMO_NAME, nk_from_Rect2D(labelRect), NK_WINDOW_NO_SCROLLBAR)) {

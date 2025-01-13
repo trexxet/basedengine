@@ -3,26 +3,26 @@
 namespace Based {
 
 bool SceneManager::handle_events (SDL_Event *event) {
-	if (currentScene)
+	if (currentScene) [[likely]]
 		return currentScene->handle_events (event);
-	return false;
+	return (scheduledScene != nullptr);
 }
 
 bool SceneManager::update () {
-	if (currentScene)
+	if (currentScene) [[likely]]
 		return currentScene->update();
-	return false;
+	return (scheduledScene != nullptr);
 }
 
 void SceneManager::render (Window* window) {
-	if (currentScene)
+	if (currentScene) [[likely]]
 		currentScene->render(window);
 }
 
 bool SceneManager::gui (Window* window) {
-	if (currentScene)
+	if (currentScene) [[likely]]
 		return currentScene->gui(window);
-	return false;
+	return (scheduledScene != nullptr);
 }
 
 }

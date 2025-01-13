@@ -29,7 +29,7 @@ int main (int argv, char** args) {
 	}
 
 	SceneMain sceneMain (ENABLE_CLIENT ? engine.client->window() : nullptr, conf);
-	engine.sceneManager.currentScene = &sceneMain;
+	engine.sceneManager.schedule_next (&sceneMain);
 
 	Based::log.write ("Starting main loop");
 	while (engine.tick());

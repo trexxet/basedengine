@@ -22,7 +22,7 @@ int main (int argv, char** args) {
 	engine.client->create_window (DEMO_NAME, windowSize);
 
 	SceneMain sceneMain (engine.client->window(), conf);
-	engine.sceneManager.currentScene = &sceneMain;
+	engine.sceneManager.schedule_next (&sceneMain);
 
 	Based::log.write ("Starting main loop");
 	while (engine.tick());
