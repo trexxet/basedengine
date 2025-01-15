@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Geometry.hpp"
+#include "Resource.hpp"
 #include "Window.hpp"
 
 namespace Based {
@@ -25,7 +26,10 @@ class EngineClient {
 	inline void tickGui ();
 	inline void tickFinish ();
 public:
+	ResourceManager resourceManager;
+
 	EngineClient (Engine *_engine);
+
 	void create_window (const std::string& title, const Size2D<int>& size);
 	inline Window* window () { return sdl->window.get(); } 
 };

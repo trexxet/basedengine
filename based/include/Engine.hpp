@@ -12,6 +12,7 @@ class Engine {
 	void tickUpdate ();
 public:
 	std::unique_ptr<EngineClient> client {nullptr};
+
 	SceneManager sceneManager;
 
 	Engine ();
