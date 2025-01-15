@@ -10,6 +10,7 @@ void Texture::load (const std::string& path) {
 	surface = IMG_Load (path.c_str());
 	if (!surface)
 		log.fatal ("Can't load texture {}: {}", path, SDL_GetError());
+
 	log.write ("Loaded texture: {}", path);
 	loaded = true;
 }

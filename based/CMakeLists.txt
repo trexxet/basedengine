@@ -17,6 +17,7 @@ set(BASED_SOURCES
 	EngineClient.cpp
 	LuaFile.cpp
 	NuklearImplement.c
+	Shader.cpp
 	Texture.cpp
 	Window.cpp
 )

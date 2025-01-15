@@ -11,10 +11,10 @@ namespace Based {
  * \param path file path
  * \return string containing loaded file, or empty if failed
  */
-std::string loadFileToString (const std::string& path) {
+std::string load_file_to_string (const std::string& path) {
 	std::string string;
 	std::ifstream file (path, std::ios::in | std::ios::binary);
-	if (file) {
+	if (file) [[likely]] {
 		file.seekg (0, std::ios::end);
 		size_t size = (size_t) file.tellg();
 		string.resize (size);

@@ -35,12 +35,12 @@ public:
  * \param name name of the resource
  * \param path path to resource file
  */
-	template <ResourceClass T>
-	bool load (const std::string& name, const std::string& path) {
+	template <ResourceClass T, typename... _Args>
+	bool load (const std::string& name, const std::string& path, _Args&&... args) {
 		if (resourceMap.contains (name))
 			return true;
 		try {
-			resourceMap.emplace (name, std::make_unique<T>());
+			resourceMap.emplace (name, std::make_unique<T>(std::forward<_Args> (args)...));
 			resourceMap[name]->load (path);
 		}
 		catch (const std::exception &e) {
@@ -83,7 +83,7 @@ public:
 	}
 
 /**
- * Get loaded resource pointer
+ * Get pointer to loaded resource
  * \param name name of the resource
  */
 	template <ResourceClass T>
