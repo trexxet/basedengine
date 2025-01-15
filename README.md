@@ -23,3 +23,4 @@
 * Types are PascalCase. Variables are camelCase. Methods and functions are snake_case.
 * There must always be exactly one space between the function name and the opening parenthesis. The only exception is **calling** a function with no arguments - must have no space before parenthesis.
 * Every file must end with an empty line
+* Includes are sorted in 3 groups separated by empty line: system headers (`<string>`), dependency library headers (`<glad/gl.h>`) and Based headers (`"Logger.hpp"`). Each group is sorted alphabetically.
