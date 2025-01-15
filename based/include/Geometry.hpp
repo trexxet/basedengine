@@ -39,7 +39,7 @@ using Size2D = Point2D<T>;
 
 template <typename T>
 struct Rect2D {
-	T x, y, width, height;
+	T x, y, width, height; // Flattened Point2D + Size2D - should be a bit faster
 
 	Rect2D (T _x, T _y, T _w, T _h) : x (_x), y (_y), width (_w), height (_h) {}
 	Rect2D () : x (0), y (0), width (0), height (0) {}
@@ -58,10 +58,10 @@ struct Rect2D {
 
 	template <typename U>
 	void centrify (const Rect2D<U>& outer) {
-		if (outer.width < width || outer.height < height)
-			return;
-		x += (outer.width - width) / 2;
-		y += (outer.height - height) / 2;
+		// If (outer.width < width || outer.height < height), then
+		// outer is effectively inner for that axis, so no need to check
+		x = outer.x + (outer.width - width) / 2;
+		y = outer.y + (outer.height - height) / 2;
 	}
 
 	Point2D<T> pos () { return Point2D<T> {x, y}; }

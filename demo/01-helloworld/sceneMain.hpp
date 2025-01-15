@@ -18,7 +18,7 @@ public:
 	void handle_events (SDL_Event *event) override final {
 		switch (event->type) {
 			case SDL_EVENT_MOUSE_BUTTON_UP:
-				engine->stop();
+				engine->stop(); // same as engine->sceneManager.schedule_next (nullptr)
 				[[fallthrough]];
 			case SDL_EVENT_QUIT:
 				Based::log.write ("Bye!");
