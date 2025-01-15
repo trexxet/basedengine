@@ -39,6 +39,7 @@ void Texture::unload () {
 	if (!ready) return;
 	glDeleteTextures (1, &id);
 	ready = false;
+	loaded = false;
 }
 
 }

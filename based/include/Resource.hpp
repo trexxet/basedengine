@@ -19,7 +19,10 @@ struct Resource {
 	bool ready = false;
 
 	Resource() = default;
-	inline Resource* get () { return this; }
+	Resource (const Resource&) = delete;
+	Resource& operator= (const Resource&) = delete;
+	Resource (Resource&&) = default;
+	Resource& operator= (Resource&&) = default;
 };
 
 template <class T>

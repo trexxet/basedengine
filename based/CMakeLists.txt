@@ -25,6 +25,7 @@ list(TRANSFORM BASED_SOURCES PREPEND src/)
 
 target_sources(based PRIVATE ${BASED_SOURCES})
 target_include_directories(based PUBLIC include/)
+target_include_directories(based PRIVATE include_internal/)
 
 target_link_libraries(based PUBLIC 
 	glad

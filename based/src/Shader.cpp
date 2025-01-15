@@ -52,6 +52,7 @@ void Shader::unload () {
 	if (!ready) return;
 	glDeleteShader (id);
 	ready = false;
+	loaded = false;
 }
 
 ShaderProgram::ShaderProgram (ShaderVec&& units) : units(units) { }
@@ -87,7 +88,50 @@ bool ShaderProgram::prepare () {
 
 void ShaderProgram::unload () {
 	if (!ready) return;
+	glDeleteProgram(id);
 	ready = false;
+	loaded = false;
+}
+
+/*
+ *
+ * Some built-in default shaders
+ *
+ */
+namespace Default {
+
+	std::string src_2d_forward_vert =
+#include "shaders_builtin/2d_forward.vert"
+;
+	std::string src_2d_sampler_frag =
+#include "shaders_builtin/2d_sampler.frag"
+;
+
+void Shaders::init () {
+	shaders.try_emplace (S_2D_ForwardVert, Shader(GL_VERTEX_SHADER, std::move(src_2d_forward_vert)));
+	shaders.try_emplace (S_2D_SamplerFrag, Shader(GL_FRAGMENT_SHADER, std::move(src_2d_sampler_frag)));
+
+	for (auto& [id, shader] : shaders) {
+		shader.load();
+		shader.prepare();
+	}
+
+	ShaderVec SP_2D_ForwardSampler_Units { &shaders.at(S_2D_ForwardVert), &shaders.at(S_2D_SamplerFrag) };
+	shaderPrograms.try_emplace (SP_2D_ForwardSampler, ShaderProgram (std::move(SP_2D_ForwardSampler_Units)));
+
+	for (auto& [id, shaderProgram] : shaderPrograms) {
+		shaderProgram.load();
+		shaderProgram.prepare();
+	}
+}
+
+Shaders::~Shaders () {
+	for (auto& [id, shaderProgram] : shaderPrograms)
+		shaderProgram.unload();
+	for (auto& [id, shader] : shaders)
+		shader.unload();
+}
+
 }
 
 }

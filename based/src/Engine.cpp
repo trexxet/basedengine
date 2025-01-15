@@ -19,7 +19,7 @@ Engine::Engine () {
 void Engine::enable_client () {
 	if (client)
 		log.fatal ("Can't create multiple clients!");
-	client = std::make_unique<EngineClient>(this);
+	client = std::make_unique<EngineClient> (this);
 	log.write ("Client enabled");
 }
 
