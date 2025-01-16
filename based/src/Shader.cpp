@@ -5,6 +5,25 @@
 
 namespace Based {
 
+using _gl_getivproc_t = void (*)(GLuint id, GLenum pname, GLint *params);
+using _gl_getinfoproc_t = void (*)(GLuint id, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
+
+static bool check_glsl_status (GLuint id, _gl_getivproc_t _gl_getivproc, GLenum statusName) {
+	GLint ok;
+	_gl_getivproc (id, statusName, &ok);
+	return static_cast<bool>(ok);
+}
+
+static std::string get_glsl_error(GLuint id, _gl_getivproc_t _gl_getivproc, _gl_getinfoproc_t _gl_getinfoproc) {
+	std::string errMsg;
+	GLint errLen;
+	_gl_getivproc (id, GL_INFO_LOG_LENGTH, &errLen);
+	errMsg.resize (errLen);
+	_gl_getinfoproc (id, errLen, NULL, &errMsg[0]);
+	errMsg.erase (errMsg.find_last_not_of ("\n") - 1);
+	return errMsg;
+}
+
 Shader::Shader (GLenum type) : type(type) { }
 
 Shader::Shader (GLenum type, std::string&& src) : Shader(type) {
@@ -31,15 +50,8 @@ bool Shader::prepare () {
 	glShaderSource (id, 1, &src, NULL);
 	glCompileShader (id);
 
-	GLint ok;
-	glGetShaderiv (id, GL_COMPILE_STATUS, &ok);
-	if (!ok) [[unlikely]] {
-		GLint errLen;
-		glGetShaderiv (id, GL_INFO_LOG_LENGTH, &errLen);
-		std::string errMsg;
-		errMsg.resize (errLen);
-		glGetShaderInfoLog (id, errLen, NULL, &errMsg[0]);
-		log.warn ("Failed to compile shader:\n{}", errMsg);
+	if (!check_glsl_status(id, glGetShaderiv, GL_COMPILE_STATUS)) [[unlikely]] {
+		log.warn ("Failed to compile shader:\n{}", get_glsl_error(id, glGetShaderiv, glGetShaderInfoLog));
 		return false;
 	}
 
@@ -49,10 +61,11 @@ bool Shader::prepare () {
 }
 
 void Shader::unload () {
-	if (!ready) return;
-	glDeleteShader (id);
+	if (glIsShader (id))
+		glDeleteShader (id);
 	ready = false;
 	loaded = false;
+	id = 0;
 }
 
 ShaderProgram::ShaderProgram (ShaderVec&& units) : units(units) { }
@@ -60,7 +73,7 @@ ShaderProgram::ShaderProgram (ShaderVec&& units) : units(units) { }
 void ShaderProgram::load (const std::string& path) {
 	for (const Shader* shader: units) {
 		if (!shader->ready)
-			log.fatal ("Failed to instantiate shader program: not all shaders are ready");
+			log.warn ("Failed to instantiate shader program: shader units not compiled");
 	}
 }
 
@@ -70,15 +83,8 @@ bool ShaderProgram::prepare () {
 		glAttachShader (id, shader->id);
 	glLinkProgram (id);
 
-	GLint ok;
-	glGetProgramiv (id, GL_LINK_STATUS, &ok);
-	if (!ok) [[unlikely]] {
-		GLint errLen;
-		glGetProgramiv (id, GL_INFO_LOG_LENGTH, &errLen);
-		std::string errMsg;
-		errMsg.resize (errLen);
-		glGetProgramInfoLog (id, errLen, NULL, &errMsg[0]);
-		log.warn ("Failed to link shader program:\n{}", errMsg);
+	if (!check_glsl_status(id, glGetProgramiv, GL_LINK_STATUS)) [[unlikely]] {
+		log.warn ("Failed to link shader program:\n{}", get_glsl_error(id, glGetProgramiv, glGetProgramInfoLog));
 		return false;
 	}
 	
@@ -87,10 +93,11 @@ bool ShaderProgram::prepare () {
 }
 
 void ShaderProgram::unload () {
-	if (!ready) return;
-	glDeleteProgram(id);
+	if (glIsProgram (id))
+		glDeleteProgram (id);
 	ready = false;
 	loaded = false;
+	id = 0;
 }
 
 /*

@@ -93,8 +93,8 @@ public:
 
 	LOGGER_FUNCTION(fatal) {
 		depth = 0;
-		std::string msg = make_message ("ERROR: ", __fmt, std::forward<_Args>(__args)...);
-		dowrite (msg, true);
+		std::string msg = std::format (__fmt, std::forward<_Args>(__args)...);
+		dowrite (make_message ("ERROR: ", "{}", msg), true);
 		throw std::runtime_error (msg);
 	}
 
