@@ -1,5 +1,6 @@
 #include "Shader.hpp"
 
+#include "GL_Util.hpp"
 #include "Logger.hpp"
 #include "Util.hpp"
 
@@ -100,10 +101,21 @@ void ShaderProgram::unload () {
 	id = 0;
 }
 
+void ShaderProgram::use () {
+	glUseProgram (id);
+	BASED_GL_CHECK ("Error using shader program");
+}
+
+// todo: uniform location cache
+void ShaderProgram::setUniform (const GLchar *name, GLint value) {
+	GLint loc = glGetUniformLocation (id, name);
+	BASED_GL_CHECK ("Error getting uniform location");
+	glUniform1i (loc, value);
+	BASED_GL_CHECK ("Error setting uniform");
+}
+
 /*
- *
  * Some built-in default shaders
- *
  */
 namespace Default {
 
@@ -121,6 +133,8 @@ void Shaders::init () {
 	for (auto& [id, shader] : shaders) {
 		shader.load();
 		shader.prepare();
+		if (!shader.ready) [[unlikely]]
+			log.fatal ("Failed to compile default shader");
 	}
 
 	ShaderVec SP_2D_ForwardSampler_Units { &shaders.at(S_2D_ForwardVert), &shaders.at(S_2D_SamplerFrag) };
@@ -129,6 +143,8 @@ void Shaders::init () {
 	for (auto& [id, shaderProgram] : shaderPrograms) {
 		shaderProgram.load();
 		shaderProgram.prepare();
+		if (!shaderProgram.ready) [[unlikely]]
+			log.fatal ("Failed to link default shader program");
 	}
 }
 

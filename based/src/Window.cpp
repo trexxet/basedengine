@@ -43,6 +43,10 @@ Window::~Window () {
 }
 
 Window::Nk::Nk (Window& owner) {
+#ifdef BASED_DISABLE_NK
+	log.write ("Nuklear initialization skipped");
+	return;
+#else
 	if (!owner.sdlWindow)
 		log.fatal ("Failed to initialize Nuklear: window is not created yet!");
 	ctx = nk_sdl_init (owner.sdlWindow);
@@ -50,15 +54,20 @@ Window::Nk::Nk (Window& owner) {
 	nk_sdl_font_stash_begin (&atlas);
 	nk_sdl_font_stash_end ();
 	log.write ("Nuklear {} initialized", NK_VERSION);
+#endif
 }
 
 Window::Nk::~Nk () {
+#ifndef BASED_DISABLE_NK
 	nk_sdl_shutdown ();
+#endif
 }
 
 void Window::render () {
+#ifndef BASED_DISABLE_NK
 	nk_sdl_render (NK_ANTI_ALIASING_ON, NK_MAX_VERTEX_MEMORY, NK_MAX_ELEMENT_MEMORY);
 	glEnable (GL_DEPTH_TEST);
+#endif
 	SDL_GL_SwapWindow(sdlWindow);
 }
 

@@ -21,9 +21,9 @@ public:
 	Shader (GLenum type);
 	Shader (GLenum type, std::string&& src);
 
-	/// \note If path is empty, then it's assumed that the shader should compile from string set in constructor
+	/// @note If path is empty, then it's assumed that the shader should compile from string set in constructor
 	void load (const std::string& path = "") override final;
-	/// Compile gl shader
+	/// @brief Compile gl shader
 	bool prepare () override final;
 	void unload () override final;
 };
@@ -38,26 +38,34 @@ public:
 	ShaderProgram () = delete;
 	ShaderProgram (ShaderVec&& units);
 
-	/// Check if all shader units are compiled
-	/// \note path is unused
+	/// @brief Check if all shader units are compiled
+	/// @note path is unused
 	void load (const std::string& path = "") override final;
-	/// Create & link gl shader program
+	/// @brief Create & link gl shader program
 	bool prepare () override final;
 	void unload () override final;
+
+	/// @brief Use the shader program
+	/// @note Shader program readiness is not checked
+	void use ();
+	/// @brief Set uniform
+	/// @param name Uniform name
+	/// @param value Uniform value
+	void setUniform (const GLchar *name, GLint value);
 };
 
 namespace Default {
 
 enum ShaderID {
-	/// Vertex shader that forwards X Y vertex coordinates and S texture coordinate,
+	/// @brief Vertex shader that forwards X Y vertex coordinates and S texture coordinate,
 	/// and flips T texture coordinate
 	S_2D_ForwardVert,
-	/// Fragment shader that applies 2D sampler (texture) using S and T texture coordinates
+	/// @brief Fragment shader that applies 2D sampler (texture) using S and T texture coordinates
 	S_2D_SamplerFrag
 };
 
 enum ShaderProgramID {
-	/// S_2D_ForwardVert, S_2D_SamplerFrag
+	/// @brief S_2D_ForwardVert, S_2D_SamplerFrag
 	SP_2D_ForwardSampler
 };
 

@@ -25,4 +25,4 @@
 * Every file must end with an empty line
 * Includes are sorted in 3 groups separated by empty line: system headers (`<string>`), dependency library headers (`<glad/gl.h>`) and Based headers (`"Logger.hpp"`). Each group is sorted alphabetically.
 * No new line for opening curly bracket
-* Doxygen comments use triple slash and same indentation as the related code. Commands use backslash.
+* Doxygen comments use triple slash and same indentation as the related code. Commands use @.

@@ -22,3 +22,9 @@ extern "C" {
 
 #define NK_MAX_VERTEX_MEMORY 512 * 1024
 #define NK_MAX_ELEMENT_MEMORY 128 * 1024
+
+#ifdef BASED_DISABLE_NK
+#define nk_input_begin(x)
+#define nk_sdl_handle_event(x)
+#define nk_input_end(x)
+#endif

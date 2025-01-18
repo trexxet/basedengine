@@ -2,6 +2,7 @@
 
 #include <SDL3_image/SDL_image.h>
 
+#include "GL_Util.hpp"
 #include "Logger.hpp"
 
 namespace Based {
@@ -27,6 +28,7 @@ bool Texture::prepare () {
 	glTexImage2D (GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0, mode, GL_UNSIGNED_BYTE, surface->pixels);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	BASED_GL_CHECK ("Error loading texture");
 
 	SDL_DestroySurface (surface);
 	surface = nullptr;
@@ -36,10 +38,16 @@ bool Texture::prepare () {
 }
 
 void Texture::unload () {
-	if (!ready) return;
-	glDeleteTextures (1, &id);
+	if (glIsTexture(id))
+		glDeleteTextures (1, &id);
 	ready = false;
 	loaded = false;
+}
+
+void Texture::bind (GLuint unit) {
+	glActiveTexture (GL_TEXTURE0 + unit);
+	glBindTexture (GL_TEXTURE_2D, id);
+	BASED_GL_CHECK ("Error binding texture");
 }
 
 }

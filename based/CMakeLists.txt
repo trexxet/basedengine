@@ -8,15 +8,21 @@ include(cmake/getLua.cmake)
 include(cmake/getSol.cmake)
 include(cmake/getNuklear.cmake)
 
-target_compile_definitions(based PUBLIC BASED_VERSION="0.1-dev-alpha")
+target_compile_definitions(based PUBLIC
+	BASED_VERSION="0.1-dev-alpha"
+	BASED_ENABLE_GL_CHECK
+	BASED_DISABLE_NK
+)
 set_target_properties(based PROPERTIES VERSION 0.1 SOVERSION 01)
 set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 
 set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
+	GL_Util.cpp
 	LuaFile.cpp
 	NuklearImplement.c
+	Polygon.cpp
 	Shader.cpp
 	Texture.cpp
 	Window.cpp

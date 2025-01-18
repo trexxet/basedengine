@@ -4,6 +4,7 @@
 
 #include "Engine.hpp"
 #include "Logger.hpp"
+#include "NuklearCommon.h"
 #include "Scene.hpp"
 
 namespace Based {
@@ -13,7 +14,7 @@ EngineClient::SDL::SDL () {
 		log.fatal ("SDL init error: {}", SDL_GetError());
 	SDL_GL_SetAttribute (SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute (SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	SDL_GL_SetAttribute (SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+	SDL_GL_SetAttribute (SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
 	int sdlVersion = SDL_GetVersion();
 	log.write("SDL {}.{}.{} initialized",

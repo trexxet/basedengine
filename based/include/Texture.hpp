@@ -15,6 +15,11 @@ public:
 	void load (const std::string& path) override final;
 	bool prepare () override final;
 	void unload () override final;
+
+	/// @brief Bind texture to texture unit
+	/// @param unit Texture unit number
+	/// @note Texture readiness is not checked
+	void bind (GLuint unit);
 };
 
 }
