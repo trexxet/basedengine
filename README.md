@@ -18,11 +18,15 @@
 * Sol 3.2.3
 * Nuklear 4.12.3
 
+## Build flags
+* `BASED_ENABLE_GL_CHECK` - enable printing GL error stack after some actions. May be slow, useful for debug.
+* `BASED_DISABLE_NK` - disable Nuklear. May be useful for GL debug.
+
 #### Code style (which I may forget)
 * Tabs are used for indentation. Spaces are used for alignment. Thus, tab width is not important.
 * Types are PascalCase. Variables are camelCase. Methods and functions are snake_case.
 * There must always be exactly one space between the function name and the opening parenthesis. The only exception is **calling** a function with no arguments - must have no space before parenthesis.
 * Every file must end with an empty line
-* Includes are sorted in 3 groups separated by empty line: system headers (`<string>`), dependency library headers (`<glad/gl.h>`) and Based headers (`"Logger.hpp"`). Each group is sorted alphabetically.
+* Includes are sorted in 3 groups separated by empty line: system headers (`<string>`), dependency library headers (`<glad/gl.h>`) and Based headers (`"Logger.hpp"`). Each group is sorted alphabetically and per-subdirectory. Source file starts with a corresponding include, header file starts with `#pragma once` if needed.
 * No new line for opening curly bracket
 * Doxygen comments use triple slash and same indentation as the related code. Commands use @.

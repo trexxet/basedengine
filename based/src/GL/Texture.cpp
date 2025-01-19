@@ -1,11 +1,11 @@
-#include "Texture.hpp"
+#include "GL/Texture.hpp"
 
 #include <SDL3_image/SDL_image.h>
 
-#include "GL_Util.hpp"
 #include "Logger.hpp"
+#include "GL/GL_Util.hpp"
 
-namespace Based {
+namespace Based::GL {
 
 void Texture::load (const std::string& path) {
 	surface = IMG_Load (path.c_str());

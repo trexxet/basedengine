@@ -4,6 +4,8 @@
 
 #include <glad/gl.h>
 
+#include "ClassHelper.hpp"
+
 namespace Based::GL {
 
 class Polygon {
@@ -44,10 +46,7 @@ public:
 	}
 
 	~Polygon ();
-	Polygon (const Polygon&) = delete;
-	Polygon& operator= (const Polygon&) = delete;
-	Polygon (Polygon&&) = default;
-	Polygon& operator= (Polygon&&) = default;
+	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Polygon);
 };
 
 class ConvexQuad : public Polygon {

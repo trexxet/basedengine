@@ -5,7 +5,7 @@
 
 #include "Resource.hpp"
 
-namespace Based {
+namespace Based::GL {
 
 class Texture : public Resource {
 	SDL_Surface *surface = nullptr;

@@ -19,13 +19,13 @@ set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
-	GL_Util.cpp
 	LuaFile.cpp
 	NuklearImplement.c
-	Polygon.cpp
-	Shader.cpp
-	Texture.cpp
 	Window.cpp
+	GL/GL_Util.cpp
+	GL/Polygon.cpp
+	GL/Shader.cpp
+	GL/Texture.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)
 

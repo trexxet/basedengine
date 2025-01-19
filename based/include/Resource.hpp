@@ -30,8 +30,7 @@ struct Resource {
 	bool ready = false;
 
 	Resource() = default;
-	BASED_CLASS_COPY (Resource, delete);
-	BASED_CLASS_MOVE (Resource, default);
+	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Resource);
 };
 
 template <class T>
@@ -99,8 +98,7 @@ public:
 	}
 
 	ResourceManager () = default;
-	BASED_CLASS_COPY (ResourceManager, delete);
-	BASED_CLASS_MOVE (ResourceManager, delete);
+	BASED_CLASS_NO_COPY_MOVE (ResourceManager);
 	~ResourceManager () {
 		for (auto & [name, res] : resourceMap) {
 			try {

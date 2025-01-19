@@ -1,4 +1,10 @@
-#include "Logger.hpp"
+/* Demo 01 - Hello World 
+ * 
+ * Demonstrates initialization, logging, window creation, loading Lua config,
+ * basic event handling and creating a Nuklear window & label.
+ * 
+ * (c) trexxet 2025
+ */
 
 /* You still need to include SDL_main.h to the source file
  * containing your `int main (int argv, char** argc)`. Note
@@ -9,6 +15,7 @@
 #include "Engine.hpp"
 #include "EngineClient.hpp"
 #include "Geometry.hpp"
+#include "Logger.hpp"
 #include "LuaFile.hpp"
 #include "Scene.hpp"
 

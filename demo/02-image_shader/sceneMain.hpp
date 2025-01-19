@@ -4,15 +4,15 @@
 #include <span>
 
 #include "Logger.hpp"
-#include "Polygon.hpp"
 #include "Scene.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
+#include "GL/Polygon.hpp"
+#include "GL/Shader.hpp"
+#include "GL/Texture.hpp"
 
 class SceneMain : public Based::Scene {
 	std::unique_ptr<Based::GL::Rect> bgRect {nullptr};
-	std::unique_ptr<Based::Texture> bgTex {nullptr};
-	Based::ShaderProgram *bgShader {nullptr};
+	std::unique_ptr<Based::GL::Texture> bgTex {nullptr};
+	Based::GL::ShaderProgram *bgShader {nullptr};
 public:
 	SceneMain (Based::Engine* engine, Based::Lua::File& conf) : Based::Scene(engine) {
 		if (!engine->client) return;
@@ -30,12 +30,12 @@ public:
 		bgRect->addAttribute (1, 2, 4, 2);
 		bgRect->end_VAO_batch ();
 
-		bgShader = &engine->client->defaultShaders[Based::Default::SP_2D_ForwardSampler];
+		bgShader = &engine->client->defaultShaders[Based::GL::Default::SP_2D_ForwardSampler];
 		bgShader->use();
 		bgShader->setUniform ("tex", 0);
 
-		bgTex = std::make_unique<Based::Texture>();
-		bgTex->load ("../demo/assets/02-image_shader/thinking.png");
+		bgTex = std::make_unique<Based::GL::Texture>();
+		bgTex->load (BG_PATH);
 		if (!bgTex->prepare())
 			Based::log.fatal ("Failed to prepare texture!");
 	}

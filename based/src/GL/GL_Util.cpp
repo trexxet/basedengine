@@ -1,4 +1,4 @@
-#include "GL_Util.hpp"
+#include "GL/GL_Util.hpp"
 
 #include "Logger.hpp"
 

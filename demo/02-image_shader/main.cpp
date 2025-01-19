@@ -1,13 +1,19 @@
-#include "Logger.hpp"
+/* Demo 02 - Image and Shader 
+ * 
+ * Demonstrates loading a texture, creating a graphical polygon,
+ * using of a built-in shader and rendering a picture.
+ * 
+ * (c) trexxet 2025
+ */
 
 #include <SDL3/SDL_main.h>
 
 #include "Engine.hpp"
 #include "EngineClient.hpp"
 #include "Geometry.hpp"
+#include "Logger.hpp"
 #include "LuaFile.hpp"
 #include "Scene.hpp"
-#include "Shader.hpp"
 
 #include "sceneMain.hpp"
 

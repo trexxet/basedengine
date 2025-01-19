@@ -1,6 +1,6 @@
-#include "Polygon.hpp"
+#include "GL/Polygon.hpp"
 
-#include "GL_Util.hpp"
+#include "GL/GL_Util.hpp"
 
 namespace Based::GL {
 

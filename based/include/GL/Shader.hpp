@@ -10,7 +10,7 @@
 #include "ClassHelper.hpp"
 #include "Resource.hpp"
 
-namespace Based {
+namespace Based::GL {
 
 class Shader : public Resource {
 	GLenum type;
@@ -87,8 +87,7 @@ struct Shaders {
 	inline ShaderProgram& operator[] (ShaderProgramID id) { return shaderPrograms.at (id); }
 
 	Shaders () = default;
-	BASED_CLASS_COPY (Shaders, delete);
-	BASED_CLASS_MOVE (Shaders, delete);
+	BASED_CLASS_NO_COPY_MOVE (Shaders);
 };
 
 }

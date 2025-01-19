@@ -1,10 +1,10 @@
-#include "Shader.hpp"
+#include "GL/Shader.hpp"
 
-#include "GL_Util.hpp"
 #include "Logger.hpp"
 #include "Util.hpp"
+#include "GL/GL_Util.hpp"
 
-namespace Based {
+namespace Based::GL {
 
 using _gl_getivproc_t = void (*)(GLuint id, GLenum pname, GLint *params);
 using _gl_getinfoproc_t = void (*)(GLuint id, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
@@ -88,6 +88,8 @@ bool ShaderProgram::prepare () {
 	for (const Shader* shader: units)
 		glAttachShader (id, shader->id);
 
+	// Enabling Vertex Attribute Arrays before linking program
+	// prevents shader recompilation based on GL state
 	for (GLuint i = 0; i < attributes; i++) {
 		glEnableVertexAttribArray (i);
 		BASED_GL_CHECK ("Error enabling Vertex Attribute Array during shader program creation");
