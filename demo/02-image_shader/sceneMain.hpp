@@ -19,10 +19,10 @@ public:
 
 		GLfloat bgVBO_arr[] = {
 			// x   y   s   t
-			  -1,  1,  0,  1,
 			  -1, -1,  0,  0,
 			   1, -1,  1,  0,
-			   1,  1,  1,  1
+			   1,  1,  1,  1,
+			  -1,  1,  0,  1
 		};
 		std::span<GLfloat> bgVBO {bgVBO_arr};
 		bgRect = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &bgVBO, true);
@@ -31,11 +31,11 @@ public:
 		bgRect->end_VAO_batch ();
 
 		GLfloat gridVBO_arr[] = {
-			// x   y   s   t
-			  -0.8,  0.8,  0,  1,
+			// x     y     s   t
 			  -0.8, -0.2,  0,  0,
 			   0.2, -0.2,  1,  0,
-			   0.2,  0.8,  1,  1
+			   0.2,  0.8,  1,  1,
+			  -0.8,  0.8,  0,  1
 		};
 		std::span<GLfloat> gridVBO {gridVBO_arr};
 		gridRect = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &gridVBO, true);

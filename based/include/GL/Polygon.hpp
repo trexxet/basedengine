@@ -54,7 +54,12 @@ public:
 	ConvexQuad (GLenum VBO_usage, const std::span<GLfloat>* VBO_array, bool startVAOBatch = false)
 		: Polygon (4, GL_TRIANGLE_FAN, VBO_usage, VBO_array, nullptr, startVAOBatch) { }
 };
-using Rect = ConvexQuad;
+
+class Rect : public ConvexQuad {
+public:
+	Rect (GLenum VBO_usage, const std::span<GLfloat>* VBO_array, bool startVAOBatch = false)
+		: ConvexQuad (VBO_usage, VBO_array, startVAOBatch) { }
+};
 
 class ConvexHex : public Polygon {
 public:

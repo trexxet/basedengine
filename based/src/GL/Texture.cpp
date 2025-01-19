@@ -12,6 +12,8 @@ void Texture::load (const std::string& path) {
 	if (!surface)
 		log.fatal ("Can't load texture {}: {}", path, SDL_GetError());
 
+	size = {surface->w, surface->h};
+
 	log.write ("Loaded texture: {}", path);
 	loaded = true;
 }
@@ -25,7 +27,7 @@ bool Texture::prepare () {
 
 	glGenTextures (1, &id);
 	glBindTexture (GL_TEXTURE_2D, id);
-	glTexImage2D (GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0, mode, GL_UNSIGNED_BYTE, surface->pixels);
+	glTexImage2D (GL_TEXTURE_2D, 0, mode, size.x, size.y, 0, mode, GL_UNSIGNED_BYTE, surface->pixels);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	BASED_GL_CHECK ("Error loading texture");
