@@ -1,3 +1,16 @@
+/* Resource and ResourceManager
+ * 
+ * Resource is a base class for objects that can be
+ * loaded externally and needs their lifetime managed.
+ * ResourceManager wraps management and access for multiple Resources.
+ * Current list of built-in Resources:
+ * * Shader
+ * * ShaderProgram
+ * * Texture
+ * 
+ * (c) trexxet 2025
+ */
+
 #pragma once
 
 #include <concepts>
@@ -29,7 +42,8 @@ struct Resource {
 	/// Resource is ready to be used
 	bool ready = false;
 
-	Resource() = default;
+	Resource () = default;
+	virtual ~Resource () = default;
 	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Resource);
 };
 
@@ -99,17 +113,6 @@ public:
 
 	ResourceManager () = default;
 	BASED_CLASS_NO_COPY_MOVE (ResourceManager);
-	~ResourceManager () {
-		for (auto & [name, res] : resourceMap) {
-			try {
-				res->unload();
-			}
-			catch (const std::exception &e) {
-				log.warn ("Failed to unload resource {}", name);
-			}
-		}
-		resourceMap.clear();
-	}
 };
 
 }

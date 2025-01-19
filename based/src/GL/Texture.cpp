@@ -44,6 +44,10 @@ void Texture::unload () {
 	loaded = false;
 }
 
+Texture::~Texture () {
+	if (id) unload();
+}
+
 void Texture::bind (GLuint unit) {
 	glActiveTexture (GL_TEXTURE0 + unit);
 	glBindTexture (GL_TEXTURE_2D, id);

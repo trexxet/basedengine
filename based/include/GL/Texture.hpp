@@ -16,6 +16,8 @@ public:
 	bool prepare () override final;
 	void unload () override final;
 
+	~Texture () override final;
+
 	/// @brief Bind texture to texture unit
 	/// @param unit Texture unit number
 	/// @note Texture readiness is not checked

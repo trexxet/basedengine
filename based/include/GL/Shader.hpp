@@ -28,7 +28,7 @@ public:
 	bool prepare () override final;
 	void unload () override final;
 
-	~Shader ();
+	~Shader () override final;
 };
 
 using ShaderVec = std::vector<Shader *>;
@@ -51,7 +51,7 @@ public:
 	bool prepare () override final;
 	void unload () override final;
 
-	~ShaderProgram ();
+	~ShaderProgram () override final;
 
 	/// @brief Use the shader program
 	/// @note Shader program readiness is not checked

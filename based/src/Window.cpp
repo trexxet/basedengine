@@ -29,7 +29,6 @@ Window::Window (const std::string &title, const Size2D<int>& _size) :
 	log.write_dec ("Render device: {}", (const char*) glGetString (GL_RENDERER));
 
 	glClearColor (0, 0, 0, 1);
-	glEnable (GL_DEPTH_TEST);
 	if (glGetError () != GL_NO_ERROR)
 		log.fatal ("Failed to use OpenGL!");
 

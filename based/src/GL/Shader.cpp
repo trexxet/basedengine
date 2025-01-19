@@ -62,6 +62,7 @@ bool Shader::prepare () {
 }
 
 void Shader::unload () {
+	source.clear();
 	if (glIsShader (id))
 		glDeleteShader (id);
 	ready = false;
@@ -107,6 +108,7 @@ bool ShaderProgram::prepare () {
 }
 
 void ShaderProgram::unload () {
+	units.clear();
 	if (glIsProgram (id))
 		glDeleteProgram (id);
 	ready = false;
