@@ -7,6 +7,7 @@
 
 #include <glad/gl.h>
 
+#include "ClassHelper.hpp"
 #include "Resource.hpp"
 
 namespace Based {
@@ -26,6 +27,8 @@ public:
 	/// @brief Compile gl shader
 	bool prepare () override final;
 	void unload () override final;
+
+	~Shader ();
 };
 
 using ShaderVec = std::vector<Shader *>;
@@ -44,6 +47,8 @@ public:
 	/// @brief Create & link gl shader program
 	bool prepare () override final;
 	void unload () override final;
+
+	~ShaderProgram ();
 
 	/// @brief Use the shader program
 	/// @note Shader program readiness is not checked
@@ -75,12 +80,12 @@ struct Shaders {
 
 	void init ();
 
+	inline Shader& operator() (ShaderID id) { return shaders.at (id); }
+	inline ShaderProgram& operator[] (ShaderProgramID id) { return shaderPrograms.at (id); }
+
 	Shaders () = default;
-	Shaders (const Shaders&) = delete;
-	Shaders& operator= (const Shaders&) = delete;
-	Shaders (Shaders&&) = delete;
-	Shaders& operator= (Shaders&&) = delete;
-	~Shaders ();
+	BASED_CLASS_COPY (Shaders, delete);
+	BASED_CLASS_MOVE (Shaders, delete);
 };
 
 }

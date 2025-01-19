@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "ClassHelper.hpp"
 #include "Logger.hpp"
 
 namespace Based {
@@ -29,10 +30,8 @@ struct Resource {
 	bool ready = false;
 
 	Resource() = default;
-	Resource (const Resource&) = delete;
-	Resource& operator= (const Resource&) = delete;
-	Resource (Resource&&) = default;
-	Resource& operator= (Resource&&) = default;
+	BASED_CLASS_COPY (Resource, delete);
+	BASED_CLASS_MOVE (Resource, default);
 };
 
 template <class T>
@@ -100,10 +99,8 @@ public:
 	}
 
 	ResourceManager () = default;
-	ResourceManager (const ResourceManager&) = delete;
-	ResourceManager& operator= (const ResourceManager&) = delete;
-	ResourceManager (ResourceManager&&) = delete;
-	ResourceManager& operator= (ResourceManager&&) = delete;
+	BASED_CLASS_COPY (ResourceManager, delete);
+	BASED_CLASS_MOVE (ResourceManager, delete);
 	~ResourceManager () {
 		for (auto & [name, res] : resourceMap) {
 			try {

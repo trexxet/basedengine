@@ -69,6 +69,10 @@ void Shader::unload () {
 	id = 0;
 }
 
+Shader::~Shader() {
+	if (id) unload();
+}
+
 ShaderProgram::ShaderProgram (ShaderVec&& units) : units(units) { }
 
 void ShaderProgram::load (const std::string& path) {
@@ -101,6 +105,10 @@ void ShaderProgram::unload () {
 	id = 0;
 }
 
+ShaderProgram::~ShaderProgram () {
+	if (id) unload();
+}
+
 void ShaderProgram::use () {
 	glUseProgram (id);
 	BASED_GL_CHECK ("Error using shader program");
@@ -127,8 +135,10 @@ namespace Default {
 ;
 
 void Shaders::init () {
-	shaders.try_emplace (S_2D_ForwardVert, Shader(GL_VERTEX_SHADER, std::move(src_2d_forward_vert)));
-	shaders.try_emplace (S_2D_SamplerFrag, Shader(GL_FRAGMENT_SHADER, std::move(src_2d_sampler_frag)));
+	shaders.emplace (std::piecewise_construct, std::forward_as_tuple (S_2D_ForwardVert),
+	                 std::forward_as_tuple (GL_VERTEX_SHADER, std::move (src_2d_forward_vert)));
+	shaders.emplace (std::piecewise_construct, std::forward_as_tuple (S_2D_SamplerFrag),
+	                 std::forward_as_tuple (GL_FRAGMENT_SHADER, std::move (src_2d_sampler_frag)));
 
 	for (auto& [id, shader] : shaders) {
 		shader.load();
@@ -137,8 +147,9 @@ void Shaders::init () {
 			log.fatal ("Failed to compile default shader");
 	}
 
-	ShaderVec SP_2D_ForwardSampler_Units { &shaders.at(S_2D_ForwardVert), &shaders.at(S_2D_SamplerFrag) };
-	shaderPrograms.try_emplace (SP_2D_ForwardSampler, ShaderProgram (std::move(SP_2D_ForwardSampler_Units)));
+	ShaderVec SP_2D_ForwardSampler_Units { &shaders.at (S_2D_ForwardVert), &shaders.at (S_2D_SamplerFrag) };
+	shaderPrograms.emplace (std::piecewise_construct, std::forward_as_tuple (SP_2D_ForwardSampler),
+	                        std::forward_as_tuple (std::move (SP_2D_ForwardSampler_Units)));
 
 	for (auto& [id, shaderProgram] : shaderPrograms) {
 		shaderProgram.load();
@@ -146,13 +157,6 @@ void Shaders::init () {
 		if (!shaderProgram.ready) [[unlikely]]
 			log.fatal ("Failed to link default shader program");
 	}
-}
-
-Shaders::~Shaders () {
-	for (auto& [id, shaderProgram] : shaderPrograms)
-		shaderProgram.unload();
-	for (auto& [id, shader] : shaders)
-		shader.unload();
 }
 
 }

@@ -30,7 +30,7 @@ public:
 		bgRect->addAttribute (1, 2, 4, 2);
 		bgRect->end_VAO_batch ();
 
-		bgShader = &engine->client->defaultShaders.shaderPrograms.at(Based::Default::SP_2D_ForwardSampler);
+		bgShader = &engine->client->defaultShaders[Based::Default::SP_2D_ForwardSampler];
 		bgShader->use();
 		bgShader->setUniform ("tex", 0);
 
