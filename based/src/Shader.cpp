@@ -73,7 +73,8 @@ Shader::~Shader() {
 	if (id) unload();
 }
 
-ShaderProgram::ShaderProgram (ShaderVec&& units) : units(units) { }
+ShaderProgram::ShaderProgram (ShaderVec&& units, GLuint attributes)
+	: units (units), attributes (attributes) { }
 
 void ShaderProgram::load (const std::string& path) {
 	for (const Shader* shader: units) {
@@ -86,6 +87,12 @@ bool ShaderProgram::prepare () {
 	id = glCreateProgram ();
 	for (const Shader* shader: units)
 		glAttachShader (id, shader->id);
+
+	for (GLuint i = 0; i < attributes; i++) {
+		glEnableVertexAttribArray (i);
+		BASED_GL_CHECK ("Error enabling Vertex Attribute Array during shader program creation");
+	}
+
 	glLinkProgram (id);
 
 	if (!check_glsl_status(id, glGetProgramiv, GL_LINK_STATUS)) [[unlikely]] {
@@ -149,7 +156,7 @@ void Shaders::init () {
 
 	ShaderVec SP_2D_ForwardSampler_Units { &shaders.at (S_2D_ForwardVert), &shaders.at (S_2D_SamplerFrag) };
 	shaderPrograms.emplace (std::piecewise_construct, std::forward_as_tuple (SP_2D_ForwardSampler),
-	                        std::forward_as_tuple (std::move (SP_2D_ForwardSampler_Units)));
+	                        std::forward_as_tuple (std::move (SP_2D_ForwardSampler_Units), 2));
 
 	for (auto& [id, shaderProgram] : shaderPrograms) {
 		shaderProgram.load();

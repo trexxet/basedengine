@@ -36,10 +36,13 @@ using ShaderVec = std::vector<Shader *>;
 class ShaderProgram : public Resource {
 	ShaderVec units;
 public:
-	GLuint id = 0;
+	GLuint id = 0, attributes = 0;
 
 	ShaderProgram () = delete;
-	ShaderProgram (ShaderVec&& units);
+	/// @brief Constructor for ShaderProgram
+	/// @param units Vector of Shader* pointing to the corresponding Shader units
+	/// @param attributes Number of generic vertex attributes
+	ShaderProgram (ShaderVec&& units, GLuint attributes);
 
 	/// @brief Check if all shader units are compiled
 	/// @note path is unused
