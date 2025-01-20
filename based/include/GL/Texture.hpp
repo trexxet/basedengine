@@ -12,7 +12,7 @@ namespace Based::GL {
 class Texture : public Resource {
 	SDL_Surface *surface = nullptr;
 public:
-	GLuint id;
+	GLuint id, unit;
 	Size2D<int> size;
 	/// @brief {0, 0, size.x, size.y}
 	Rect2D<int> rect;
@@ -28,7 +28,7 @@ public:
 	/// @brief Bind texture to texture unit
 	/// @param unit Texture unit number
 	/// @note Texture readiness is not checked
-	void bind (GLuint unit);
+	void bind (GLuint tex_unit);
 
 	// Coordinate space transformations
 	// todo: vectorize

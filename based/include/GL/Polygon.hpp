@@ -42,9 +42,11 @@ public:
 	/// @param size Nnumber of components per generic vertex attribute
 	/// @param stride Item count offset between consecutive generic vertex attributes
 	/// @param pointer Item count offset of the first component of the first generic vertex attribute in the VBO
-	void addAttribute (GLuint index, GLint size, int stride, int pointer);
+	void add_attribute (GLuint index, GLint size, int stride, int pointer);
 	/// @brief Draw polygon
 	void draw ();
+	/// @brief Bind VAO, draw polygon, unbind VAO (if needed) 
+	void bind_draw (bool startVAOBatch = false);
 
 	/// @brief Unbind VAO
 	inline void end_VAO_batch() {

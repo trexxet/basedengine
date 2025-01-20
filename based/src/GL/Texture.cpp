@@ -51,10 +51,11 @@ Texture::~Texture () {
 	if (id) unload();
 }
 
-void Texture::bind (GLuint unit) {
-	glActiveTexture (GL_TEXTURE0 + unit);
+void Texture::bind (GLuint tex_unit) {
+	glActiveTexture (GL_TEXTURE0 + tex_unit);
 	glBindTexture (GL_TEXTURE_2D, id);
 	BASED_GL_CHECK ("Error binding texture");
+	unit = tex_unit;
 }
 
 }

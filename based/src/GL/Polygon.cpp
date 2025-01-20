@@ -28,7 +28,7 @@ Polygon::Polygon (GLsizei vertexCount, GLenum drawMode, GLenum VBO_usage,
 
 // todo: normalized?
 // todo: glEnableVertexAttribArray better be called before linking of SP
-void Polygon::addAttribute (GLuint index, GLint size, int stride, int pointer) {
+void Polygon::add_attribute (GLuint index, GLint size, int stride, int pointer) {
 	glVertexAttribPointer (index, size, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), (void *)(pointer * sizeof(GLfloat)));
 	glEnableVertexAttribArray (index);
 	BASED_GL_CHECK ("Error setting attributes to a primitive");
@@ -40,6 +40,13 @@ void Polygon::draw () {
 	else
 		glDrawArrays (drawMode, 0, vertexCount);
 	BASED_GL_CHECK ("Error drawing a primitive");
+}
+
+void Polygon::bind_draw (bool startVAOBatch) {
+	start_VAO_batch();
+	draw();
+	if (!startVAOBatch)
+		end_VAO_batch();
 }
 
 Polygon::~Polygon () {
@@ -55,8 +62,8 @@ Polygon::~Polygon () {
 std::unique_ptr<Rect> Rect::make (GLenum VBO_usage, const std::vector<GLfloat>& VBO_vec, bool startVAObatch) {
 	std::span<const GLfloat> VBO_span {VBO_vec};
 	std::unique_ptr<Rect> rect = std::make_unique<Rect> (VBO_usage, &VBO_span, true);
-	rect->addAttribute (0, 2, 4, 0);
-	rect->addAttribute (1, 2, 4, 2);
+	rect->add_attribute (0, 2, 4, 0); // X Y s t
+	rect->add_attribute (1, 2, 4, 2); // x y S T
 	if (!startVAObatch)
 		rect->end_VAO_batch ();
 	return rect;

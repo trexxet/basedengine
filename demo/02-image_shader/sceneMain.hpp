@@ -10,8 +10,8 @@
 #include "GL/Texture.hpp"
 
 class SceneMain : public Based::Scene {
-	std::unique_ptr<Based::GL::Rect> bgRect {nullptr}, gridRect {nullptr};
-	std::unique_ptr<Based::GL::Texture> bgTex {nullptr}, gridTex {nullptr};
+	std::unique_ptr<Based::GL::Rect> bgRect {nullptr}, sprite1Rect {nullptr};
+	std::unique_ptr<Based::GL::Texture> bgTex {nullptr}, sprite1Tex {nullptr};
 	Based::GL::ShaderProgram *bgShader {nullptr};
 public:
 	SceneMain (Based::Engine* engine, Based::Lua::File& conf) : Based::Scene(engine) {
@@ -29,19 +29,21 @@ public:
 			  -0.8,  0.8,  0,  1
 		};
 		Based::GL::VBOSpan gridVBO {gridVBO_arr};
-		gridRect = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &gridVBO, true);
-		gridRect->addAttribute (0, 2, 4, 0);
-		gridRect->addAttribute (1, 2, 4, 2);
-		gridRect->end_VAO_batch ();
+		sprite1Rect = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &gridVBO, true);
+		sprite1Rect->add_attribute (0, 2, 4, 0);
+		sprite1Rect->add_attribute (1, 2, 4, 2);
+		sprite1Rect->end_VAO_batch ();
 
 		bgShader = &engine->client->defaultShaders[Based::GL::Default::SP_2D_ForwardSampler];
 
 		bgTex = std::make_unique<Based::GL::Texture>();
 		bgTex->load (BG_PATH);
-		gridTex = std::make_unique<Based::GL::Texture>();
-		gridTex->load (GRID_PATH);
-		if (!bgTex->prepare() || !gridTex->prepare())
+		sprite1Tex = std::make_unique<Based::GL::Texture>();
+		sprite1Tex->load (SPRITE1_PATH);
+		if (!bgTex->prepare() || !sprite1Tex->prepare())
 			Based::log.fatal ("Failed to prepare texture!");
+		bgTex->bind (0);
+		sprite1Tex->bind (1);
 
 		// For this demo, we are managing depth visibility by draw order
 		glDisable (GL_DEPTH_TEST);
@@ -54,17 +56,11 @@ public:
 	void update () override final { }
 
 	void render () override final {
-		bgTex->bind (0);
-		gridTex->bind (1);
 		bgShader->use();
-		bgShader->setUniform ("tex", 0);
-		bgRect->start_VAO_batch ();
-		bgRect->draw();
-		bgRect->end_VAO_batch ();
-		bgShader->setUniform ("tex", 1);
-		gridRect->start_VAO_batch ();
-		gridRect->draw();
-		gridRect->end_VAO_batch ();
+		bgShader->setUniform ("tex", bgTex->unit);
+		bgRect->bind_draw();
+		bgShader->setUniform ("tex", sprite1Tex->unit);
+		sprite1Rect->bind_draw();
 	}
 
 	void gui () override final { }
