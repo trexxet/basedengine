@@ -1,12 +1,18 @@
 #pragma once
 
+#include <memory>
 #include <span>
+#include <vector>
 
 #include <glad/gl.h>
 
 #include "ClassHelper.hpp"
+#include "Geometry.hpp"
 
 namespace Based::GL {
+
+using VBOSpan = std::span<const GLfloat>;
+using EBOSpan = std::span<const GLuint>;
 
 class Polygon {
 	GLuint VAO = 0, VBO = 0, EBO = 0;
@@ -20,7 +26,7 @@ public:
 	/// @param VBO_array std::span* wrap for VBO array
 	/// @param EBO_array std::span* wrap for EBO array (null if EBO not used)
 	/// @param startVAOBatch true if should leave VAO binded
-	Polygon (GLsizei vertexCount, GLenum drawMode, GLenum VBO_usage, const std::span<GLfloat>* VBO_array, const std::span<GLuint>* EBO_array, bool startVAOBatch = false);
+	Polygon (GLsizei vertexCount, GLenum drawMode, GLenum VBO_usage, const VBOSpan* VBO_array, const EBOSpan* EBO_array, bool startVAOBatch = false);
 
 	/// @brief Bind VAO
 	/// \return if successful
@@ -51,19 +57,31 @@ public:
 
 class ConvexQuad : public Polygon {
 public:
-	ConvexQuad (GLenum VBO_usage, const std::span<GLfloat>* VBO_array, bool startVAOBatch = false)
+	ConvexQuad (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: Polygon (4, GL_TRIANGLE_FAN, VBO_usage, VBO_array, nullptr, startVAOBatch) { }
 };
 
 class Rect : public ConvexQuad {
 public:
-	Rect (GLenum VBO_usage, const std::span<GLfloat>* VBO_array, bool startVAOBatch = false)
+	Rect (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: ConvexQuad (VBO_usage, VBO_array, startVAOBatch) { }
+
+	/// @brief Create a Rect from a vector containing VBO, auto generate VAO
+	static std::unique_ptr<Rect> make (GLenum VBO_usage, const std::vector<GLfloat>& VBO_vec, bool startVAObatch = false);
+	/// @brief Create a Rect with auto generated VBO & VAO
+	/// @param xy Screen coordinates (GL space from -1 to 1)
+	/// @param st Texture coordinates (GL space from 0 to 1)
+	static std::unique_ptr<Rect> make (GLenum VBO_usage, const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st, bool startVAObatch = false);
+	
+	/// @brief Generate VBO for Rect using screen & texture coordinates
+	/// @param xy Screen coordinates (GL space from -1 to 1)
+	/// @param st Texture coordinates (GL space from 0 to 1)
+	static std::vector<GLfloat> generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st);
 };
 
 class ConvexHex : public Polygon {
 public:
-	ConvexHex (GLenum VBO_usage, const std::span<GLfloat>* VBO_array, bool startVAOBatch = false)
+	ConvexHex (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: Polygon (6, GL_TRIANGLE_FAN, VBO_usage, VBO_array, nullptr, startVAOBatch) { }
 };
 using Hex = ConvexHex;

@@ -16,6 +16,8 @@ struct Window {
 	SDL_Window *sdlWindow;
 	Size2D<int> size;
 	Rect2D<int> rect;
+	/// @brief Get {-1, -1, 2, 2} rect in GL coordinates (from -1 to 1)
+	constexpr static Rect2D<GLfloat> Full () { return {-1.f, -1.f, 2.f, 2.f}; }
 
 	struct Nk {
 		nk_context *ctx;
@@ -31,6 +33,7 @@ struct Window {
 	~Window ();
 
 	// Coordinate space transformations
+	// todo: vectorize
 	inline glm::vec2 Window2GL (const Point2D<int>& p) const {
 		return {
 			(2.f * p.x) / size.x - 1.f,
@@ -47,16 +50,16 @@ struct Window {
 		return {
 			(2.f * r.x) / size.x - 1.f,
 			(2.f * r.y) / size.y - 1.f,
-			(2.f * r.width) / size.x - 1.f,
-			(2.f * r.height) / size.y - 1.f
+			(2.f * r.w) / size.x - 1.f,
+			(2.f * r.h) / size.y - 1.f
 		};
 	}
 	inline Rect2D<int> GL2Window (const Rect2D<float>& r) const {
 		return {
 			(int)((r.x + 1) * size.x * 0.5f),
 			(int)((r.y + 1) * size.y * 0.5f),
-			(int)((r.width + 1) * size.x * 0.5f),
-			(int)((r.height + 1) * size.y * 0.5f)
+			(int)((r.w + 1) * size.x * 0.5f),
+			(int)((r.h + 1) * size.y * 0.5f)
 		};
 	}
 };

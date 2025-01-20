@@ -17,19 +17,10 @@ public:
 	SceneMain (Based::Engine* engine, Based::Lua::File& conf) : Based::Scene(engine) {
 		if (!engine->client) return;
 
-		GLfloat bgVBO_arr[] = {
-			// x   y   s   t
-			  -1, -1,  0,  0,
-			   1, -1,  1,  0,
-			   1,  1,  1,  1,
-			  -1,  1,  0,  1
-		};
-		std::span<GLfloat> bgVBO {bgVBO_arr};
-		bgRect = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &bgVBO, true);
-		bgRect->addAttribute (0, 2, 4, 0);
-		bgRect->addAttribute (1, 2, 4, 2);
-		bgRect->end_VAO_batch ();
+		// Use GL::Rect::make to auto generate VBO & VAO
+		bgRect = Based::GL::Rect::make (GL_STATIC_DRAW, Based::Window::Full(), Based::GL::Texture::Full());
 
+		// Set VBO & VAO manually
 		GLfloat gridVBO_arr[] = {
 			// x     y     s   t
 			  -0.8, -0.2,  0,  0,
@@ -37,7 +28,7 @@ public:
 			   0.2,  0.8,  1,  1,
 			  -0.8,  0.8,  0,  1
 		};
-		std::span<GLfloat> gridVBO {gridVBO_arr};
+		Based::GL::VBOSpan gridVBO {gridVBO_arr};
 		gridRect = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &gridVBO, true);
 		gridRect->addAttribute (0, 2, 4, 0);
 		gridRect->addAttribute (1, 2, 4, 2);
@@ -52,8 +43,7 @@ public:
 		if (!bgTex->prepare() || !gridTex->prepare())
 			Based::log.fatal ("Failed to prepare texture!");
 
-		// For this demo, we are managing the back-to-front visibility
-		// outselves by draw order
+		// For this demo, we are managing depth visibility by draw order
 		glDisable (GL_DEPTH_TEST);
 		glEnable (GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

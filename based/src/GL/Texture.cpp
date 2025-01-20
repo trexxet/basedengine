@@ -13,6 +13,7 @@ void Texture::load (const std::string& path) {
 		log.fatal ("Can't load texture {}: {}", path, SDL_GetError());
 
 	size = {surface->w, surface->h};
+	rect = {size};
 
 	log.write ("Loaded texture: {}", path);
 	loaded = true;

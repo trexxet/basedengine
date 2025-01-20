@@ -14,6 +14,10 @@ class Texture : public Resource {
 public:
 	GLuint id;
 	Size2D<int> size;
+	/// @brief {0, 0, size.x, size.y}
+	Rect2D<int> rect;
+	/// @brief Get {0, 0, 1, 1} rect in GL coordinates
+	constexpr static Rect2D<GLfloat> Full () { return {0.f, 0.f, 1.f, 1.f}; }
 
 	void load (const std::string& path) override final;
 	bool prepare () override final;
@@ -27,6 +31,7 @@ public:
 	void bind (GLuint unit);
 
 	// Coordinate space transformations
+	// todo: vectorize
 	inline glm::vec2 Tex2GL (const Point2D<int>& p) const {
 		return {
 			(GLfloat) p.x / size.x,
@@ -43,16 +48,16 @@ public:
 		return {
 			(GLfloat) r.x / size.x,
 			(GLfloat) r.y / size.y,
-			(GLfloat) r.width / size.x,
-			(GLfloat) r.height / size.y
+			(GLfloat) r.w / size.x,
+			(GLfloat) r.h / size.y
 		};
 	}
 	inline Rect2D<int> GL2Tex (const Rect2D<float>& r) const {
 		return {
 			(int) (r.x * size.x),
 			(int) (r.y * size.y),
-			(int) (r.width * size.x),
-			(int) (r.height * size.y)
+			(int) (r.w * size.x),
+			(int) (r.h * size.y)
 		};
 	}
 };

@@ -5,7 +5,7 @@
 namespace Based::GL {
 
 Polygon::Polygon (GLsizei vertexCount, GLenum drawMode, GLenum VBO_usage, 
-                  const std::span<GLfloat>* VBO_array, const std::span<GLuint>* EBO_array, bool startVAOBatch) 
+                  const VBOSpan* VBO_array, const EBOSpan* EBO_array, bool startVAOBatch) 
 	: drawMode(drawMode), vertexCount(vertexCount) {
 	glGenVertexArrays (1, &VAO);
 	glBindVertexArray (VAO);
@@ -50,6 +50,30 @@ Polygon::~Polygon () {
 	glDeleteVertexArrays (1, &VAO);
 	end_VAO_batch();
 	BASED_GL_CHECK ("Error deleting a primitive");
+}
+
+std::unique_ptr<Rect> Rect::make (GLenum VBO_usage, const std::vector<GLfloat>& VBO_vec, bool startVAObatch) {
+	std::span<const GLfloat> VBO_span {VBO_vec};
+	std::unique_ptr<Rect> rect = std::make_unique<Rect> (VBO_usage, &VBO_span, true);
+	rect->addAttribute (0, 2, 4, 0);
+	rect->addAttribute (1, 2, 4, 2);
+	if (!startVAObatch)
+		rect->end_VAO_batch ();
+	return rect;
+}
+
+std::unique_ptr<Rect> Rect::make (GLenum VBO_usage, const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st, bool startVAObatch) {
+	return make (VBO_usage, generateVBO (xy, st), startVAObatch);
+}
+
+std::vector<GLfloat> Rect::generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st) {
+	return {
+		//    x            y            s            t
+		   xy.x,        xy.y,        st.s,        st.t,
+		   xy.x + xy.w, xy.y,        st.s + st.w, st.t,
+		   xy.x + xy.w, xy.y + xy.h, st.s + st.w, st.t + st.h,
+		   xy.x,        xy.y + xy.h, st.s,        st.t + st.h
+	};
 }
 
 }
