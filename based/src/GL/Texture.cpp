@@ -7,6 +7,8 @@
 
 namespace Based::GL {
 
+Texture::Texture (GLuint unit) : unit (unit) { }
+
 void Texture::load (const std::string& path) {
 	surface = IMG_Load (path.c_str());
 	if (!surface)
@@ -25,6 +27,9 @@ bool Texture::prepare () {
 
 	const SDL_PixelFormatDetails *pfd = SDL_GetPixelFormatDetails(surface->format);
 	GLenum mode = (pfd->bytes_per_pixel == 4) ? GL_RGBA : GL_RGB;
+
+	glActiveTexture (GL_TEXTURE0 + unit);
+	BASED_GL_CHECK ("Error setting texture unit");
 
 	glGenTextures (1, &id);
 	glBindTexture (GL_TEXTURE_2D, id);
@@ -51,11 +56,12 @@ Texture::~Texture () {
 	if (id) unload();
 }
 
-void Texture::bind (GLuint tex_unit) {
-	glActiveTexture (GL_TEXTURE0 + tex_unit);
-	glBindTexture (GL_TEXTURE_2D, id);
-	BASED_GL_CHECK ("Error binding texture");
-	unit = tex_unit;
+std::unique_ptr<Texture> Texture::make (const std::string& path, GLuint unit) {
+	std::unique_ptr<Texture> tex = std::make_unique<Texture> (unit);
+	tex->load (path);
+	if (!tex->prepare()) [[unlikely]]
+		log.fatal ("Failed to prepare texture {}", path);
+	return tex;
 }
 
 }

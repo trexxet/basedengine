@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glad/gl.h>
 #include <glm/vec2.hpp>
 #include <SDL3/SDL_surface.h>
@@ -19,16 +21,17 @@ public:
 	/// @brief Get {0, 0, 1, 1} rect in GL coordinates
 	constexpr static Rect2D<GLfloat> Full () { return {0.f, 0.f, 1.f, 1.f}; }
 
+	Texture () = delete;
+	Texture (GLuint unit);
+
 	void load (const std::string& path) override final;
 	bool prepare () override final;
 	void unload () override final;
 
 	~Texture () override final;
 
-	/// @brief Bind texture to texture unit
-	/// @param unit Texture unit number
-	/// @note Texture readiness is not checked
-	void bind (GLuint tex_unit);
+	/// @brief Create, load, prepare and optionally bind texture
+	static std::unique_ptr<Texture> make (const std::string& path, GLuint unit);
 
 	// Coordinate space transformations
 	// todo: vectorize
