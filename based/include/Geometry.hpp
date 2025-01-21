@@ -70,4 +70,18 @@ struct Rect2D {
 	Size2D<T> size () { return Size2D<T> {w, h}; }
 };
 
+template <typename T>
+struct Circle2D {
+	T x, y, r; // Flattened Point2D + radius
+
+	Circle2D (T _x, T _y, T _r) : x (_x), y (_y), r (_r) {}
+	Circle2D () : x (0), y (0), r (0) {}
+
+	template <typename U>
+	Circle2D (const Point2D<T>& center, const U radius) :
+		x (center.x), y (center.y), r (radius) {}
+
+	Point2D<T> pos () { return Point2D<T> {x, y}; }
+};
+
 }

@@ -18,7 +18,7 @@ public:
 	Size2D<int> size;
 	/// @brief {0, 0, size.x, size.y}
 	Rect2D<int> rect;
-	/// @brief Get {0, 0, 1, 1} rect in GL coordinates
+	/// @brief Get {0, 0, 1, 1} rect in GL texture coordinates
 	constexpr static Rect2D<GLfloat> Full () { return {0.f, 0.f, 1.f, 1.f}; }
 
 	Texture () = delete;
@@ -62,6 +62,12 @@ public:
 			(int) (r.w * size.x),
 			(int) (r.h * size.y)
 		};
+	}
+	inline static GLfloat toNDC (const GLfloat x) {
+		return 2.f * x - 1.f;
+	}
+	inline static GLfloat fromNDC (const GLfloat x) {
+		return (x + 1.f) * 0.5f;
 	}
 };
 
