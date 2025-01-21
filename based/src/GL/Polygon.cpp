@@ -59,20 +59,6 @@ Polygon::~Polygon () {
 	BASED_GL_CHECK ("Error deleting a primitive");
 }
 
-std::unique_ptr<Rect> Rect::make (GLenum VBO_usage, const std::vector<GLfloat>& VBO_vec, bool startVAObatch) {
-	std::span<const GLfloat> VBO_span {VBO_vec};
-	std::unique_ptr<Rect> rect = std::make_unique<Rect> (VBO_usage, &VBO_span, true);
-	rect->add_attribute (0, 2, 4, 0); // X Y s t
-	rect->add_attribute (1, 2, 4, 2); // x y S T
-	if (!startVAObatch)
-		rect->end_VAO_batch ();
-	return rect;
-}
-
-std::unique_ptr<Rect> Rect::make (GLenum VBO_usage, const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st, bool startVAObatch) {
-	return make (VBO_usage, generateVBO (xy, st), startVAObatch);
-}
-
 std::vector<GLfloat> Rect::generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st) {
 	return {
 		//    x            y            s            t
@@ -80,6 +66,21 @@ std::vector<GLfloat> Rect::generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<
 		   xy.x + xy.w, xy.y,        st.s + st.w, st.t,
 		   xy.x + xy.w, xy.y + xy.h, st.s + st.w, st.t + st.h,
 		   xy.x,        xy.y + xy.h, st.s,        st.t + st.h
+	};
+}
+
+std::vector<GLfloat> Hex::generateVBO (const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st) {
+	const GLfloat sqrt_3_div_2 = 0.866;
+	GLfloat xyir = sqrt_3_div_2 * xy.r; // inner radius
+	GLfloat stir = sqrt_3_div_2 * st.r;
+	return {
+		//    x       y           s       t
+		   0.0f,   xy.r,          0.0f,   st.r,
+		  -xyir,   xy.r * 0.5f,  -stir,   st.r * 0.5f,
+		  -xyir,  -xy.r * 0.5f,  -stir,  -st.r * 0.5f,
+		   0.0f,  -xy.r,          0.0f,  -st.r,
+		   xyir,  -xy.r * 0.5f,   stir,  -st.r * 0.5f,
+		   xyir,   xy.r * 0.5f,   stir,   st.r * 0.5f
 	};
 }
 

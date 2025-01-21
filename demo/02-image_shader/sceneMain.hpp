@@ -16,15 +16,20 @@ class SceneMain : public Based::Scene {
 	 * * 2) Combining textures into a single texture and using texture atlas (for 2D) */
 	std::unique_ptr<Based::GL::Texture>
 		textureBackground {nullptr},
-		texture1 {nullptr};
+		texture1 {nullptr},
+		texture2 {nullptr};
 	enum {
-		textureBackground_unit = 0,
-		texture1_unit = 1
+		textureBackground_unit,
+		texture1_unit,
+		texture2_unit
 	};
 	/* Polygons are wrappers for VBO/VAO/EBO. GL::Rect is one of them. */
 	std::unique_ptr<Based::GL::Rect>
 		rectBackground {nullptr},
 		rectSprite1 {nullptr};
+	/* GL::Hex is another Polygon type */
+	std::unique_ptr<Based::GL::Hex>
+		hexSprite1 {nullptr};
 	/* Finally, polygon and texture are processed with GL::ShaderProgram. */
 	Based::GL::ShaderProgram *shaderSprite {nullptr};
 public:
@@ -38,18 +43,19 @@ public:
 			Based::log.fatal ("Failed to prepare texture!");
 		/* Alternatively, texture can be made with GL::Texture::make() */
 		texture1 = Based::GL::Texture::make (SPRITE1_PATH, texture1_unit);
+		texture2 = Based::GL::Texture::make (SPRITE2_PATH, texture2_unit);
 
 		/* Polygon can be created in a number of ways.
 		 * 1) Use GL::Rect::make() to auto generate VBO & VAO */
 		rectBackground = Based::GL::Rect::make (GL_STATIC_DRAW, Based::Window::Full(), Based::GL::Texture::Full());
 
-		/* 2) Set VBO & VAO manually */
+		/* 2) Set VBO & VAO manually. This way you can make any convex quadrilateral. */
 		GLfloat sprite1VBO_arr[] = {
-			// x     y     s   t   (everything in GL space coordinates)
-			  -0.8, -0.2,  0,  0,
-			   0.2, -0.2,  1,  0,
-			   0.2,  0.8,  1,  1,
-			  -0.8,  0.8,  0,  1
+			//  x     y    s   t   (everything in GL coordinates)
+			  -0.9,  0.4,  0,  0,
+			  -0.5,  0.4,  1,  0,
+			  -0.5,  0.8,  1,  1,
+			  -0.9,  0.8,  0,  1
 		};
 		Based::GL::VBOSpan sprite1VBO {sprite1VBO_arr};
 		rectSprite1 = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &sprite1VBO, true);
@@ -57,8 +63,12 @@ public:
 		rectSprite1->add_attribute (1, 2, 4, 2); // x y S T
 		rectSprite1->end_VAO_batch ();
 
-		/* There are some built-in shader programs and shaders. One of them is SP_2D_ForwardSampler,
-		 * which simply forwards X, Y, S and (1-T) coordinates (because images has inverted Y axis in GL space),
+		/* Hex can be created in a similar way. Instead of Rect2D you need to specify  it's center point and 
+		 * it's outer radius for both X Y (screen space) and S T (texture space) */
+		hexSprite1 = Based::GL::Hex::make (GL_STATIC_DRAW, Based::Circle2D<GLfloat> (0, 0, 0.3f), Based::Circle2D<GLfloat> (0.5f, 0.5f, 0.5f));
+
+		/* There are some built-in shader programs and shaders. One of them is SP_2D_ForwardSampler, which
+		 * simply forwards X, Y, S and (1-T) coordinates (because images has inverted Y axis in GL texture space),
 		 * and samples the texture unit in "tex" uniform. */
 		shaderSprite = &engine->client->defaultShaders[Based::GL::Default::SP_2D_ForwardSampler];
 
@@ -83,6 +93,8 @@ public:
 		rectBackground->bind_draw();
 		shaderSprite->setUniform ("tex", texture1->unit);
 		rectSprite1->bind_draw();
+		shaderSprite->setUniform ("tex", texture2->unit);
+		hexSprite1->bind_draw();
 	}
 
 	void gui () override final { }

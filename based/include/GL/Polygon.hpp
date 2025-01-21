@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <memory>
 #include <span>
 #include <vector>
@@ -57,10 +58,33 @@ public:
 	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Polygon);
 };
 
-class ConvexQuad : public Polygon {
+class ConvexPolygon;
+template <class T>
+concept ConvexPolygonClass = std::derived_from<T, ConvexPolygon>;
+
+/// @note Any convex polygon can be rendered without EBO using GL_TRIANGLE_FAN
+class ConvexPolygon : public Polygon {
+public:
+	ConvexPolygon (GLsizei vertexCount, GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
+		: Polygon (vertexCount, GL_TRIANGLE_FAN, VBO_usage, VBO_array, nullptr, startVAOBatch) { }
+
+	/// @brief Create a ConvexPolygon from a vector containing VBO, auto generate VAO
+	template <ConvexPolygonClass T>
+	static std::unique_ptr<T> make (GLenum VBO_usage, const std::vector<GLfloat>& VBO_vec, bool startVAObatch = false) {
+		std::span<const GLfloat> VBO_span {VBO_vec};
+		std::unique_ptr<T> poly = std::make_unique<T> (VBO_usage, &VBO_span, true);
+		poly->add_attribute (0, 2, 4, 0); // X Y s t
+		poly->add_attribute (1, 2, 4, 2); // x y S T
+		if (!startVAObatch)
+			poly->end_VAO_batch ();
+		return poly;
+	}
+};
+
+class ConvexQuad : public ConvexPolygon {
 public:
 	ConvexQuad (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
-		: Polygon (4, GL_TRIANGLE_FAN, VBO_usage, VBO_array, nullptr, startVAOBatch) { }
+		: ConvexPolygon (4, VBO_usage, VBO_array, startVAOBatch) { }
 };
 
 class Rect : public ConvexQuad {
@@ -68,24 +92,41 @@ public:
 	Rect (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: ConvexQuad (VBO_usage, VBO_array, startVAOBatch) { }
 
-	/// @brief Create a Rect from a vector containing VBO, auto generate VAO
-	static std::unique_ptr<Rect> make (GLenum VBO_usage, const std::vector<GLfloat>& VBO_vec, bool startVAObatch = false);
 	/// @brief Create a Rect with auto generated VBO & VAO
-	/// @param xy Screen coordinates (GL space from -1 to 1)
-	/// @param st Texture coordinates (GL space from 0 to 1)
-	static std::unique_ptr<Rect> make (GLenum VBO_usage, const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st, bool startVAObatch = false);
+	/// @param xy Screen coordinates (GL NDC space (-1, 1))
+	/// @param st Texture coordinates (GL texture space (0, 1))
+	inline static std::unique_ptr<Rect> make (GLenum VBO_usage, const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st, bool startVAObatch = false) {
+		return ConvexPolygon::make<Rect> (VBO_usage, generateVBO (xy, st), startVAObatch);
+	}
 	
 	/// @brief Generate VBO for Rect using screen & texture coordinates
-	/// @param xy Screen coordinates (GL space from -1 to 1)
-	/// @param st Texture coordinates (GL space from 0 to 1)
+	/// @param xy Screen coordinates (GL NDC space (-1, 1))
+	/// @param st Texture coordinates (GL texture space (0, 1))
 	static std::vector<GLfloat> generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st);
 };
 
-class ConvexHex : public Polygon {
+class ConvexHex : public ConvexPolygon {
 public:
 	ConvexHex (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
-		: Polygon (6, GL_TRIANGLE_FAN, VBO_usage, VBO_array, nullptr, startVAOBatch) { }
+		: ConvexPolygon (6, VBO_usage, VBO_array, startVAOBatch) { }
 };
-using Hex = ConvexHex;
+
+class Hex : public ConvexHex {
+public:
+	Hex (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
+		: ConvexHex (VBO_usage, VBO_array, startVAOBatch) { }
+
+	/// @brief Create a Hex with auto generated VBO & VAO
+	/// @param xy Outer cirlce for screen coordinates (GL NDC space (-1, 1))
+	/// @param st Outer cirlce for texture coordinates (GL texture space (0, 1))
+	inline static std::unique_ptr<Hex> make (GLenum VBO_usage, const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st, bool startVAObatch = false) {
+		return ConvexPolygon::make<Hex> (VBO_usage, generateVBO (xy, st), startVAObatch);
+	}
+
+	/// @brief Generate VBO for Hex using screen & texture coordinates
+	/// @param xy Outer cirlce for screen coordinates (GL NDC space (-1, 1))
+	/// @param st Outer circle for texture coordinates (GL texture space (0, 1))
+	static std::vector<GLfloat> generateVBO (const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st);
+};
 
 }
