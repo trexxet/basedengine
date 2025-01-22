@@ -20,6 +20,8 @@ public:
 	Rect2D<int> rect;
 	/// @brief Get {0, 0, 1, 1} rect in GL texture coordinates
 	constexpr static Rect2D<GLfloat> Full () { return {0.f, 0.f, 1.f, 1.f}; }
+	/// @brief Get {0.5f, 0.5f} point in GL texture coordinates
+	constexpr static Point2D<GLfloat> Center () { return {0.5f, 0.5f}; }
 
 	Texture () = delete;
 	Texture (GLuint unit);

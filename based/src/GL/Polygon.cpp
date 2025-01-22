@@ -69,19 +69,33 @@ std::vector<GLfloat> Rect::generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<
 	};
 }
 
-std::vector<GLfloat> Hex::generateVBO (const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st) {
+std::vector<GLfloat> Hex::generateVBO (Orientation o, const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st) {
 	const GLfloat sqrt_3_div_2 = 0.866;
 	GLfloat xyir = sqrt_3_div_2 * xy.r; // inner radius
 	GLfloat stir = sqrt_3_div_2 * st.r;
-	return {
-		//    x       y           s       t
-		   0.0f,   xy.r,          0.0f,   st.r,
-		  -xyir,   xy.r * 0.5f,  -stir,   st.r * 0.5f,
-		  -xyir,  -xy.r * 0.5f,  -stir,  -st.r * 0.5f,
-		   0.0f,  -xy.r,          0.0f,  -st.r,
-		   xyir,  -xy.r * 0.5f,   stir,  -st.r * 0.5f,
-		   xyir,   xy.r * 0.5f,   stir,   st.r * 0.5f
-	};
+	switch (o) {
+		case Orientation::topFlat:
+			return {
+				//    x              y       s             t
+				   xy.r,          0.0f,   st.r,         0.0f,
+				   xy.r * 0.5f,   xyir,   st.r * 0.5f,  stir,
+				  -xy.r * 0.5f,   xyir,  -st.r * 0.5f,  stir,
+				  -xy.r,          0.0f,  -st.r,         0.0f,
+				  -xy.r * 0.5f,  -xyir,  -st.r * 0.5f, -stir,
+				   xy.r * 0.5f,  -xyir,   st.r * 0.5f, -stir
+			};
+		case Orientation::topPoint:
+			return {
+				//    x       y              s       t
+				   0.0f,   xy.r,          0.0f,   st.r,
+				  -xyir,   xy.r * 0.5f,  -stir,   st.r * 0.5f,
+				  -xyir,  -xy.r * 0.5f,  -stir,  -st.r * 0.5f,
+				   0.0f,  -xy.r,          0.0f,  -st.r,
+				   xyir,  -xy.r * 0.5f,   stir,  -st.r * 0.5f,
+				   xyir,   xy.r * 0.5f,   stir,   st.r * 0.5f
+			};
+		default: return {};
+	}
 }
 
 }

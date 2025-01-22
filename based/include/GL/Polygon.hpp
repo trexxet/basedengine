@@ -115,18 +115,22 @@ class Hex : public ConvexHex {
 public:
 	Hex (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: ConvexHex (VBO_usage, VBO_array, startVAOBatch) { }
+	
+	enum class Orientation { topPoint, topFlat };
 
 	/// @brief Create a Hex with auto generated VBO & VAO
+	/// @param top Orientation of the Hex (flat or point top)
 	/// @param xy Outer cirlce for screen coordinates (GL NDC space (-1, 1))
 	/// @param st Outer cirlce for texture coordinates (GL texture space (0, 1))
-	inline static std::unique_ptr<Hex> make (GLenum VBO_usage, const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st, bool startVAObatch = false) {
-		return ConvexPolygon::make<Hex> (VBO_usage, generateVBO (xy, st), startVAObatch);
+	inline static std::unique_ptr<Hex> make (GLenum VBO_usage, Orientation o, const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st, bool startVAObatch = false) {
+		return ConvexPolygon::make<Hex> (VBO_usage, generateVBO (o, xy, st), startVAObatch);
 	}
 
 	/// @brief Generate VBO for Hex using screen & texture coordinates
+	/// @param top Orientation of the Hex (flat or point top)
 	/// @param xy Outer cirlce for screen coordinates (GL NDC space (-1, 1))
 	/// @param st Outer circle for texture coordinates (GL texture space (0, 1))
-	static std::vector<GLfloat> generateVBO (const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st);
+	static std::vector<GLfloat> generateVBO (Orientation o, const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st);
 };
 
 }

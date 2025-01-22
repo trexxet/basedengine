@@ -63,9 +63,11 @@ public:
 		rectSprite1->add_attribute (1, 2, 4, 2); // x y S T
 		rectSprite1->end_VAO_batch ();
 
-		/* Hex can be created in a similar way. Instead of Rect2D you need to specify  it's center point and 
-		 * it's outer radius for both X Y (screen space) and S T (texture space) */
-		hexSprite1 = Based::GL::Hex::make (GL_STATIC_DRAW, Based::Circle2D<GLfloat> (0, 0, 0.3f), Based::Circle2D<GLfloat> (0.5f, 0.5f, 0.5f));
+		/* Hex can be created in a similar way. Instead of Rect2D you need to specify it's orientation
+		 * and outer circle for both X Y (screen space) and S T (texture space) */
+		hexSprite1 = Based::GL::Hex::make (GL_STATIC_DRAW, Based::GL::Hex::Orientation::topFlat,
+		                                   Based::Circle2D<GLfloat> (Based::Window::Center(), 0.3f),
+		                                   Based::Circle2D<GLfloat> (Based::GL::Texture::Center(), 0.5f));
 
 		/* There are some built-in shader programs and shaders. One of them is SP_2D_ForwardSampler, which
 		 * simply forwards X, Y, S and (1-T) coordinates (because images has inverted Y axis in GL texture space),
