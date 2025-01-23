@@ -15,7 +15,9 @@ namespace Based {
 struct Window {
 	SDL_Window *sdlWindow;
 	Size2D<int> size;
+	GLfloat aspect;
 	Rect2D<int> rect;
+
 	/// @brief Get {-1, -1, 2, 2} rect in GL NDC coordinates
 	constexpr static Rect2D<GLfloat> Full () { return {-1.f, -1.f, 2.f, 2.f}; }
 	/// @brief Get {0.f, 0.f} point in GL NDC coordinates

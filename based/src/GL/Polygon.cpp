@@ -76,23 +76,23 @@ std::vector<GLfloat> Hex::generateVBO (Orientation o, const Circle2D<GLfloat>& x
 	switch (o) {
 		case Orientation::topFlat:
 			return {
-				//    x              y       s             t
-				   xy.r,          0.0f,   st.r,         0.0f,
-				   xy.r * 0.5f,   xyir,   st.r * 0.5f,  stir,
-				  -xy.r * 0.5f,   xyir,  -st.r * 0.5f,  stir,
-				  -xy.r,          0.0f,  -st.r,         0.0f,
-				  -xy.r * 0.5f,  -xyir,  -st.r * 0.5f, -stir,
-				   xy.r * 0.5f,  -xyir,   st.r * 0.5f, -stir
+				//   x                    y             s                    t
+				xy.x + xy.r,         xy.y,         st.x + st.r,         st.y,
+				xy.x + xy.r * 0.5f,  xy.y + xyir,  st.x + st.r * 0.5f,  st.y + stir,
+				xy.x - xy.r * 0.5f,  xy.y + xyir,  st.x - st.r * 0.5f,  st.y + stir,
+				xy.x - xy.r,         xy.y,         st.x - st.r,         st.y,
+				xy.x - xy.r * 0.5f,  xy.y - xyir,  st.x - st.r * 0.5f,  st.y - stir,
+				xy.x + xy.r * 0.5f,  xy.y - xyir,  st.x + st.r * 0.5f,  st.y - stir
 			};
 		case Orientation::topPoint:
 			return {
-				//    x       y              s       t
-				   0.0f,   xy.r,          0.0f,   st.r,
-				  -xyir,   xy.r * 0.5f,  -stir,   st.r * 0.5f,
-				  -xyir,  -xy.r * 0.5f,  -stir,  -st.r * 0.5f,
-				   0.0f,  -xy.r,          0.0f,  -st.r,
-				   xyir,  -xy.r * 0.5f,   stir,  -st.r * 0.5f,
-				   xyir,   xy.r * 0.5f,   stir,   st.r * 0.5f
+				//   x             y                    s             t
+				xy.x,         xy.y + xy.r,         st.x,         st.y + st.r,
+				xy.x - xyir,  xy.y + xy.r * 0.5f,  st.x - stir,  st.y + st.r * 0.5f,
+				xy.x - xyir,  xy.y - xy.r * 0.5f,  st.x - stir,  st.y - st.r * 0.5f,
+				xy.x,         xy.y - xy.r,         st.x,         st.y - st.r,
+				xy.x + xyir,  xy.y - xy.r * 0.5f,  st.x + stir,  st.y - st.r * 0.5f,
+				xy.x + xyir,  xy.y + xy.r * 0.5f,  st.x + stir,  st.y + st.r * 0.5f
 			};
 		default: return {};
 	}

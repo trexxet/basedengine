@@ -12,6 +12,7 @@ Window::Window (const std::string &title, const Size2D<int>& _size) :
 	if (!sdlWindow)
 		log.fatal ("Window \"{}\" could not be created!", title);
 	log.write ("Window \"{}\" created", title);
+	aspect = (GLfloat) size.width / size.height;
 
 	if (!SDL_GL_CreateContext(sdlWindow))
 		log.fatal ("Failed to create OpenGL context!");
