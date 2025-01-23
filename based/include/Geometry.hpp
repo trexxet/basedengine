@@ -30,6 +30,11 @@ struct Point2D {
 		y -= source.y;
 	}
 
+	template <typename U>
+	operator Point2D<U> () const {
+		return { static_cast<U>(x), static_cast<U>(y) };
+	}
+
 	Point2D (T _x, T _y) : x (_x), y (_y) {}
 	Point2D () : x (0), y (0) {}
 };
@@ -66,13 +71,20 @@ struct Rect2D {
 		y = outer.y + (outer.h - h) / 2;
 	}
 
+	template <typename U>
+	operator Rect2D<U> () const {
+		return { static_cast<U>(x), static_cast<U>(y), static_cast<U>(w), static_cast<U>(h) };
+	}
+
 	Point2D<T> pos () { return Point2D<T> {x, y}; }
 	Size2D<T> size () { return Size2D<T> {w, h}; }
 };
 
 template <typename T>
 struct Circle2D {
-	T x, y, r; // Flattened Point2D + radius
+	union { T x, s; };
+	union { T y, t; };
+	T r; // Flattened Point2D + radius
 
 	Circle2D (T _x, T _y, T _r) : x (_x), y (_y), r (_r) {}
 	Circle2D () : x (0), y (0), r (0) {}
@@ -80,6 +92,11 @@ struct Circle2D {
 	template <typename U>
 	Circle2D (const Point2D<T>& center, const U radius) :
 		x (center.x), y (center.y), r (radius) {}
+
+	template <typename U>
+	operator Circle2D<U> () const {
+		return { static_cast<U>(x), static_cast<U>(y), static_cast<U>(r) };
+	}
 
 	Point2D<T> pos () { return Point2D<T> {x, y}; }
 };

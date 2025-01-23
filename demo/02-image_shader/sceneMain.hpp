@@ -35,6 +35,7 @@ class SceneMain : public Based::Scene {
 public:
 	SceneMain (Based::Engine* engine, Based::Lua::File& conf) : Based::Scene(engine) {
 		if (!engine->client) return;
+		Based::Window* window = engine->client->window();
 	
 		/* Textures can be created as a typical Resource (Create -> Load -> Prepare) */
 		textureBackground = std::make_unique<Based::GL::Texture> (textureBackground_unit);
@@ -47,15 +48,19 @@ public:
 
 		/* Polygon can be created in a number of ways.
 		 * 1) Use GL::Rect::make() to auto generate VBO & VAO */
-		rectBackground = Based::GL::Rect::make (GL_STATIC_DRAW, Based::Window::Full(), Based::GL::Texture::Full());
+		rectBackground = Based::GL::Rect::make (GL_STATIC_DRAW, window->rect, Based::GL::Texture::full());
 
-		/* 2) Set VBO & VAO manually. This way you can make any convex quadrilateral. */
+		/* 2) Set VBO & VAO manually. This way you can make any polygon. */
+		Based::Point2D<GLfloat> s1_topleft {16.f, 16.f};
+		Based::Size2D<GLfloat> s1_size {256.f, 256.f};
+		/* Note that X and Y are defined in screen pixel coordinates,
+		   while S and T are defined in GL texture coordinates (from 0 to 1, T axis inverted) */
 		GLfloat sprite1VBO_arr[] = {
-			//  x     y    s   t   (everything in GL coordinates)
-			  -0.9,  0.4,  0,  0,
-			  -0.5,  0.4,  1,  0,
-			  -0.5,  0.8,  1,  1,
-			  -0.9,  0.8,  0,  1
+			//             x                          y             s   t
+			  s1_topleft.x + s1_size.w,  s1_topleft.y,              1,  1,
+			  s1_topleft.x,              s1_topleft.y,              0,  1,
+			  s1_topleft.x,              s1_topleft.y + s1_size.h,  0,  0,
+			  s1_topleft.x + s1_size.w,  s1_topleft.y + s1_size.h,  1,  0
 		};
 		Based::GL::VBOSpan sprite1VBO {sprite1VBO_arr};
 		rectSprite1 = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &sprite1VBO, true);
@@ -66,8 +71,8 @@ public:
 		/* Hex can be created in a similar way. Instead of Rect2D you need to specify it's orientation
 		 * and outer circle for both X Y (screen space) and S T (texture space) */
 		hexSprite1 = Based::GL::Hex::make (GL_STATIC_DRAW, Based::GL::Hex::Orientation::topFlat,
-		                                   Based::Circle2D<GLfloat> (Based::Window::Center(), 0.3f),
-		                                   Based::Circle2D<GLfloat> (Based::GL::Texture::Center(), 0.5f));
+		                                   Based::Circle2D<GLfloat> (window->center(), 100.f),
+		                                   Based::Circle2D<GLfloat> (Based::GL::Texture::center(), 0.5f));
 
 		/* There are some built-in shader programs and shaders. One of them is SP_2D_ForwardSampler, which
 		 * simply forwards X, Y, S and (1-T) coordinates (because images has inverted Y axis in GL texture space),
@@ -90,8 +95,14 @@ public:
 		 * Note that for a real program you should consider:
 		 * * 1) Combining multiple VAOs/VBOs into a single one
 		 * * 2) Using instancing */
+		/* 1) Use (enable) the shader program */
 		shaderSprite->use();
+		/* 2) Set the MVP matrix as orthoghraphic projection of entire window.
+		 * In other words, go from GL NDC coordinates to screen pixel coordinates. */
+		shaderSprite->setUniform ("mvp", engine->client->window()->ortho);
+		/* 3) Set the sampler (in fragment shader) to the texture unit of required texture */
 		shaderSprite->setUniform ("tex", textureBackground->unit);
+		/* 4) Bind VAO and draw polygon */
 		rectBackground->bind_draw();
 		shaderSprite->setUniform ("tex", texture1->unit);
 		rectSprite1->bind_draw();

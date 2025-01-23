@@ -1,18 +1,18 @@
 #include "Window.hpp"
 
 #include <glad/gl.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Logger.hpp"
 
 namespace Based {
 
-Window::Window (const std::string &title, const Size2D<int>& _size) :
-	size (_size), rect (_size) {
+Window::Window (const std::string &title, const Size2D<int>& size) {
 	sdlWindow  = SDL_CreateWindow (title.c_str(), size.width, size.height, SDL_WINDOW_OPENGL);
 	if (!sdlWindow)
 		log.fatal ("Window \"{}\" could not be created!", title);
 	log.write ("Window \"{}\" created", title);
-	aspect = (GLfloat) size.width / size.height;
+	resize (size);
 
 	if (!SDL_GL_CreateContext(sdlWindow))
 		log.fatal ("Failed to create OpenGL context!");
@@ -69,6 +69,13 @@ void Window::render () {
 	glEnable (GL_DEPTH_TEST);
 #endif
 	SDL_GL_SwapWindow(sdlWindow);
+}
+
+void Window::resize (const Size2D<int>& size) {
+	_size = size;
+	_rect = {size};
+	_aspect = (GLfloat) size.width / size.height;
+	_ortho = glm::ortho<GLfloat> (0, size.width, size.height, 0);
 }
 
 }

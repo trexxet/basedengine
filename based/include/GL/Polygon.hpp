@@ -93,14 +93,14 @@ public:
 		: ConvexQuad (VBO_usage, VBO_array, startVAOBatch) { }
 
 	/// @brief Create a Rect with auto generated VBO & VAO
-	/// @param xy Screen coordinates (GL NDC space (-1, 1))
+	/// @param xy Screen coordinates
 	/// @param st Texture coordinates (GL texture space (0, 1))
 	inline static std::unique_ptr<Rect> make (GLenum VBO_usage, const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st, bool startVAObatch = false) {
 		return ConvexPolygon::make<Rect> (VBO_usage, generateVBO (xy, st), startVAObatch);
 	}
 	
 	/// @brief Generate VBO for Rect using screen & texture coordinates
-	/// @param xy Screen coordinates (GL NDC space (-1, 1))
+	/// @param xy Screen coordinates
 	/// @param st Texture coordinates (GL texture space (0, 1))
 	static std::vector<GLfloat> generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st);
 };
@@ -120,7 +120,7 @@ public:
 
 	/// @brief Create a Hex with auto generated VBO & VAO
 	/// @param top Orientation of the Hex (flat or point top)
-	/// @param xy Outer cirlce for screen coordinates (GL NDC space (-1, 1))
+	/// @param xy Outer cirlce for screen coordinates
 	/// @param st Outer cirlce for texture coordinates (GL texture space (0, 1))
 	inline static std::unique_ptr<Hex> make (GLenum VBO_usage, Orientation o, const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st, bool startVAObatch = false) {
 		return ConvexPolygon::make<Hex> (VBO_usage, generateVBO (o, xy, st), startVAObatch);
@@ -128,7 +128,7 @@ public:
 
 	/// @brief Generate VBO for Hex using screen & texture coordinates
 	/// @param top Orientation of the Hex (flat or point top)
-	/// @param xy Outer cirlce for screen coordinates (GL NDC space (-1, 1))
+	/// @param xy Outer cirlce for screen coordinates
 	/// @param st Outer circle for texture coordinates (GL texture space (0, 1))
 	static std::vector<GLfloat> generateVBO (Orientation o, const Circle2D<GLfloat>& xy, const Circle2D<GLfloat>& st);
 };

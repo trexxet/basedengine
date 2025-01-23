@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <glad/gl.h>
+#include <glm/mat4x4.hpp>
 
 #include "ClassHelper.hpp"
 #include "Resource.hpp"
@@ -60,6 +61,7 @@ public:
 	/// @param name Uniform name
 	/// @param value Uniform value
 	void setUniform (const GLchar *name, GLint value);
+	void setUniform (const GLchar *name, const glm::mat4& value);
 };
 
 namespace Default {
