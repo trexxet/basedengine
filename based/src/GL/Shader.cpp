@@ -130,14 +130,14 @@ void ShaderProgram::use () {
 }
 
 // todo: uniform location cache
-void ShaderProgram::setUniform (const GLchar *name, GLint value) {
+void ShaderProgram::set_uniform (const GLchar *name, GLint value) {
 	GLint loc = glGetUniformLocation (id, name);
 	BASED_GL_CHECK ("Error getting uniform location");
 	glUniform1i (loc, value);
 	BASED_GL_CHECK ("Error setting uniform");
 }
 
-void ShaderProgram::setUniform (const GLchar *name, const glm::mat4& value) {
+void ShaderProgram::set_uniform (const GLchar *name, const glm::mat4& value) {
 	GLint loc = glGetUniformLocation (id, name);
 	BASED_GL_CHECK ("Error getting uniform location");
 	glUniformMatrix4fv (loc, 1, GL_FALSE, glm::value_ptr (value));
@@ -151,16 +151,16 @@ namespace Default {
 
 Shaders shaders;
 
-std::string src_2d_forward_vert =
-#include "shaders_builtin/2d_forward.vert"
+std::string src_2d_mvp_vert =
+#include "shaders_builtin/2d_mvp.vert"
 ;
 std::string src_2d_sampler_frag =
 #include "shaders_builtin/2d_sampler.frag"
 ;
 
 void Shaders::init () {
-	shaders.emplace (std::piecewise_construct, std::forward_as_tuple (S_2D_ForwardVert),
-	                 std::forward_as_tuple (GL_VERTEX_SHADER, std::move (src_2d_forward_vert)));
+	shaders.emplace (std::piecewise_construct, std::forward_as_tuple (S_2D_MVPVert),
+	                 std::forward_as_tuple (GL_VERTEX_SHADER, std::move (src_2d_mvp_vert)));
 	shaders.emplace (std::piecewise_construct, std::forward_as_tuple (S_2D_SamplerFrag),
 	                 std::forward_as_tuple (GL_FRAGMENT_SHADER, std::move (src_2d_sampler_frag)));
 
@@ -171,9 +171,9 @@ void Shaders::init () {
 			log.fatal ("Failed to compile default shader");
 	}
 
-	ShaderVec SP_2D_ForwardSampler_Units { &shaders.at (S_2D_ForwardVert), &shaders.at (S_2D_SamplerFrag) };
-	shaderPrograms.emplace (std::piecewise_construct, std::forward_as_tuple (SP_2D_ForwardSampler),
-	                        std::forward_as_tuple (std::move (SP_2D_ForwardSampler_Units), 2));
+	ShaderVec SP_2D_MVPSampler_Units { &shaders.at (S_2D_MVPVert), &shaders.at (S_2D_SamplerFrag) };
+	shaderPrograms.emplace (std::piecewise_construct, std::forward_as_tuple (SP_2D_MVPSampler),
+	                        std::forward_as_tuple (std::move (SP_2D_MVPSampler_Units), 2));
 
 	for (auto& [id, shaderProgram] : shaderPrograms) {
 		shaderProgram.load();

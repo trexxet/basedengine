@@ -19,6 +19,7 @@ class SceneMain : public Based::Scene {
 		textureBackground {nullptr},
 		texture1 {nullptr},
 		texture2 {nullptr};
+	// todo: make texture unit auto enumerator
 	enum {
 		textureBackground_unit,
 		texture1_unit,
@@ -84,10 +85,10 @@ public:
 		                                   Based::Circle2D<GLfloat> (window->center(), 100.f),
 		                                   Based::Circle2D<GLfloat> (Based::GL::Texture::center(), 0.5f));
 
-		/* There are some built-in shader programs and shaders. One of them is SP_2D_ForwardSampler, which
-		 * simply forwards X, Y, S and (1-T) coordinates (because images Y axis is inverted to GL texture space T axis),
-		 * and samples the texture unit in "tex" uniform. */
-		shaderSprite = &Based::GL::Default::shaders[Based::GL::Default::SP_2D_ForwardSampler];
+		/* There are some built-in shader programs and shaders. One of them is SP_2D_MVPSampler, which applies
+		 * MVP matrix in "mvp" uniform to (X, Y), passes (S, 1 - T) coordinates (because images Y axis is inverted
+		 * to GL texture space T axis), and samples the texture unit in "tex" uniform. */
+		shaderSprite = &Based::GL::Default::shaders[Based::GL::Default::SP_2D_MVPSampler];
 
 		/* Finally, Sprite combines everything needed for a simple image drawing.
 		 * Again, it can be created as a resource (Create -> Load -> Prepare) */
@@ -133,17 +134,17 @@ public:
 		shaderSprite->use();
 		/* 2) Set the MVP matrix as orthoghraphic projection of entire window.
 		 * In other words, go from GL NDC coordinates to screen pixel coordinates. */
-		shaderSprite->setUniform ("mvp", engine->client->window()->ortho);
+		shaderSprite->set_uniform ("mvp", engine->client->window()->ortho);
 		/* 3) Set the sampler (in the fragment shader) to the texture unit of required texture */
-		shaderSprite->setUniform ("tex", textureBackground->unit);
+		shaderSprite->set_uniform ("tex", textureBackground->unit);
 		/* 4) Bind VAO and draw polygon */
 		rectBackground->bind_draw();
 		/* 5) Subsequent draws can be made starting from step 3 */
-		shaderSprite->setUniform ("tex", texture1->unit);
+		shaderSprite->set_uniform ("tex", texture1->unit);
 		rectSprite1->bind_draw();
-		shaderSprite->setUniform ("tex", texture2->unit);
+		shaderSprite->set_uniform ("tex", texture2->unit);
 		hexSprite1->bind_draw();
-		/* 6) Alternatively, Sprite can be used. It performs steps 1-4 for GL::Rect and SP_2D_ForwardSampler. */
+		/* 6) Alternatively, Sprite can be used. It performs steps 1-4 for GL::Rect and SP_2D_MVPSampler. */
 		sprite1->draw();
 		/* Note that these steps are performed for every Sprite::draw(), inducing context switching and
 		 * being potentially slow. */

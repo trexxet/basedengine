@@ -60,23 +60,22 @@ public:
 	/// @brief Set uniform
 	/// @param name Uniform name
 	/// @param value Uniform value
-	void setUniform (const GLchar *name, GLint value);
-	void setUniform (const GLchar *name, const glm::mat4& value);
+	void set_uniform (const GLchar *name, GLint value);
+	void set_uniform (const GLchar *name, const glm::mat4& value);
 };
 
 namespace Default {
 
 enum ShaderID {
-	/// @brief Vertex shader that forwards X Y vertex coordinates and S texture coordinate,
-	/// and flips T texture coordinate
-	S_2D_ForwardVert,
+	/// @brief Vertex shader that applies MVP to (X, Y) and passes (S, 1 - T) further
+	S_2D_MVPVert,
 	/// @brief Fragment shader that applies 2D sampler (texture) using S and T texture coordinates
 	S_2D_SamplerFrag
 };
 
 enum ShaderProgramID {
-	/// @brief S_2D_ForwardVert, S_2D_SamplerFrag
-	SP_2D_ForwardSampler
+	/// @brief S_2D_MVPVert, S_2D_SamplerFrag
+	SP_2D_MVPSampler
 };
 
 struct Shaders {

@@ -24,7 +24,7 @@ bool Sprite::prepare () {
 	if (ready || !loaded)
 		return ready;
 
-	if (!Default::shaders[Default::SP_2D_ForwardSampler].ready || !texture)
+	if (!Default::shaders[Default::SP_2D_MVPSampler].ready || !texture)
 		return false;
 	
 	ready = texture->ready;
@@ -48,10 +48,10 @@ Sprite::~Sprite () {
 }
 
 void Sprite::draw () {
-	ShaderProgram& sp = Default::shaders[Default::SP_2D_ForwardSampler];
+	ShaderProgram& sp = Default::shaders[Default::SP_2D_MVPSampler];
 	sp.use();
-	sp.setUniform ("mvp", *mvp);
-	sp.setUniform ("tex", texture->unit);
+	sp.set_uniform ("mvp", *mvp);
+	sp.set_uniform ("tex", texture->unit);
 	glRect->bind_draw();
 }
 
@@ -64,10 +64,11 @@ std::unique_ptr<Sprite> Sprite::make (const std::string& path, GLuint textureUni
 }
 
 std::unique_ptr<Sprite> Sprite::make (Texture *texture, const Rect2D<GLfloat>& rect, const glm::mat4* mvp) {
-	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite> (texture, rect, mvp);
 	// For some cases, texture may be prepared later, so we need only to check the shader status
-	if (!Default::shaders[Default::SP_2D_ForwardSampler].ready)
+	if (!Default::shaders[Default::SP_2D_MVPSampler].ready)
 		log.fatal ("Failed to prepare sprite - shader not ready");
+
+	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite> (texture, rect, mvp);
 	sprite->ready = texture->ready;
 	return sprite;
 }
