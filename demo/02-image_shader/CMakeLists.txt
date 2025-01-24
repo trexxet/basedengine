@@ -11,6 +11,7 @@ target_compile_definitions(${DEMO_TARGET} PRIVATE
 	BG_PATH="${ASSET_PATH}/crate1.png"
 	SPRITE1_PATH="${ASSET_PATH}/crate2.png"
 	SPRITE2_PATH="${ASSET_PATH}/crate3.png"
+	SPRITE3_PATH="${ASSET_PATH}/crowbar.png"
 )
 target_link_libraries(${DEMO_TARGET}
 	based

@@ -1,4 +1,6 @@
+#define _BASED_DEFAULT_SHADERS_IMPLEMENT
 #include "GL/Shader.hpp"
+#undef _BASED_DEFAULT_SHADERS_IMPLEMENT
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -53,8 +55,8 @@ bool Shader::prepare () {
 	glShaderSource (id, 1, &src, NULL);
 	glCompileShader (id);
 
-	if (!check_glsl_status(id, glGetShaderiv, GL_COMPILE_STATUS)) [[unlikely]] {
-		log.warn ("Failed to compile shader:\n{}", get_glsl_error(id, glGetShaderiv, glGetShaderInfoLog));
+	if (!check_glsl_status (id, glGetShaderiv, GL_COMPILE_STATUS)) [[unlikely]] {
+		log.warn ("Failed to compile shader:\n{}", get_glsl_error (id, glGetShaderiv, glGetShaderInfoLog));
 		return false;
 	}
 
@@ -87,7 +89,7 @@ void ShaderProgram::load (const std::string& path) {
 }
 
 bool ShaderProgram::prepare () {
-	id = glCreateProgram ();
+	id = glCreateProgram();
 	for (const Shader* shader: units)
 		glAttachShader (id, shader->id);
 
@@ -100,8 +102,8 @@ bool ShaderProgram::prepare () {
 
 	glLinkProgram (id);
 
-	if (!check_glsl_status(id, glGetProgramiv, GL_LINK_STATUS)) [[unlikely]] {
-		log.warn ("Failed to link shader program:\n{}", get_glsl_error(id, glGetProgramiv, glGetProgramInfoLog));
+	if (!check_glsl_status (id, glGetProgramiv, GL_LINK_STATUS)) [[unlikely]] {
+		log.warn ("Failed to link shader program:\n{}", get_glsl_error (id, glGetProgramiv, glGetProgramInfoLog));
 		return false;
 	}
 	
@@ -147,10 +149,12 @@ void ShaderProgram::setUniform (const GLchar *name, const glm::mat4& value) {
  */
 namespace Default {
 
-	std::string src_2d_forward_vert =
+Shaders shaders;
+
+std::string src_2d_forward_vert =
 #include "shaders_builtin/2d_forward.vert"
 ;
-	std::string src_2d_sampler_frag =
+std::string src_2d_sampler_frag =
 #include "shaders_builtin/2d_sampler.frag"
 ;
 

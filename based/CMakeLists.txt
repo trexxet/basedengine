@@ -25,6 +25,7 @@ set(BASED_SOURCES
 	GL/GL_Util.cpp
 	GL/Polygon.cpp
 	GL/Shader.cpp
+	GL/Sprite.cpp
 	GL/Texture.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)

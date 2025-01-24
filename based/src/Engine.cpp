@@ -3,9 +3,9 @@
 #include <sol/version.hpp>
 #include <lua.h>
 
-#define _BASED_IMPLEMENT
+#define _BASED_LOGGER_IMPLEMENT
 #include "Logger.hpp"
-#undef _BASED_IMPLEMENT
+#undef _BASED_LOGGER_IMPLEMENT
 
 namespace Based {
 

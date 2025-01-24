@@ -5,7 +5,6 @@
 #include "Geometry.hpp"
 #include "Resource.hpp"
 #include "Window.hpp"
-#include "GL/Shader.hpp"
 
 namespace Based {
 
@@ -33,8 +32,6 @@ public:
 
 	void create_window (const std::string& title, const Size2D<int>& size);
 	inline Window* window () { return sdl->window.get(); } 
-
-	GL::Default::Shaders defaultShaders;
 };
 
 }

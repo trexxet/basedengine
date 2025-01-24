@@ -92,6 +92,10 @@ struct Shaders {
 	BASED_CLASS_NO_COPY_MOVE (Shaders);
 };
 
+#ifndef _BASED_DEFAULT_SHADERS_IMPLEMENT
+extern Shaders shaders;
+#endif
+
 }
 
 }

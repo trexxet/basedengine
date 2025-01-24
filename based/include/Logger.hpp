@@ -103,7 +103,7 @@ public:
 
 };
 
-#ifndef _BASED_IMPLEMENT
+#ifndef _BASED_LOGGER_IMPLEMENT
 extern Logger log;
 #endif
 

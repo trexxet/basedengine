@@ -14,6 +14,7 @@
 #include "Logger.hpp"
 #include "LuaFile.hpp"
 #include "Scene.hpp"
+#include "GL/Shader.hpp"
 
 #include "sceneMain.hpp"
 
@@ -27,7 +28,7 @@ int main (int argv, char** args) {
 	Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
 	Based::Size2D<int> windowSize = conf["window"]; 
 	engine.client->create_window (DEMO_NAME, windowSize);
-	engine.client->defaultShaders.init();
+	Based::GL::Default::shaders.init();
 
 	SceneMain sceneMain (&engine, conf);
 	engine.sceneManager.schedule_next (&sceneMain);
