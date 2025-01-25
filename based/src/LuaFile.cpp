@@ -2,6 +2,8 @@
 
 #include <filesystem>
 
+#include <glad/gl.h>
+
 #include "Geometry.hpp"
 #include "Logger.hpp"
 
@@ -19,7 +21,7 @@ File::File (const std::string &filename, int flags) : name(filename) {
 		log.fatal ("Error while executing Lua file {}: {}", filename, e.what());
 	}
 
-	log.write ("Loaded Lua file {}", filename);
+	log.write ("Loaded Lua file: {}", filename);
 }
 
 File File::loadIfExists (const std::string &filename,
@@ -37,29 +39,38 @@ File File::loadIfExists (const std::string &filename,
 void File::bindBasedTypes (BindTypes types) {
 	if (types & BindTypes::Geometry) {
 		// Point2D, Size2D
-		auto bindGeometryP2D = [this] <template <typename> class C1, typename C2> (const std::string& name) {
-			this->state.new_usertype<C1<C2>>(name, sol::constructors<
-				C1<C2>(),
-				C1<C2>(C2, C2)>()
+#define BIND_FIELD(f) #f, &Point2D<C>::f
+		auto bindGeometryP2D = [this] <typename C> (const std::string& name) {
+			this->state.new_usertype<Point2D<C>>(name, sol::constructors<
+				Point2D<C>(),
+				Point2D<C>(C, C)>(),
+				BIND_FIELD (x),
+				BIND_FIELD (y),
+				BIND_FIELD (s),
+				BIND_FIELD (t),
+				BIND_FIELD (w),
+				BIND_FIELD (width),
+				BIND_FIELD (h),
+				BIND_FIELD (height)
 			);
 		};
-		bindGeometryP2D.operator()<Point2D, int> ("Point2D");
-		bindGeometryP2D.operator()<Size2D, int> ("Size2D");
-		bindGeometryP2D.operator()<Point2D, double> ("Point2Dd");
-		bindGeometryP2D.operator()<Size2D, double> ("Size2Dd");
+#undef BIND_FIELD
+		bindGeometryP2D.operator()<int> ("Vec2D");
+		bindGeometryP2D.operator()<GLfloat> ("Vec2Df");
 		// Rect2D
 		auto bindGeometryR2D = [this] <typename C> (const std::string& name) {
 			this->state.new_usertype<Rect2D<C>>(name, sol::constructors<
 				Rect2D<C>(),
 				Rect2D<C>(C, C, C, C),
 				Rect2D<C>(Size2D<C>),
+				Rect2D<C>(Point2D<C>, C, C),
 				Rect2D<C>(C, C, Size2D<C>),
 				Rect2D<C>(Point2D<C>, Size2D<C>)>(),
 				"centrify", &Rect2D<C>::template centrify<C>
 			);
 		};
 		bindGeometryR2D.operator()<int> ("Rect2D");
-		bindGeometryR2D.operator()<double> ("Rect2Dd");
+		bindGeometryR2D.operator()<GLfloat> ("Rect2Df");
 	}
 }
 

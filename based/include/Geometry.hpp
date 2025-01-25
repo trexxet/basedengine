@@ -52,16 +52,16 @@ struct Rect2D {
 	Rect2D () : x (0), y (0), w (0), h (0) {}
 
 	template <typename U>
-	Rect2D (const Size2D<U>& size) :
-		x (0), y (0), w (size.w), h (size.h) {}
+	Rect2D (const Size2D<U>& size) : x (0), y (0), w (size.w), h (size.h) {}
 
 	template <typename U>
-	Rect2D (T _x, T _y, const Size2D<U>& size) :
-		x (_x), y (_y), w (size.w), h (size.h) {}
+	Rect2D (const Point2D<U>& pos, T _w, T _h) : x (pos.x), y (pos.y), w (_w), h (_h) {}
+
+	template <typename U>
+	Rect2D (T _x, T _y, const Size2D<U>& size) : x (_x), y (_y), w (size.w), h (size.h) {}
 	
 	template <typename U>
-	Rect2D (const Point2D<T>& pos, const Size2D<U>& size) :
-		x (pos.x), y (pos.y), w (size.w), h (size.h) {}
+	Rect2D (const Point2D<T>& pos, const Size2D<U>& size) : x (pos.x), y (pos.y), w (size.w), h (size.h) {}
 
 	template <typename U>
 	void centrify (const Rect2D<U>& outer) {
@@ -90,8 +90,7 @@ struct Circle2D {
 	Circle2D () : x (0), y (0), r (0) {}
 
 	template <typename U>
-	Circle2D (const Point2D<T>& center, const U radius) :
-		x (center.x), y (center.y), r (radius) {}
+	Circle2D (const Point2D<T>& center, const U radius) : x (center.x), y (center.y), r (radius) {}
 
 	template <typename U>
 	operator Circle2D<U> () const {

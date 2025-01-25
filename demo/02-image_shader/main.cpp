@@ -10,12 +10,11 @@
 
 #include "Engine.hpp"
 #include "EngineClient.hpp"
-#include "Geometry.hpp"
 #include "Logger.hpp"
-#include "LuaFile.hpp"
 #include "Scene.hpp"
 #include "GL/Shader.hpp"
 
+#include "config.hpp"
 #include "sceneMain.hpp"
 
 int main (int argv, char** args) {
@@ -25,12 +24,14 @@ int main (int argv, char** args) {
 	Based::Engine engine;
 	engine.enable_client();
 
-	Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
-	Based::Size2D<int> windowSize = conf["window"]; 
-	engine.client->create_window (DEMO_NAME, windowSize);
+	// For this demo, we are using a simple Lua config with static structure
+	Config config;
+	config.load (CONFIG_PATH);
+
+	engine.client->create_window (DEMO_NAME, config.windowSize);
 	Based::GL::Default::shaders.init();
 
-	SceneMain sceneMain (&engine, conf);
+	SceneMain sceneMain (&engine, config);
 	engine.sceneManager.schedule_next (&sceneMain);
 
 	Based::log.write ("Starting main loop");
