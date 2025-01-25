@@ -30,7 +30,7 @@ public:
 
 	EngineClient (Engine *_engine);
 
-	void create_window (const std::string& title, const Size2D<int>& size);
+	void create_window (const std::string& title, const Vec2D<int>& size);
 	inline Window* window () { return sdl->window.get(); } 
 };
 

@@ -13,7 +13,7 @@
 namespace Based {
 
 class Window {
-	Size2D<int> _size;
+	Vec2D<int> _size;
 	Rect2D<int> _rect;
 	GLfloat _aspect;
 	glm::mat4 _ortho;
@@ -21,16 +21,16 @@ public:
 	SDL_Window *sdlWindow;
 	
 	/// @brief Window size and corresponding rectangle
-	const Size2D<int>& size = _size;
+	const Vec2D<int>& size = _size;
 	const Rect2D<int>& rect = _rect;
 	/// @brief Window aspect (size.x / size.y)
 	const GLfloat& aspect = _aspect;
 	/// @brief Orthographic projection matrix for the window
 	const glm::mat4& ortho = _ortho;
-	/// @brief Point2D for Window center
-	Point2D<int> center () { return { size.width / 2, size.height / 2 }; }
+	/// @brief Pixel for Window center
+	Vec2D<int> center () { return size / 2; }
 	/// @brief Set window size and related members
-	void resize (const Size2D<int>& size);
+	void resize (const Vec2D<int>& size);
 
 	struct Nk {
 		nk_context *ctx;
@@ -42,7 +42,7 @@ public:
 
 	void render ();
 
-	Window (const std::string& title, const Size2D<int>& _size);
+	Window (const std::string& title, const Vec2D<int>& _size);
 	~Window ();
 };
 

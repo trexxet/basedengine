@@ -7,8 +7,8 @@
 
 namespace Based {
 
-Window::Window (const std::string &title, const Size2D<int>& size) {
-	sdlWindow  = SDL_CreateWindow (title.c_str(), size.width, size.height, SDL_WINDOW_OPENGL);
+Window::Window (const std::string &title, const Vec2D<int>& size) {
+	sdlWindow  = SDL_CreateWindow (title.c_str(), size.x, size.y, SDL_WINDOW_OPENGL);
 	if (!sdlWindow)
 		log.fatal ("Window \"{}\" could not be created!", title);
 	log.write ("Window \"{}\" created", title);
@@ -71,11 +71,11 @@ void Window::render () {
 	SDL_GL_SwapWindow(sdlWindow);
 }
 
-void Window::resize (const Size2D<int>& size) {
+void Window::resize (const Vec2D<int>& size) {
 	_size = size;
 	_rect = {size};
-	_aspect = (GLfloat) size.width / size.height;
-	_ortho = glm::ortho<GLfloat> (0, size.width, size.height, 0);
+	_aspect = (GLfloat) size.x / size.y;
+	_ortho = glm::ortho<GLfloat> (0, size.x, size.y, 0);
 }
 
 }

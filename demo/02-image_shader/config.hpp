@@ -9,7 +9,7 @@
 #include "LuaFile.hpp"
 
 struct Config {
-	Based::Size2D<int> windowSize;
+	Based::Vec2D<int> windowSize;
 
 	struct {
 		std::string textureBg, texture1, texture2, texture3;

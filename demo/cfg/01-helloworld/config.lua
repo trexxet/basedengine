@@ -1,6 +1,6 @@
 -- The default game configuration file.
 
-window = Vec2D.new(800, 600)
+window = Vec2Di.new(800, 600)
 
-labelRect = Rect2D.new(Size2D.new(150, 20))
-labelRect:centrify(Rect2D.new(window))
+labelRect = Rect2Di.new(Vec2Di.new(150, 20))
+labelRect:centrify(Rect2Di.new(window))

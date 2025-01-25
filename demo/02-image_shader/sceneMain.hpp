@@ -65,16 +65,16 @@ public:
 		rectBackground = Based::GL::Rect::make (GL_STATIC_DRAW, window->rect, Based::GL::Texture::full());
 
 		/* 2) Set VBO & VAO manually. This way you can make any polygon. */
-		Based::Point2D<GLfloat> s1_topleft {16.f, 16.f};
-		Based::Size2D<GLfloat> s1_size {256.f, 256.f};
+		Based::Vec2D<GLfloat> s1_topleft {16.f, 16.f};
+		Based::Vec2D<GLfloat> s1_size {256.f, 256.f};
 		/* Note that X and Y are defined in screen pixel coordinates,
 		   while S and T are defined in GL texture coordinates (from 0 to 1, T axis inverted) */
 		GLfloat sprite1VBO_arr[] = {
 			//             x                          y             s   t
-			  s1_topleft.x + s1_size.w,  s1_topleft.y,              1,  1,
+			  s1_topleft.x + s1_size.x,  s1_topleft.y,              1,  1,
 			  s1_topleft.x,              s1_topleft.y,              0,  1,
-			  s1_topleft.x,              s1_topleft.y + s1_size.h,  0,  0,
-			  s1_topleft.x + s1_size.w,  s1_topleft.y + s1_size.h,  1,  0
+			  s1_topleft.x,              s1_topleft.y + s1_size.y,  0,  0,
+			  s1_topleft.x + s1_size.x,  s1_topleft.y + s1_size.y,  1,  0
 		};
 		Based::GL::VBOSpan sprite1VBO {sprite1VBO_arr};
 		rect1 = std::make_unique<Based::GL::Rect> (GL_STATIC_DRAW, &sprite1VBO, true);

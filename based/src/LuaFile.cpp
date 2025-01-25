@@ -38,39 +38,35 @@ File File::loadIfExists (const std::string &filename,
 
 void File::bindBasedTypes (BindTypes types) {
 	if (types & BindTypes::Geometry) {
-		// Point2D, Size2D
-#define BIND_FIELD(f) #f, &Point2D<C>::f
-		auto bindGeometryP2D = [this] <typename C> (const std::string& name) {
-			this->state.new_usertype<Point2D<C>>(name, sol::constructors<
-				Point2D<C>(),
-				Point2D<C>(C, C)>(),
+		// Vec2D
+		auto bindGeometryVec2D = [this] <typename C> (const std::string& name) {
+			this->state.new_usertype<Vec2D<C>>(name, sol::constructors<
+				Vec2D<C>(),
+				Vec2D<C>(C, C)>(),
+#define BIND_FIELD(f) #f, &Vec2D<C>::f
 				BIND_FIELD (x),
 				BIND_FIELD (y),
 				BIND_FIELD (s),
-				BIND_FIELD (t),
-				BIND_FIELD (w),
-				BIND_FIELD (width),
-				BIND_FIELD (h),
-				BIND_FIELD (height)
+				BIND_FIELD (t)
+#undef BIND_FIELD
 			);
 		};
-#undef BIND_FIELD
-		bindGeometryP2D.operator()<int> ("Vec2D");
-		bindGeometryP2D.operator()<GLfloat> ("Vec2Df");
+		bindGeometryVec2D.operator()<int> ("Vec2Di");
+		bindGeometryVec2D.operator()<GLfloat> ("Vec2D");
 		// Rect2D
-		auto bindGeometryR2D = [this] <typename C> (const std::string& name) {
+		auto bindGeometryRect2D = [this] <typename C> (const std::string& name) {
 			this->state.new_usertype<Rect2D<C>>(name, sol::constructors<
 				Rect2D<C>(),
 				Rect2D<C>(C, C, C, C),
-				Rect2D<C>(Size2D<C>),
-				Rect2D<C>(Point2D<C>, C, C),
-				Rect2D<C>(C, C, Size2D<C>),
-				Rect2D<C>(Point2D<C>, Size2D<C>)>(),
+				Rect2D<C>(Vec2D<C>),
+				Rect2D<C>(Vec2D<C>, C, C),
+				Rect2D<C>(C, C, Vec2D<C>),
+				Rect2D<C>(Vec2D<C>, Vec2D<C>)>(),
 				"centrify", &Rect2D<C>::template centrify<C>
 			);
 		};
-		bindGeometryR2D.operator()<int> ("Rect2D");
-		bindGeometryR2D.operator()<GLfloat> ("Rect2Df");
+		bindGeometryRect2D.operator()<int> ("Rect2Di");
+		bindGeometryRect2D.operator()<GLfloat> ("Rect2D");
 	}
 }
 
