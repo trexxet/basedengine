@@ -20,7 +20,7 @@ public:
 	Texture* texture {nullptr};
 
 	Sprite () = delete;
-	Sprite (GLuint textureUnit, const Rect2D<GLfloat>& rect, const glm::mat4* mvp);
+	Sprite (const Rect2D<GLfloat>& rect, const glm::mat4* mvp);
 	Sprite (Texture *texture, const Rect2D<GLfloat>& rect, const glm::mat4* mvp);
 
 	void load (const std::string& path) override final;
@@ -33,15 +33,16 @@ public:
 
 	/// @brief Create, load, and prepare Sprite with managed texture
 	/// @param path path to texture file
-	/// @param textureUnit GL texture unit number
 	/// @param rect Rect2D for the sprite position
 	/// @param mvp MVP matrix for the shader
-	static std::unique_ptr<Sprite> make (const std::string& path, GLuint textureUnit, const Rect2D<GLfloat>& rect, const glm::mat4* mvp);
+	static std::unique_ptr<Sprite> make (const std::string& path, const Rect2D<GLfloat>& rect, const glm::mat4* mvp);
 	/// @brief Create, load, and prepare Sprite with referenced texture (unmanaged)
 	/// @param texture used texture
 	/// @param rect Rect2D for the sprite position
 	/// @param mvp MVP matrix for the shader
 	static std::unique_ptr<Sprite> make (Texture *texture, const Rect2D<GLfloat>& rect, const glm::mat4* mvp);
+
+	static consteval GLuint textureUnit = 0;
 };
 
 }

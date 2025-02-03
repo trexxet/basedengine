@@ -23,13 +23,11 @@ class SceneMain : public Based::Scene {
 		textureBackground {nullptr},
 		texture1 {nullptr},
 		texture2 {nullptr};
-	// todo: make texture unit auto enumerator
+	/* Also, note that all Textures are created and loaded being binded to texture unit 0.
+	 * We can use other units for rendering though. */
 	enum {
-		textureBackground_unit,
-		texture1_unit,
-		texture2_unit,
-		sprite1_unit,
-		sprite2_unit
+		texUnit_default =0,
+		texUnit_hex
 	};
 	/* Polygons are wrappers for VBO/VAO/EBO. GL::Rect is one of them. */
 	std::unique_ptr<Based::GL::Rect>
@@ -53,13 +51,13 @@ public:
 		window = engine->client->window();
 	
 		/* Textures can be created as a typical Resource (Create -> Load -> Prepare) */
-		textureBackground = std::make_unique<Based::GL::Texture> (textureBackground_unit);
+		textureBackground = std::make_unique<Based::GL::Texture>();
 		textureBackground->load (config.path.textureBg);
 		if (!textureBackground->prepare())
 			Based::log.fatal ("Failed to prepare texture!");
 		/* Alternatively, texture can be made with GL::Texture::make() */
-		texture1 = Based::GL::Texture::make (config.path.texture1, texture1_unit);
-		texture2 = Based::GL::Texture::make (config.path.texture2, texture2_unit);
+		texture1 = Based::GL::Texture::make (config.path.texture1);
+		texture2 = Based::GL::Texture::make (config.path.texture2);
 
 		/* Polygon can be created in a number of ways.
 		 * 1) Use GL::Rect::make() to auto generate VBO & VAO */
@@ -115,8 +113,7 @@ public:
 		 * Again, it can be created as a resource (Create -> Load -> Prepare) */
 		/* Note that the width here is negative, making the image horizontally flipped,
 		 * and Rect2D being extended left from the X coordinate. */
-		sprite1 = std::make_unique<Based::GL::Sprite> (sprite1_unit,
-		                                               Based::Rect2D<GLfloat> {500.f, 16.f, -256.f, 256.f},
+		sprite1 = std::make_unique<Based::GL::Sprite> (Based::Rect2D<GLfloat> {500.f, 16.f, -256.f, 256.f},
 		                                               &window->ortho);
 		sprite1->load (config.path.texture3);
 		if (!sprite1->prepare())
@@ -124,7 +121,7 @@ public:
 		/* Sprite has a make() as well. */
 		/* Note that the width here is negative, making the image vertically flipped,
 		 * and Rect2D being extended top from the Y coordinate. */
-		sprite2 = Based::GL::Sprite::make (config.path.texture3, sprite2_unit,
+		sprite2 = Based::GL::Sprite::make (config.path.texture3,
 		                                   Based::Rect2D<GLfloat> {16.f, 500.f, 256.f, -256.f},
 		                                   &window->ortho);
 		/* Also, note that the same texture is being loaded twice. To avoid this, we can reuse
@@ -155,23 +152,27 @@ public:
 		 * In other words, go from GL NDC coordinates to screen pixel coordinates. */
 		shader->set_uniform ("mvp", window->ortho);
 		/* 3) Set the sampler (in the fragment shader) to the texture unit of required texture */
-		shader->set_uniform ("tex", textureBackground->unit);
-		/* 4) Bind VAO and draw polygon */
+		shader->set_uniform ("tex", texUnit_default);
+		/* 4) Bind the required texture to the texture unit */
+		textureBackground->use (texUnit_default);
+		/* 5) Bind VAO and draw polygon */
 		rectBackground->bind_draw();
-		/* 5) Subsequent draws can be made starting from step 3 */
-		shader->set_uniform ("tex", texture1->unit);
+		/* 6) Subsequent draws can be made starting from step 3 (or 4, if no texture unit switch required) */
+		texture1->use ();
 		rect1->bind_draw();
-		/* 6) Alternatively, Sprite can be used. It performs steps 1-4 for GL::Rect and SP_2D_MVPSampler. */
+		/* 7) Alternatively, Sprite can be used. It performs steps 1-5 for GL::Rect and SP_2D_MVPSampler. */
 		sprite1->draw();
 		/* Note that these steps are performed for every Sprite::draw(), inducing context switching and
 		 * being potentially slow. */
 		sprite2->draw();
 		sprite3->draw();
-		/* We'll use our own shader program to draw hex */
+		/* 8) To draw hex, we'll use our own shaders as an example */
 		hexShader->use();
 		hexShader->set_uniform ("mvp", window->ortho);
 		hexShader->set_uniform ("center", window->center());
-		hexShader->set_uniform ("tex", texture2->unit);
+		/* Also, we'll use different texture unit */
+		hexShader->set_uniform ("tex", texUnit_hex);
+		texture2->use (texUnit_hex);
 		hex1->bind_draw();
 	}
 

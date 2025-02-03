@@ -2,9 +2,9 @@
 
 namespace Based::GL {
 
-Sprite::Sprite (GLuint textureUnit, const Rect2D<GLfloat>& rect, const glm::mat4* mvp) : mvp (mvp) {
+Sprite::Sprite (const Rect2D<GLfloat>& rect, const glm::mat4* mvp) : mvp (mvp) {
 	glRect = Rect::make (GL_STATIC_DRAW, rect, Texture::full());
-	texture = new Texture (textureUnit);
+	texture = new Texture();
 	textureManaged = true;
 }
 
@@ -51,12 +51,13 @@ void Sprite::draw () {
 	ShaderProgram& sp = Default::shaders[Default::SP_2D_MVPSampler];
 	sp.use();
 	sp.set_uniform ("mvp", *mvp);
-	sp.set_uniform ("tex", texture->unit);
+	sp.set_uniform ("tex", textureUnit);
+	texture->use (textureUnit);
 	glRect->bind_draw();
 }
 
-std::unique_ptr<Sprite> Sprite::make (const std::string& path, GLuint textureUnit, const Rect2D<GLfloat>& rect, const glm::mat4* mvp) {
-	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite> (textureUnit, rect, mvp);
+std::unique_ptr<Sprite> Sprite::make (const std::string& path, const Rect2D<GLfloat>& rect, const glm::mat4* mvp) {
+	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite> (rect, mvp);
 	sprite->load (path);
 	if (!sprite->prepare()) [[unlikely]]
 		log.fatal ("Failed to prepare sprite {}", path);

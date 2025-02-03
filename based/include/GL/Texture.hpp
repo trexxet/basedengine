@@ -13,7 +13,7 @@ namespace Based::GL {
 class Texture : public Resource {
 	SDL_Surface *surface = nullptr;
 public:
-	GLuint id, unit;
+	GLuint id;
 	Vec2D<int> size;
 	/// @brief {0, 0, size.x, size.y}
 	Rect2D<int> rect;
@@ -22,8 +22,7 @@ public:
 	/// @brief Get {0.5f, 0.5f} point in GL texture coordinates
 	constexpr static Vec2D<GLfloat> center () { return { 0.5f, 0.5f }; }
 
-	Texture () = delete;
-	Texture (GLuint unit);
+	Texture () {}
 
 	void load (const std::string& path) override final;
 	bool prepare () override final;
@@ -31,8 +30,13 @@ public:
 
 	~Texture () override final;
 
-	/// @brief Create, load, prepare and optionally bind texture
-	static std::unique_ptr<Texture> make (const std::string& path, GLuint unit);
+	/// @brief Create, load and prepare texture
+	static std::unique_ptr<Texture> make (const std::string& path);
+
+	/// @brief Bind texture to the specified texture unit, or to the currently active one
+	/// @param unit Texture unit (-1 if should use currently active unit)
+	/// @note Texture readiness is not checked
+	void use (GLint unit = -1);
 };
 
 }
