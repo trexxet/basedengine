@@ -11,8 +11,10 @@
 #include "GL/Texture.hpp"
 
 #include "config.hpp"
+#include "hexShaderVert.hpp"
 
 class SceneMain : public Based::Scene {
+	Based::Window* window {nullptr};
 	/* For this demo, we are loading multiple textures (or, more correctly, PNG images) on our own.
 	 * Note that for a real program you should consider:
 	 * * 1) Using global or local ResourceManager
@@ -36,9 +38,10 @@ class SceneMain : public Based::Scene {
 	/* GL::Hex is another Polygon type */
 	std::unique_ptr<Based::GL::Hex>
 		hex1 {nullptr};
-	/* Finally, polygon and texture are processed with GL::ShaderProgram. We'll use a built-in one,
-	 * so reference it by a simple pointer (non-owning). */
+	/* Finally, polygon and texture are processed with GL::ShaderProgram. A built-in one is referenced
+	 * by a simple pointer (non-owning). */
 	Based::GL::ShaderProgram *shader {nullptr};
+	std::unique_ptr<Based::GL::ShaderProgram> hexShader {nullptr};
 	/* Sprite combines the texture, GL::Rect polygon and default shader into a single object. */
 	std::unique_ptr<Based::GL::Sprite>
 		sprite1 {nullptr},
@@ -47,7 +50,7 @@ class SceneMain : public Based::Scene {
 public:
 	SceneMain (Based::Engine* engine, Config& config) : Based::Scene(engine) {
 		if (!engine->client) return;
-		Based::Window* window = engine->client->window();
+		window = engine->client->window();
 	
 		/* Textures can be created as a typical Resource (Create -> Load -> Prepare) */
 		textureBackground = std::make_unique<Based::GL::Texture> (textureBackground_unit);
@@ -93,13 +96,28 @@ public:
 		 * to GL texture space T axis), and samples the texture unit in "tex" uniform. */
 		shader = &Based::GL::Default::shaders [Based::GL::Default::SP_2D_MVPSampler];
 
+		/* Shader can be created as a resource (Create -> Load -> Prepare), using a file or 
+		 * a string as a source. Note that we are scoping the Shader to the current constructor only, as it's no
+		 * longer needed after linking the ShaderProgram. */
+		std::unique_ptr<Based::GL::Shader> hexShaderVert = std::make_unique<Based::GL::Shader> (GL_VERTEX_SHADER, std::move(hexShaderVertSrc));
+		hexShaderVert->load ();
+		if (!hexShaderVert->prepare())
+			Based::log.fatal ("Failed to prepare vertex shader!");
+		
+		/* Two make_*() functions are avaliable: for a string source and for a file source */
+		std::unique_ptr<Based::GL::Shader> hexShaderFrag = Based::GL::Shader::make_from_file (GL_FRAGMENT_SHADER, config.path.hexShaderFrag);
+
+		/* Making ShaderProgram is similar. Note that you can reference default shaders in ShaderVec, e.g.:
+		 * {&Based::GL::Default::shaders(Based::GL::Default::S_2D_MVPVert), hexShaderFrag.get()} */
+		hexShader = Based::GL::ShaderProgram::make ({hexShaderVert.get(), hexShaderFrag.get()}, hexShaderVertAttributes);
+
 		/* Finally, Sprite combines everything needed for a simple image drawing.
 		 * Again, it can be created as a resource (Create -> Load -> Prepare) */
 		/* Note that the width here is negative, making the image horizontally flipped,
 		 * and Rect2D being extended left from the X coordinate. */
 		sprite1 = std::make_unique<Based::GL::Sprite> (sprite1_unit,
 		                                               Based::Rect2D<GLfloat> {500.f, 16.f, -256.f, 256.f},
-		                                               &engine->client->window()->ortho);
+		                                               &window->ortho);
 		sprite1->load (config.path.texture3);
 		if (!sprite1->prepare())
 			Based::log.fatal ("Failed to prepare sprite!");
@@ -108,13 +126,12 @@ public:
 		 * and Rect2D being extended top from the Y coordinate. */
 		sprite2 = Based::GL::Sprite::make (config.path.texture3, sprite2_unit,
 		                                   Based::Rect2D<GLfloat> {16.f, 500.f, 256.f, -256.f},
-		                                   &engine->client->window()->ortho);
+		                                   &window->ortho);
 		/* Also, note that the same texture is being loaded twice. To avoid this, we can reuse
 		 * an already existing texture. However, it should be done carefully, as the texture is not
 		 * managed by Sprite in that case. Sprite shouldn't outlive the texture! */
 		/* Note that now we are flipping on both X and Y (check config)*/
-		sprite3 = Based::GL::Sprite::make (texture1.get(), config.sprite3_rect,
-		                                   &engine->client->window()->ortho);
+		sprite3 = Based::GL::Sprite::make (texture1.get(), config.sprite3_rect, &window->ortho);
 
 		/* For this demo, we are managing depth visibility by draw order */
 		glDisable (GL_DEPTH_TEST);
@@ -136,7 +153,7 @@ public:
 		shader->use();
 		/* 2) Set the MVP matrix as orthoghraphic projection of entire window.
 		 * In other words, go from GL NDC coordinates to screen pixel coordinates. */
-		shader->set_uniform ("mvp", engine->client->window()->ortho);
+		shader->set_uniform ("mvp", window->ortho);
 		/* 3) Set the sampler (in the fragment shader) to the texture unit of required texture */
 		shader->set_uniform ("tex", textureBackground->unit);
 		/* 4) Bind VAO and draw polygon */
@@ -144,14 +161,18 @@ public:
 		/* 5) Subsequent draws can be made starting from step 3 */
 		shader->set_uniform ("tex", texture1->unit);
 		rect1->bind_draw();
-		shader->set_uniform ("tex", texture2->unit);
-		hex1->bind_draw();
 		/* 6) Alternatively, Sprite can be used. It performs steps 1-4 for GL::Rect and SP_2D_MVPSampler. */
 		sprite1->draw();
 		/* Note that these steps are performed for every Sprite::draw(), inducing context switching and
 		 * being potentially slow. */
 		sprite2->draw();
 		sprite3->draw();
+		/* We'll use our own shader program to draw hex */
+		hexShader->use();
+		hexShader->set_uniform ("mvp", window->ortho);
+		hexShader->set_uniform ("center", window->center());
+		hexShader->set_uniform ("tex", texture2->unit);
+		hex1->bind_draw();
 	}
 
 	void gui () override final { }

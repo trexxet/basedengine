@@ -78,6 +78,22 @@ Shader::~Shader() {
 	if (id) unload();
 }
 
+std::unique_ptr<Shader> Shader::make_from_file (GLenum type, const std::string& path) {
+	std::unique_ptr<Shader> shader = std::make_unique<Shader> (type);
+	shader->load (path);
+	if (!shader->prepare()) [[unlikely]]
+		log.fatal ("Failed to prepare shader {}", path);
+	return shader;
+}
+
+std::unique_ptr<Shader> Shader::make_from_string (GLenum type, std::string&& src) {
+	std::unique_ptr<Shader> shader = std::make_unique<Shader> (type, std::forward<std::string>(src));
+	shader->load ();
+	if (!shader->prepare()) [[unlikely]]
+		log.fatal ("Failed to prepare shader from source");
+	return shader;
+}
+
 ShaderProgram::ShaderProgram (ShaderVec&& units, GLuint attributes)
 	: units (units), attributes (attributes) { }
 
@@ -124,6 +140,14 @@ ShaderProgram::~ShaderProgram () {
 	if (id) unload();
 }
 
+std::unique_ptr<ShaderProgram> ShaderProgram::make (ShaderVec&& units, GLuint attributes) {
+	std::unique_ptr<ShaderProgram> sp = std::make_unique<ShaderProgram> (std::forward<ShaderVec> (units), attributes);
+	sp->load ();
+	if (!sp->prepare()) [[unlikely]]
+		log.fatal ("Failed to prepare shader program!");
+	return sp;
+}
+
 void ShaderProgram::use () {
 	glUseProgram (id);
 	BASED_GL_CHECK ("Error using shader program");
@@ -134,6 +158,20 @@ void ShaderProgram::set_uniform (const GLchar *name, GLint value) {
 	GLint loc = glGetUniformLocation (id, name);
 	BASED_GL_CHECK ("Error getting uniform location");
 	glUniform1i (loc, value);
+	BASED_GL_CHECK ("Error setting uniform");
+}
+
+void ShaderProgram::set_uniform (const GLchar *name, const glm::vec2& value) {
+	GLint loc = glGetUniformLocation (id, name);
+	BASED_GL_CHECK ("Error getting uniform location");
+	glUniform2fv (loc, 1, glm::value_ptr (value));
+	BASED_GL_CHECK ("Error setting uniform");
+}
+
+void ShaderProgram::set_uniform (const GLchar *name, const glm::ivec2& value) {
+	GLint loc = glGetUniformLocation (id, name);
+	BASED_GL_CHECK ("Error getting uniform location");
+	glUniform2iv (loc, 1, glm::value_ptr (value));
 	BASED_GL_CHECK ("Error setting uniform");
 }
 

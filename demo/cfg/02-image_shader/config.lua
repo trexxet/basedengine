@@ -7,7 +7,8 @@ path = {
 	textureBg = assetPath .. "crate1.png",
 	texture1 = assetPath .. "crate2.png",
 	texture2 = assetPath .. "crate3.png",
-	texture3 = assetPath .. "crowbar.png"
+	texture3 = assetPath .. "crowbar.png",
+	hexShaderFrag = assetPath .. "hex.frag"
 }
 
 hex1_outerRadius = 100.0;

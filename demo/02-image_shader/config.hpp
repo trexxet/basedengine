@@ -12,7 +12,7 @@ struct Config {
 	Based::Vec2D<int> windowSize;
 
 	struct {
-		std::string textureBg, texture1, texture2, texture3;
+		std::string textureBg, texture1, texture2, texture3, hexShaderFrag;
 	} path;
 
 	GLfloat hex1R;
@@ -26,6 +26,7 @@ struct Config {
 		path.texture1 = conf["path"]["texture1"];
 		path.texture2 = conf["path"]["texture2"];
 		path.texture3 = conf["path"]["texture3"];
+		path.hexShaderFrag = conf["path"]["hexShaderFrag"];
 		hex1R = conf["hex1_outerRadius"];
 		sprite3_rect = conf["sprite3_rect"];
 

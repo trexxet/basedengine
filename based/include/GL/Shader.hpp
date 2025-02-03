@@ -30,6 +30,11 @@ public:
 	void unload () override final;
 
 	~Shader () override final;
+
+	/// @brief Create, load, and prepare Shader from file
+	static std::unique_ptr<Shader> make_from_file (GLenum type, const std::string& path);
+	/// @brief Create, load, and prepare Shader from source string
+	static std::unique_ptr<Shader> make_from_string (GLenum type, std::string&& src);
 };
 
 using ShaderVec = std::vector<Shader *>;
@@ -54,6 +59,9 @@ public:
 
 	~ShaderProgram () override final;
 
+	/// @brief Create, load, and prepare ShaderProgram
+	static std::unique_ptr<ShaderProgram> make (ShaderVec&& units, GLuint attributes);
+
 	/// @brief Use the shader program
 	/// @note Shader program readiness is not checked
 	void use ();
@@ -61,6 +69,8 @@ public:
 	/// @param name Uniform name
 	/// @param value Uniform value
 	void set_uniform (const GLchar *name, GLint value);
+	void set_uniform (const GLchar *name, const glm::vec2& value);
+	void set_uniform (const GLchar *name, const glm::ivec2& value);
 	void set_uniform (const GLchar *name, const glm::mat4& value);
 };
 
