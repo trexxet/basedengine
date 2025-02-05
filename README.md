@@ -20,7 +20,6 @@
 
 ## Build flags
 * `BASED_ENABLE_GL_CHECK` - enable printing GL error stack after some actions. May be slow, useful for debug.
-* `BASED_DISABLE_NK` - disable Nuklear. May be useful for GL debug.
 
 #### Code style (which I may forget)
 * Tabs are used for indentation. Spaces are used for alignment. Thus, tab width is not important.

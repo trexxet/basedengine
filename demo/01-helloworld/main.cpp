@@ -31,7 +31,7 @@ int main (int argv, char** args) {
 
 	Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
 	if (ENABLE_CLIENT) {
-		Vec2D<int> windowSize = conf["window"]; 
+		Based::Vec2D<int> windowSize = conf["window"]; 
 		engine.client->create_window (DEMO_NAME, windowSize);
 	}
 

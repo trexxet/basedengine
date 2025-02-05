@@ -13,10 +13,19 @@
 namespace Based {
 
 class Window {
+public:
+	enum Flags {
+		NO_FLAGS = 0,
+		DISABLE_NUKLEAR = 1
+	};
+	Flags flags;
+
+private:
 	Vec2D<int> _size;
 	Rect2D<int> _rect;
 	GLfloat _aspect;
 	glm::mat4 _ortho;
+
 public:
 	SDL_Window *sdlWindow;
 	
@@ -42,7 +51,7 @@ public:
 
 	void render ();
 
-	Window (const std::string& title, const Vec2D<int>& _size);
+	Window (const std::string& title, const Vec2D<int>& _size, const Flags flags);
 	~Window ();
 };
 

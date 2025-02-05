@@ -37,7 +37,7 @@ public:
 	void gui () override final {
 		nk_context *nk_ctx = engine->client->window()->nk_ctx();
 		if (nk_begin (nk_ctx, DEMO_NAME, nk_from_Rect2D(labelRect), NK_WINDOW_NO_SCROLLBAR)) {
-			nk_layout_row_dynamic (nk_ctx, labelRect.height, 1);
+			nk_layout_row_dynamic (nk_ctx, labelRect.h, 1);
 			nk_label (nk_ctx, DEMO_NAME, NK_TEXT_CENTERED);
 		}
 		nk_end (nk_ctx);

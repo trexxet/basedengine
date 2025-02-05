@@ -42,7 +42,7 @@ public:
 	/// @param mvp MVP matrix for the shader
 	static std::unique_ptr<Sprite> make (Texture *texture, const Rect2D<GLfloat>& rect, const glm::mat4* mvp);
 
-	static consteval GLuint textureUnit = 0;
+	static const GLuint textureUnit = 0;
 };
 
 }

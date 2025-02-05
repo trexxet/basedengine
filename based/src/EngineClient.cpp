@@ -33,11 +33,11 @@ EngineClient::EngineClient (Engine *_engine) : engine(_engine) {
 	sdl = std::make_unique<SDL>();
 }
 
-void EngineClient::create_window (const std::string &title, const Vec2D<int>& size)
+void EngineClient::create_window (const std::string &title, const Vec2D<int>& size, const Window::Flags flags)
 {
 	if (sdl->window)
 		log.fatal ("Can't create multiple windows!");
-	sdl->window = std::make_unique<Window> (title, size);
+	sdl->window = std::make_unique<Window> (title, size, flags);
 }
 
 void EngineClient::tick () {
@@ -50,9 +50,11 @@ void EngineClient::tick () {
 
 inline void EngineClient::tickEvents () {
 	SDL_Event event;
-	nk_context *nk_ctx = sdl->window->nk->ctx;
+	Window::Nk *nk = sdl->window->nk.get();
 
-	nk_input_begin (nk_ctx);
+	if (nk)
+		nk_input_begin (nk->ctx);
+
 	while (SDL_PollEvent (&event)) {
 		switch (event.type) {
 			[[unlikely]]
@@ -60,11 +62,14 @@ inline void EngineClient::tickEvents () {
 				engine->stop();
 				break;
 			default:
-				nk_sdl_handle_event (&event);
+				if (nk)
+					nk_sdl_handle_event (&event);
 		}
 		engine->sceneManager.handle_events (&event);
 	}
-	nk_input_end (nk_ctx);
+
+	if (nk)
+		nk_input_end (nk->ctx);
 }
 
 inline void EngineClient::tickRender () {

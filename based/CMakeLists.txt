@@ -11,7 +11,6 @@ include(cmake/getNuklear.cmake)
 target_compile_definitions(based PUBLIC
 	BASED_VERSION="0.1-dev-alpha"
 	BASED_ENABLE_GL_CHECK
-	BASED_DISABLE_NK
 )
 set_target_properties(based PROPERTIES VERSION 0.1 SOVERSION 01)
 set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)

@@ -28,7 +28,7 @@ int main (int argv, char** args) {
 	Config config;
 	config.load (CONFIG_PATH);
 
-	engine.client->create_window (DEMO_NAME, config.windowSize);
+	engine.client->create_window (DEMO_NAME, config.windowSize, Based::Window::Flags::DISABLE_NUKLEAR);
 	Based::GL::Default::shaders.init();
 
 	SceneMain sceneMain (&engine, config);
