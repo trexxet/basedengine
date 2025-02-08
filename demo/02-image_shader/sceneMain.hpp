@@ -169,7 +169,6 @@ public:
 		/* 8) To draw hex, we'll use our own shaders as an example */
 		hexShader->use();
 		hexShader->set_uniform ("mvp", window->ortho);
-		hexShader->set_uniform ("center", window->center());
 		/* Also, we'll use different texture unit */
 		hexShader->set_uniform ("tex", texUnit_hex);
 		texture2->use (texUnit_hex);

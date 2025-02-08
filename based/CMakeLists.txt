@@ -10,9 +10,15 @@ include(cmake/getNuklear.cmake)
 
 target_compile_definitions(based PUBLIC
 	BASED_VERSION="0.1-dev-alpha"
-	BASED_ENABLE_GL_CHECK
 )
-set_target_properties(based PROPERTIES VERSION 0.1 SOVERSION 01)
+target_compile_definitions(based PRIVATE
+	$<$<CONFIG:Debug>:BASED_ENABLE_GL_CHECK>
+)
+set_target_properties(based PROPERTIES
+	VERSION 0.1
+	SOVERSION 01
+	DEBUG_POSTFIX "dbg"
+)
 set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 
 set(BASED_SOURCES

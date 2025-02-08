@@ -156,6 +156,10 @@ void ShaderProgram::use () {
 // todo: uniform location cache
 void ShaderProgram::set_uniform (const GLchar *name, GLint value) {
 	GLint loc = glGetUniformLocation (id, name);
+	if (loc < 0) [[unlikely]] {
+		log.warn ("Can't get uniform {}", name);
+		return;
+	}
 	BASED_GL_CHECK ("Error getting uniform location");
 	glUniform1i (loc, value);
 	BASED_GL_CHECK ("Error setting uniform");
@@ -163,6 +167,10 @@ void ShaderProgram::set_uniform (const GLchar *name, GLint value) {
 
 void ShaderProgram::set_uniform (const GLchar *name, const glm::vec2& value) {
 	GLint loc = glGetUniformLocation (id, name);
+	if (loc < 0) [[unlikely]] {
+		log.warn ("Can't get uniform {}", name);
+		return;
+	}
 	BASED_GL_CHECK ("Error getting uniform location");
 	glUniform2fv (loc, 1, glm::value_ptr (value));
 	BASED_GL_CHECK ("Error setting uniform");
@@ -170,6 +178,10 @@ void ShaderProgram::set_uniform (const GLchar *name, const glm::vec2& value) {
 
 void ShaderProgram::set_uniform (const GLchar *name, const glm::ivec2& value) {
 	GLint loc = glGetUniformLocation (id, name);
+	if (loc < 0) [[unlikely]] {
+		log.warn ("Can't get uniform {}", name);
+		return;
+	}
 	BASED_GL_CHECK ("Error getting uniform location");
 	glUniform2iv (loc, 1, glm::value_ptr (value));
 	BASED_GL_CHECK ("Error setting uniform");
@@ -177,6 +189,10 @@ void ShaderProgram::set_uniform (const GLchar *name, const glm::ivec2& value) {
 
 void ShaderProgram::set_uniform (const GLchar *name, const glm::mat4& value) {
 	GLint loc = glGetUniformLocation (id, name);
+	if (loc < 0) [[unlikely]] {
+		log.warn ("Can't get uniform {}", name);
+		return;
+	}
 	BASED_GL_CHECK ("Error getting uniform location");
 	glUniformMatrix4fv (loc, 1, GL_FALSE, glm::value_ptr (value));
 	BASED_GL_CHECK ("Error setting uniform");

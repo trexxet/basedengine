@@ -18,9 +18,6 @@
 * Sol 3.2.3
 * Nuklear 4.12.3
 
-## Build flags
-* `BASED_ENABLE_GL_CHECK` - enable printing GL error stack after some actions. May be slow, useful for debug.
-
 #### Code style (which I may forget)
 * Tabs are used for indentation. Spaces are used for alignment. Thus, tab width is not important.
 * Types are PascalCase. Variables are camelCase. Methods and functions are snake_case.
