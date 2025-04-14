@@ -153,47 +153,54 @@ void ShaderProgram::use () {
 	BASED_GL_CHECK ("Error using shader program");
 }
 
-// todo: uniform location cache
-void ShaderProgram::set_uniform (const GLchar *name, GLint value) {
+GLint ShaderProgram::get_uniform_location_from_gl (const GLchar *name) {
 	GLint loc = glGetUniformLocation (id, name);
 	if (loc < 0) [[unlikely]] {
 		log.warn ("Can't get uniform {}", name);
-		return;
+		BASED_GL_CHECK ("Error getting uniform location");
 	}
-	BASED_GL_CHECK ("Error getting uniform location");
+	return loc;
+}
+
+GLint ShaderProgram::get_uniform_location (const GLchar *name) {
+	if (!useUniformLocationCache)
+		return get_uniform_location_from_gl (name);
+	
+	std::string key (name);
+	GLint loc;
+	if (!uniformLocationCache.contains (key)) {
+		loc = get_uniform_location_from_gl (name);
+		uniformLocationCache[key] = loc;
+	}
+	else
+		loc = uniformLocationCache[key];
+	return loc;
+}
+
+void ShaderProgram::set_uniform (const GLchar *name, GLint value) {
+	GLint loc = get_uniform_location (name);
+	if (loc < 0) [[unlikely]] return;
 	glUniform1i (loc, value);
 	BASED_GL_CHECK ("Error setting uniform");
 }
 
 void ShaderProgram::set_uniform (const GLchar *name, const glm::vec2& value) {
-	GLint loc = glGetUniformLocation (id, name);
-	if (loc < 0) [[unlikely]] {
-		log.warn ("Can't get uniform {}", name);
-		return;
-	}
-	BASED_GL_CHECK ("Error getting uniform location");
+	GLint loc = get_uniform_location (name);
+	if (loc < 0) [[unlikely]] return;
 	glUniform2fv (loc, 1, glm::value_ptr (value));
 	BASED_GL_CHECK ("Error setting uniform");
 }
 
 void ShaderProgram::set_uniform (const GLchar *name, const glm::ivec2& value) {
-	GLint loc = glGetUniformLocation (id, name);
-	if (loc < 0) [[unlikely]] {
-		log.warn ("Can't get uniform {}", name);
-		return;
-	}
-	BASED_GL_CHECK ("Error getting uniform location");
+	GLint loc = get_uniform_location (name);
+	if (loc < 0) [[unlikely]] return;
 	glUniform2iv (loc, 1, glm::value_ptr (value));
 	BASED_GL_CHECK ("Error setting uniform");
 }
 
 void ShaderProgram::set_uniform (const GLchar *name, const glm::mat4& value) {
-	GLint loc = glGetUniformLocation (id, name);
-	if (loc < 0) [[unlikely]] {
-		log.warn ("Can't get uniform {}", name);
-		return;
-	}
-	BASED_GL_CHECK ("Error getting uniform location");
+	GLint loc = get_uniform_location (name);
+	if (loc < 0) [[unlikely]] return;
 	glUniformMatrix4fv (loc, 1, GL_FALSE, glm::value_ptr (value));
 	BASED_GL_CHECK ("Error setting uniform");
 }

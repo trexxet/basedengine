@@ -41,6 +41,9 @@ using ShaderVec = std::vector<Shader *>;
 
 class ShaderProgram : public Resource {
 	ShaderVec units;
+
+	GLint get_uniform_location_from_gl (const GLchar *name);
+	GLint get_uniform_location (const GLchar *name);
 public:
 	GLuint id = 0, attributes = 0;
 
@@ -65,6 +68,10 @@ public:
 	/// @brief Use the shader program
 	/// @note Shader program readiness is not checked
 	void use ();
+
+	std::unordered_map<std::string, GLint> uniformLocationCache;
+	bool useUniformLocationCache = true;
+
 	/// @brief Set uniform
 	/// @param name Uniform name
 	/// @param value Uniform value
