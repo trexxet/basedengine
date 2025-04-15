@@ -6,7 +6,6 @@ include(cmake/getSDL.cmake)
 include(cmake/getSDL_image.cmake)
 include(cmake/getLua.cmake)
 include(cmake/getSol.cmake)
-include(cmake/getNuklear.cmake)
 
 target_compile_definitions(based PUBLIC
 	BASED_VERSION="0.1-dev-alpha"
@@ -25,7 +24,6 @@ set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
 	LuaFile.cpp
-	NuklearImplement.c
 	Window.cpp
 	GL/GL_Util.cpp
 	GL/Polygon.cpp
@@ -46,6 +44,5 @@ target_link_libraries(based PUBLIC
 	SDL3_image::SDL3_image
 	lua::lua
 	sol2::sol2
-	nuklear::nk
 	-lstdc++exp
 )

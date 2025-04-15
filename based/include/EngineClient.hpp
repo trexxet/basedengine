@@ -23,7 +23,6 @@ class EngineClient {
 	void tick ();
 	inline void tickEvents ();
 	inline void tickRender ();
-	inline void tickGui ();
 	inline void tickFinish ();
 public:
 	ResourceManager resourceManager;

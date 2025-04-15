@@ -4,7 +4,6 @@
 
 #include "Engine.hpp"
 #include "Logger.hpp"
-#include "NuklearCommon.h"
 #include "Scene.hpp"
 
 namespace Based {
@@ -44,16 +43,11 @@ void EngineClient::tick () {
 	tickEvents();
 	engine->tickUpdate();
 	tickRender();
-	tickGui();
 	tickFinish();
 }
 
 inline void EngineClient::tickEvents () {
 	SDL_Event event;
-	Window::Nk *nk = sdl->window->nk.get();
-
-	if (nk)
-		nk_input_begin (nk->ctx);
 
 	while (SDL_PollEvent (&event)) {
 		switch (event.type) {
@@ -62,23 +56,15 @@ inline void EngineClient::tickEvents () {
 				engine->stop();
 				break;
 			default:
-				if (nk)
-					nk_sdl_handle_event (&event);
+				break;
 		}
 		engine->sceneManager.handle_events (&event);
 	}
-
-	if (nk)
-		nk_input_end (nk->ctx);
 }
 
 inline void EngineClient::tickRender () {
 	glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	engine->sceneManager.render();
-}
-
-inline void EngineClient::tickGui () {
-	engine->sceneManager.gui();
 }
 
 inline void EngineClient::tickFinish () {

@@ -31,11 +31,6 @@ struct Scene {
  * \note Called only in client mode
  */
 	virtual void render () = 0;
-/**
- * Process Nuklear GUI
- * \note Called only in client mode
- */
-	virtual void gui () = 0;
 };
 
 class SceneManager {
@@ -63,10 +58,6 @@ class SceneManager {
 	inline void render () {
 		if (currentScene) [[likely]]
 			currentScene->render();
-	}
-	inline void gui () {
-		if (currentScene) [[likely]]
-			currentScene->gui();
 	}
 
 public:

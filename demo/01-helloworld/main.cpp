@@ -1,7 +1,7 @@
 /* Demo 01 - Hello World 
  * 
  * Demonstrates initialization, logging, window creation, loading Lua config,
- * basic event handling and creating a Nuklear window & label.
+ * and basic event handling.
  * 
  * (c) trexxet 2025
  */

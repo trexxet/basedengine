@@ -175,7 +175,5 @@ public:
 		hex1->bind_draw();
 	}
 
-	void gui () override final { }
-
 	~SceneMain () { }
 };

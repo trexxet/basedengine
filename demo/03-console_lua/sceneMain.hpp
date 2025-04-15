@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine.hpp"
-#include "NuklearAuxiliaries.hpp"
 #include "Scene.hpp"
 
 class SceneMain : public Based::Scene {
@@ -25,6 +24,4 @@ public:
 	void update () override final { }
 
 	void render () override final { }
-
-	void gui () override final { }
 };
