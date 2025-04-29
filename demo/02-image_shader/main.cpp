@@ -18,24 +18,28 @@
 #include "sceneMain.hpp"
 
 int main (int argv, char** args) {
-	Based::log.console = true;
-	Based::log.write (DEMO_NAME);
+	try {
+		Based::log.console = true;
+		Based::log.write (DEMO_NAME);
 
-	Based::Engine engine;
-	engine.enable_client();
+		Based::Engine engine;
+		engine.enable_client();
 
-	// For this demo, we are using a simple Lua config with static structure
-	Config config;
-	config.load (CONFIG_PATH);
+		// For this demo, we are using a simple Lua config with static structure
+		Config config;
+		config.load (CONFIG_PATH);
 
-	engine.client->create_window (DEMO_NAME, config.windowSize);
-	Based::GL::Default::shaders.init();
+		engine.client->create_window (DEMO_NAME, config.windowSize);
+		Based::GL::Default::shaders.init();
 
-	SceneMain sceneMain (&engine, config);
-	engine.sceneManager.schedule_next (&sceneMain);
+		SceneMain sceneMain (&engine, config);
+		engine.sceneManager.schedule_next (&sceneMain);
 
-	Based::log.write ("Starting main loop");
-	while (engine.tick());
+		Based::log.write ("Starting main loop");
+		while (engine.tick());
+	} catch (...) {
+		Based::log.write ("Terminating due to exception");
+	}
 
 	return 0;
 }

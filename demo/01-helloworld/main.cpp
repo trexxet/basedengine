@@ -22,12 +22,11 @@
 #include "sceneMain.hpp"
 
 int main (int argv, char** args) {
-	Based::log.console = true;
-	Based::log.write (DEMO_NAME);
-
-	// Note that exceptions across DLL boundaries must be caught explicitely
-	// to unwind stack correctly
+	// Note that exceptions across DLL boundaries must be caught explicitly to correctly unwind stack
 	try {
+		Based::log.console = true;
+		Based::log.write (DEMO_NAME);
+
 		Based::Engine engine;
 		if (ENABLE_CLIENT)
 			engine.enable_client();
