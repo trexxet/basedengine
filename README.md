@@ -15,7 +15,7 @@
 * SDL 3.1.7
 * SDL_image 3.1.0
 * Lua 5.4.7
-* Sol 3.2.3
+* Sol 3.5.0
 * RmlUi 6.1
 
 #### Code style (which I may forget)

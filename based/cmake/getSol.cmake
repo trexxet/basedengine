@@ -6,7 +6,7 @@ option(SOL2_ENABLE_INSTALL "Enable installation of Sol2" OFF)
 FetchContent_Declare(
 	sol
 	GIT_REPOSITORY https://github.com/ThePhD/sol2.git
-	GIT_TAG        v3.3.0
+	GIT_TAG        v3.5.0
 	GIT_SHALLOW    TRUE
 )
 FetchContent_MakeAvailable(sol)
