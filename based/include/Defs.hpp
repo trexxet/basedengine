@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef BASED_DLL_EXPORT
+#define BASED_API __declspec(dllexport)
+#else
+#define BASED_API __declspec(dllimport)
+#endif
+
 #define BASED_CLASS_COPY(c, d) \
 	c (const c&) = d; \
 	c& operator= (const c&) = d;

@@ -6,9 +6,11 @@ include(cmake/getSDL.cmake)
 include(cmake/getSDL_image.cmake)
 include(cmake/getLua.cmake)
 include(cmake/getSol.cmake)
+include(cmake/getRmlUI.cmake)
 
 target_compile_definitions(based PUBLIC
 	BASED_VERSION="0.1-dev-alpha"
+	BASED_DLL_EXPORT
 )
 target_compile_definitions(based PRIVATE
 	$<$<CONFIG:Debug>:BASED_ENABLE_GL_CHECK>
@@ -30,6 +32,10 @@ set(BASED_SOURCES
 	GL/Shader.cpp
 	GL/Sprite.cpp
 	GL/Texture.cpp
+	RML/Context.cpp
+	RML/Document.cpp
+	RML/Interface.cpp
+	RML/Model.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)
 
@@ -44,5 +50,7 @@ target_link_libraries(based PUBLIC
 	SDL3_image::SDL3_image
 	lua::lua
 	sol2::sol2
+	RmlUi::RmlUi
+	rmlui_backend_SDL_GL3
 	-lstdc++exp
 )

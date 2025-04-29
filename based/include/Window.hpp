@@ -8,6 +8,7 @@
 #include <SDL3/SDL_video.h>
 
 #include "Geometry.hpp"
+#include "RML/Interface.hpp"
 
 namespace Based {
 
@@ -15,6 +16,7 @@ class Window {
 public:
 	enum Flags {
 		NO_FLAGS = 0,
+		DISABLE_RML = 1
 	};
 	Flags flags;
 
@@ -38,6 +40,8 @@ public:
 	Vec2D<int> center () { return size / 2; }
 	/// @brief Set window size and related members
 	void resize (const Vec2D<int>& size);
+
+	std::unique_ptr<RML::Interface> rml {nullptr};
 
 	void render ();
 

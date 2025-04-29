@@ -31,8 +31,6 @@ FetchContent_Declare(
 	GIT_TAG         main
 	GIT_SUBMODULES  ""
 	GIT_SHALLOW     TRUE
-	GIT_PROGRESS    FALSE
-	EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(SDL_image)
 target_compile_options(SDL3_image-shared PRIVATE -w)

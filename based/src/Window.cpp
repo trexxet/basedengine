@@ -32,6 +32,11 @@ Window::Window (const std::string &title, const Vec2D<int>& size, const Flags fl
 	glClearColor (0, 0, 0, 1);
 	if (glGetError () != GL_NO_ERROR)
 		log.fatal ("Failed to use OpenGL!");
+
+	if (flags & Flags::DISABLE_RML)
+		log.write ("RML initialization skipped!");
+	else
+		rml = std::make_unique<RML::Interface> (this);
 }
 
 Window::~Window () {
@@ -49,6 +54,8 @@ void Window::resize (const Vec2D<int>& size) {
 	_rect = {size};
 	_aspect = (GLfloat) size.x / size.y;
 	_ortho = glm::ortho<GLfloat> (0, size.x, size.y, 0);
+
+	// TODO: Handle resize for RML
 }
 
 }

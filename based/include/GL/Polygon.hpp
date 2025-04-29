@@ -7,7 +7,7 @@
 
 #include <glad/gl.h>
 
-#include "ClassHelper.hpp"
+#include "Defs.hpp"
 #include "Geometry.hpp"
 
 namespace Based::GL {

@@ -29,7 +29,7 @@ static std::string get_glsl_error(GLuint id, _gl_getivproc_t _gl_getivproc, _gl_
 	return errMsg;
 }
 
-Shader::Shader (GLenum type) : type(type) { }
+Shader::Shader (GLenum type) : type (type) { }
 
 Shader::Shader (GLenum type, std::string&& src) : Shader(type) {
 	source = src;

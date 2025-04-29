@@ -8,7 +8,7 @@
 #include <glad/gl.h>
 #include <glm/mat4x4.hpp>
 
-#include "ClassHelper.hpp"
+#include "Defs.hpp"
 #include "Resource.hpp"
 
 namespace Based::GL {
