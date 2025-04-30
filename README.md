@@ -15,8 +15,8 @@
 * SDL 3.1.7
 * SDL_image 3.1.0
 * Lua 5.4.7
-* Sol 3.2.3
-* Nuklear 4.12.3
+* Sol 3.5.0
+* RmlUi 6.1
 
 #### Code style (which I may forget)
 * Tabs are used for indentation. Spaces are used for alignment. Thus, tab width is not important.

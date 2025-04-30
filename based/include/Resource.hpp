@@ -20,7 +20,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ClassHelper.hpp"
+#include "Defs.hpp"
 #include "Logger.hpp"
 
 namespace Based {

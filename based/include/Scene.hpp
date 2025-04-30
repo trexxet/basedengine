@@ -12,30 +12,30 @@ class EngineClient;
 
 struct Scene {
 	Engine *engine = nullptr;
+
 	Scene (Engine *engine) : engine(engine) {
-		if (!engine) log.fatal ("Can't set engine for scene!");
+		if (!engine) [[unlikely]]
+			log.fatal ("Can't set engine for scene!");
 	}
-/**
- * Process input events
- * \param event pointer to SDL_Event
- * \note Called only in client mode
- */
+
+	/**
+	 * Process input events
+	 * \param event pointer to SDL_Event
+	 * \note Called only in client mode
+	 */
 	virtual void handle_events (SDL_Event *event) = 0;
-/**
- * Update internal game state
- * \note Called both in client and headless engine mode
- */
+
+	/**
+	 * Update internal game state
+	 * \note Called both in client and headless engine mode
+	 */
 	virtual void update () = 0;
-/**
- * Render
- * \note Called only in client mode
- */
+
+	/**
+	 * Render
+	 * \note Called only in client mode
+	 */
 	virtual void render () = 0;
-/**
- * Process Nuklear GUI
- * \note Called only in client mode
- */
-	virtual void gui () = 0;
 };
 
 class SceneManager {
@@ -63,10 +63,6 @@ class SceneManager {
 	inline void render () {
 		if (currentScene) [[likely]]
 			currentScene->render();
-	}
-	inline void gui () {
-		if (currentScene) [[likely]]
-			currentScene->gui();
 	}
 
 public:

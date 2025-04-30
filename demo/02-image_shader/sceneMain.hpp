@@ -15,6 +15,8 @@
 
 class SceneMain : public Based::Scene {
 	Based::Window* window {nullptr};
+	Based::RML::InterfaceHandle rml;
+	Based::RML::ContextStorage rctx {nullptr};
 	/* For this demo, we are loading multiple textures (or, more correctly, PNG images) on our own.
 	 * Note that for a real program you should consider:
 	 * * 1) Using global or local ResourceManager
@@ -49,7 +51,15 @@ public:
 	SceneMain (Based::Engine* engine, Config& config) : Based::Scene(engine) {
 		if (!engine->client) return;
 		window = engine->client->window();
-	
+
+		/* RML is not required for this demo, however, we can show that UI can be
+		 * combined with GL calls */
+		rml = engine->client->window()->rml.get();
+		if (rml) {
+			rctx = rml->make_context ("sceneMain");
+			rml->init_debugger (rctx); /* F12 is default key for RML debugger */
+		}
+
 		/* Textures can be created as a typical Resource (Create -> Load -> Prepare) */
 		textureBackground = std::make_unique<Based::GL::Texture>();
 		textureBackground->load (config.path.textureBg);
@@ -136,7 +146,9 @@ public:
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
-	void handle_events (SDL_Event *event) override final { }
+	void handle_events (SDL_Event *event) override final {
+		if (rml) rml->handle_event (rctx, event);
+	}
 
 	void update () override final { }
 
@@ -173,9 +185,9 @@ public:
 		hexShader->set_uniform ("tex", texUnit_hex);
 		texture2->use (texUnit_hex);
 		hex1->bind_draw();
+		/* Finally, show the UI if needed */
+		if (rml) rml->render (rctx);
 	}
-
-	void gui () override final { }
 
 	~SceneMain () { }
 };

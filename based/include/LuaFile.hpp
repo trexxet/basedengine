@@ -13,7 +13,7 @@ enum BindTypes {
 class File {
 	std::string name;
 public:
-	File (const std::string &filename, int flags = 0);
+	File (const std::string& filename, int flags = 0);
 	
 	sol::state state;
 

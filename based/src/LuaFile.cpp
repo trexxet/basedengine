@@ -36,8 +36,8 @@ File File::loadIfExists (const std::string &filename,
 	}
 }
 
-#define BIND_FIELD(f, c) #f, &c::f
 void File::bindBasedTypes (BindTypes types) {
+#define BIND_FIELD(f, c) #f, &c::f
 	if (types & BindTypes::Geometry) {
 		// Vec2D
 		auto bindGeometryVec2D = [this] <typename T> (const std::string& name) {
@@ -78,7 +78,7 @@ void File::bindBasedTypes (BindTypes types) {
 		};
 		bindGeometryCircle2D.operator()<GLfloat> ("Circle2D");
 	}
-}
 #undef BIND_FIELD
+}
 
 }
