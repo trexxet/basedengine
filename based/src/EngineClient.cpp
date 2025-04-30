@@ -1,7 +1,6 @@
 #include "EngineClient.hpp"
 
 #include <SDL3/SDL.h>
-#include <RmlUi/Debugger.h>
 
 #include "Engine.hpp"
 #include "Logger.hpp"
@@ -55,10 +54,6 @@ inline void EngineClient::tickEvents () {
 			[[unlikely]]
 			case SDL_EVENT_QUIT:
 				engine->stop();
-				break;
-			case SDL_EVENT_KEY_DOWN:
-				if (event.key.key == window()->rml->debuggerToggleKey)
-					Rml::Debugger::SetVisible (!Rml::Debugger::IsVisible());
 				break;
 			default:
 				break;

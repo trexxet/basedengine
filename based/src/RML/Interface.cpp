@@ -25,6 +25,10 @@ void Interface::init_debugger (ContextStorage& rctx, SDL_Keycode toggleKey) {
 }
 
 void Interface::handle_event (ContextStorage& rctx, SDL_Event *event) {
+	if (event->type == SDL_EVENT_KEY_DOWN) {
+		if (event->key.key == debuggerToggleKey)
+			Rml::Debugger::SetVisible (!Rml::Debugger::IsVisible());
+	}
 	RmlSDL::InputEventHandler (rctx->rctx, owner->sdlWindow, *event);
 }
 
