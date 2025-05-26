@@ -54,9 +54,9 @@ class SceneMain : public Based::Scene {
 
 	Based::Rect2D<int> labelRect;
 public:
-	SceneMain (Based::Engine *engine, Based::Lua::File& conf) : Based::Scene(engine) {
-		if (!engine->client) return; // no client (headless)
-		rml = engine->client->window()->rml.get();
+	SceneMain (Based::Engine& engine, Based::Lua::File& conf) : Based::Scene(engine) {
+		if (!engine.client) return; // no client (headless)
+		rml = engine.client->window()->rml.get();
 		if (!rml) return;
 
 		/* For this demo, we'll retrieve the label position from the Lua config
@@ -86,7 +86,7 @@ public:
 		switch (event->type) {
 			case SDL_EVENT_MOUSE_BUTTON_UP:
 				if (!Rml::Debugger::IsVisible())
-					engine->stop(); /* same as engine->sceneManager.schedule_next (nullptr) */
+					engine.stop(); /* same as engine->sceneManager.schedule_next (nullptr) */
 				else
 					break;
 			case SDL_EVENT_QUIT:

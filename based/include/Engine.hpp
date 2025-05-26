@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "EngineClient.hpp"
+#include "Defs.hpp"
 #include "Scene.hpp"
 
 namespace Based {
@@ -20,6 +21,8 @@ public:
 	void enable_client ();
 	bool tick ();
 	void stop ();
+
+	BASED_CLASS_NO_COPY_MOVE (Engine);
 };
 
 }

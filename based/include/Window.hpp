@@ -7,6 +7,7 @@
 #include <glm/mat4x4.hpp>
 #include <SDL3/SDL_video.h>
 
+#include "Defs.hpp"
 #include "Geometry.hpp"
 #include "RML/Interface.hpp"
 
@@ -47,6 +48,8 @@ public:
 
 	Window (const std::string& title, const Vec2D<int>& _size, const Flags flags);
 	~Window ();
+
+	BASED_CLASS_NO_COPY_MOVE (Window);
 };
 
 }

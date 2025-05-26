@@ -11,12 +11,9 @@ class Engine;
 class EngineClient;
 
 struct Scene {
-	Engine *engine = nullptr;
+	Engine& engine;
 
-	Scene (Engine *engine) : engine(engine) {
-		if (!engine) [[unlikely]]
-			log.fatal ("Can't set engine for scene!");
-	}
+	Scene (Engine& engine) : engine(engine) { }
 
 	/**
 	 * Process input events

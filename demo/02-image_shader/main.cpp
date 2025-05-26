@@ -32,7 +32,7 @@ int main (int argv, char** args) {
 		engine.client->create_window (DEMO_NAME, config.windowSize);
 		Based::GL::Default::shaders.init();
 
-		SceneMain sceneMain (&engine, config);
+		SceneMain sceneMain (engine, config);
 		engine.sceneManager.schedule_next (&sceneMain);
 
 		Based::log.write ("Starting main loop");

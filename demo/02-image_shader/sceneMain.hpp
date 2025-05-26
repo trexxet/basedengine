@@ -48,13 +48,13 @@ class SceneMain : public Based::Scene {
 		sprite2 {nullptr},
 		sprite3 {nullptr};
 public:
-	SceneMain (Based::Engine* engine, Config& config) : Based::Scene(engine) {
-		if (!engine->client) return;
-		window = engine->client->window();
+	SceneMain (Based::Engine& engine, Config& config) : Based::Scene(engine) {
+		if (!engine.client) return;
+		window = engine.client->window();
 
 		/* RML is not required for this demo, however, we can show that UI can be
 		 * combined with GL calls */
-		rml = engine->client->window()->rml.get();
+		rml = engine.client->window()->rml.get();
 		if (rml) {
 			rctx = rml->make_context ("sceneMain");
 			rml->init_debugger (rctx); /* F12 is default key for RML debugger */

@@ -37,7 +37,7 @@ int main (int argv, char** args) {
 			engine.client->create_window (DEMO_NAME, windowSize);
 		}
 
-		SceneMain sceneMain (&engine, conf);
+		SceneMain sceneMain (engine, conf);
 		engine.sceneManager.schedule_next (&sceneMain);
 
 		Based::log.write ("Starting main loop");
