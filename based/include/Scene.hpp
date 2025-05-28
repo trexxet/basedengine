@@ -20,7 +20,7 @@ struct Scene {
 	 * \param event pointer to SDL_Event
 	 * \note Called only in client mode
 	 */
-	virtual void handle_events (SDL_Event *event) = 0;
+	virtual void handle_event (SDL_Event *event) = 0;
 
 	/**
 	 * Update internal game state
@@ -49,9 +49,9 @@ class SceneManager {
 	}
 
 	// Tick pipeline
-	inline void handle_events (SDL_Event *event) {
+	inline void handle_event (SDL_Event *event) {
 		if (currentScene) [[likely]]
-			currentScene->handle_events (event);
+			currentScene->handle_event (event);
 	}
 	inline void update () {
 		if (currentScene) [[likely]]

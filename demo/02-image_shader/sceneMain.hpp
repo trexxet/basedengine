@@ -14,7 +14,7 @@
 #include "hexShaderVert.hpp"
 
 class SceneMain : public Based::Scene {
-	Based::Window* window {nullptr};
+	Based::WindowHandle window {nullptr};
 	Based::RML::InterfaceHandle rml;
 	Based::RML::ContextStorage rctx {nullptr};
 	/* For this demo, we are loading multiple textures (or, more correctly, PNG images) on our own.
@@ -146,7 +146,7 @@ public:
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
-	void handle_events (SDL_Event *event) override final {
+	void handle_event (SDL_Event *event) override final {
 		if (rml) rml->handle_event (rctx, event);
 	}
 

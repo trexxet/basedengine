@@ -1,11 +1,13 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include <RmlUi_Renderer_GL3.h>
 #include <RmlUi_Platform_SDL.h>
 #include <SDL3/SDL_events.h>
+#include <SDL3/SDL_keycode.h>
 
 #include "RML/Context.hpp"
 #include "RML/Document.hpp"
@@ -14,15 +16,14 @@
 namespace Based {
 	class Window;
 }
-using Based::Window;
 
 namespace Based::RML {
 
-struct Interface {
+class Interface {
 	SystemInterface_SDL systemInterface;
 	RenderInterface_GL3 renderInterface;
-	Window* owner;
-
+	Window& owner;
+public:
 	/**
 	 * \brief Create Rml context
 	 * \param name unique context name
@@ -32,16 +33,17 @@ struct Interface {
 
 	static void load_fonts (const std::vector<std::string>& paths);
 
-	SDL_Keycode debuggerToggleKey = SDLK_UNKNOWN;
-	void init_debugger (ContextStorage& rctx, SDL_Keycode toggleKey = SDLK_F12);
+	SDL_Keycode rmlDebuggerToggleKey = SDLK_UNKNOWN;
+	void init_rml_debugger (ContextStorage& rctx, SDL_Keycode toggleKey = SDLK_F12);
 
 	void handle_event (ContextStorage& rctx, SDL_Event *event);
 	void render (ContextStorage& rctx);
 
-	Interface (Window* owner);
+	Interface (Window& owner);
 	~Interface ();
 };
 
+using InterfaceStorage = std::unique_ptr<Interface>;
 using InterfaceHandle = Interface *;
 
 }

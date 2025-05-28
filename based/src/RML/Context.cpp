@@ -17,19 +17,19 @@ std::unique_ptr<Context> Context::make (const std::string& ctxName, const Vec2D<
 	return std::make_unique<Context> (ctxName, dimensions);
 }
 
-Document* Context::add_document_from_file (const std::string& name, const std::string& path) {
+DocumentHandle Context::add_document_from_file (const std::string& name, const std::string& path) {
 	if (documents.contains (name)) return nullptr;
 	documents.emplace (name, Document::make_from_file (rctx, path));
 	return documents[name].get();
 }
 
-Document* Context::add_document_from_string (const std::string& name, const std::string& src) {
+DocumentHandle Context::add_document_from_string (const std::string& name, const std::string& src) {
 	if (documents.contains (name)) return nullptr;
 	documents.emplace (name, Document::make_from_string (rctx, src));
 	return documents[name].get();
 }
 
-Model* Context::add_model (const std::string& name, int flags) {
+ModelHandle Context::add_model (const std::string& name, int flags) {
 	if (models.contains (name)) return nullptr;
 	models.emplace (name, Model::make (rctx, name, flags, &dataTypeRegister));
 	return models[name].get();

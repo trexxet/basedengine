@@ -12,7 +12,6 @@ namespace Based {
 class Engine;
 class EngineClient {
 	friend class Engine;
-	Engine *engine = nullptr;
 
 	struct SDL {
 		SDL ();
@@ -22,16 +21,16 @@ class EngineClient {
 	std::unique_ptr<SDL> sdl {nullptr};
 
 	void tick ();
-	inline void tickEvents ();
-	inline void tickRender ();
-	inline void tickFinish ();
+	inline void tick_events ();
+	inline void tick_render ();
 public:
+	Engine& engine;
 	ResourceManager resourceManager;
 
-	EngineClient (Engine *_engine);
+	EngineClient (Engine& engine);
 
 	void create_window (const std::string& title, const Vec2D<int>& size, const Window::Flags flags = Window::NO_FLAGS);
-	inline Window* window () { return sdl->window.get(); }
+	inline WindowHandle window () { return sdl->window.get(); }
 
 	BASED_CLASS_NO_COPY_MOVE (EngineClient);
 };

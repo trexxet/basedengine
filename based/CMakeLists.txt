@@ -33,6 +33,7 @@ set(BASED_SOURCES
 	GL/Sprite.cpp
 	GL/Texture.cpp
 	RML/Context.cpp
+	RML/DebugOverlay.cpp
 	RML/Document.cpp
 	RML/Interface.cpp
 	RML/Model.cpp

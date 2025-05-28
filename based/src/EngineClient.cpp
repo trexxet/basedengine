@@ -28,7 +28,7 @@ EngineClient::SDL::~SDL () {
 	SDL_Quit();
 }
 
-EngineClient::EngineClient (Engine *_engine) : engine(_engine) {
+EngineClient::EngineClient (Engine& engine) : engine(engine) {
 	sdl = std::make_unique<SDL>();
 }
 
@@ -36,39 +36,39 @@ void EngineClient::create_window (const std::string &title, const Vec2D<int>& si
 {
 	if (sdl->window)
 		log.fatal ("Can't create multiple windows!");
-	sdl->window = std::make_unique<Window> (title, size, flags);
+	sdl->window = std::make_unique<Window> (*this, title, size, flags);
 }
 
 void EngineClient::tick () {
-	tickEvents();
-	engine->tickUpdate();
-	tickRender();
-	tickFinish();
+	tick_events();
+	engine.tick_update();
+	tick_render();
 }
 
-inline void EngineClient::tickEvents () {
+inline void EngineClient::tick_events () {
 	SDL_Event event;
 
 	while (SDL_PollEvent (&event)) {
 		switch (event.type) {
 			[[unlikely]]
 			case SDL_EVENT_QUIT:
-				engine->stop();
+				engine.stop();
 				break;
 			default:
 				break;
 		}
-		engine->sceneManager.handle_events (&event);
+		engine.sceneManager.handle_event (&event);
+		window()->debugOverlay.handle_event (&event);
 	}
 }
 
-inline void EngineClient::tickRender () {
+inline void EngineClient::tick_render () {
 	glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	engine->sceneManager.render();
-}
 
-inline void EngineClient::tickFinish () {
-	sdl->window->render();
+	engine.sceneManager.render();
+
+	window()->debugOverlay.render();
+	window()->render();
 }
 
 }

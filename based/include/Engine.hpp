@@ -10,7 +10,7 @@ namespace Based {
 
 class Engine {
 	friend class EngineClient;
-	void tickUpdate ();
+	void tick_update ();
 public:
 	std::unique_ptr<EngineClient> client {nullptr};
 

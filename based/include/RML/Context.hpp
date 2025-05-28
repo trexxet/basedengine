@@ -25,9 +25,9 @@ public:
 	DocumentMap documents;
 	ModelMap models;
 
-	Document* add_document_from_file (const std::string& name, const std::string& path);
-	Document* add_document_from_string (const std::string& name, const std::string& src);
-	Model* add_model (const std::string& name, int flags = 0);
+	DocumentHandle add_document_from_file (const std::string& name, const std::string& path);
+	DocumentHandle add_document_from_string (const std::string& name, const std::string& src);
+	ModelHandle add_model (const std::string& name, int flags = 0);
 
 	static std::unique_ptr<Context> make (const std::string& ctxName, const Vec2D<int>& dimensions);
 };

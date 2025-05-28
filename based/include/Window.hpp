@@ -5,14 +5,19 @@
 
 #include <glad/gl.h>
 #include <glm/mat4x4.hpp>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_keycode.h>
 #include <SDL3/SDL_video.h>
 
 #include "Defs.hpp"
 #include "Geometry.hpp"
+#include "RML/Font.hpp"
 #include "RML/Interface.hpp"
+#include "RML/DebugOverlay.hpp"
 
 namespace Based {
 
+class EngineClient;
 class Window {
 public:
 	enum Flags {
@@ -28,28 +33,49 @@ private:
 	glm::mat4 _ortho;
 
 public:
+	EngineClient& engineClient;
 	SDL_Window *sdlWindow;
 	
 	/// @brief Window size and corresponding rectangle
-	const Vec2D<int>& size = _size;
-	const Rect2D<int>& rect = _rect;
+	const decltype((_size)) size = _size;
+	const decltype((_rect)) rect = _rect;
 	/// @brief Window aspect (size.x / size.y)
-	const GLfloat& aspect = _aspect;
+	const decltype((_aspect)) aspect = _aspect;
 	/// @brief Orthographic projection matrix for the window
-	const glm::mat4& ortho = _ortho;
+	const decltype((_ortho)) ortho = _ortho;
 	/// @brief Pixel for Window center
 	Vec2D<int> center () { return size / 2; }
 	/// @brief Set window size and related members
 	void resize (const Vec2D<int>& size);
 
-	std::unique_ptr<RML::Interface> rml {nullptr};
+	RML::InterfaceStorage rml {nullptr};
+
+	class DebugOverlay {
+		Window& window;
+	public:
+		RML::DebugOverlayStorage debugOverlay {nullptr};
+		RML::DebugOverlayHandle operator()() { return debugOverlay.get(); }
+		
+		SDL_Keycode toggleKey = SDLK_UNKNOWN;
+		bool visible = false;
+
+		void init (const RML::Font& font, SDL_Keycode toggleKey = SDLK_F3);
+		inline void toggle () { visible = !visible; }
+		inline void render () { if (debugOverlay && visible) [[unlikely]] debugOverlay->render(); }
+		void handle_event (SDL_Event *event);
+
+		DebugOverlay (Window& window) : window(window) { }
+		BASED_CLASS_NO_COPY_MOVE (DebugOverlay);
+	} debugOverlay;
 
 	void render ();
 
-	Window (const std::string& title, const Vec2D<int>& _size, const Flags flags);
+	Window (EngineClient& engineClient, const std::string& title, const Vec2D<int>& size, const Flags flags);
 	~Window ();
 
 	BASED_CLASS_NO_COPY_MOVE (Window);
 };
+
+using WindowHandle = Window *;
 
 }

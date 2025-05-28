@@ -9,7 +9,7 @@
 namespace Based::RML {
 
 ContextStorage Interface::make_context (const std::string& name) {
-	return Context::make (name, owner->size);
+	return Context::make (name, owner.size);
 }
 
 void Interface::load_fonts (const std::vector<std::string>& paths) {
@@ -19,17 +19,17 @@ void Interface::load_fonts (const std::vector<std::string>& paths) {
 	}
 }
 
-void Interface::init_debugger (ContextStorage& rctx, SDL_Keycode toggleKey) {
+void Interface::init_rml_debugger (ContextStorage& rctx, SDL_Keycode toggleKey) {
 	Rml::Debugger::Initialise(rctx->rctx);
-	debuggerToggleKey = toggleKey;
+	rmlDebuggerToggleKey = toggleKey;
 }
 
 void Interface::handle_event (ContextStorage& rctx, SDL_Event *event) {
 	if (event->type == SDL_EVENT_KEY_DOWN) {
-		if (event->key.key == debuggerToggleKey)
+		if (event->key.key == rmlDebuggerToggleKey)
 			Rml::Debugger::SetVisible (!Rml::Debugger::IsVisible());
 	}
-	RmlSDL::InputEventHandler (rctx->rctx, owner->sdlWindow, *event);
+	RmlSDL::InputEventHandler (rctx->rctx, owner.sdlWindow, *event);
 }
 
 void Interface::render (ContextStorage& rctx) {
@@ -40,8 +40,8 @@ void Interface::render (ContextStorage& rctx) {
 	renderInterface.EndFrame();
 }
 
-Interface::Interface (Window* owner) : owner (owner) {
-	if (!owner->sdlWindow)
+Interface::Interface (Window& owner) : owner(owner) {
+	if (!owner.sdlWindow)
 		log.fatal ("Failed to initialize RML: window is not created yet");
 	if (!renderInterface)
 		log.fatal ("Failed to initialize RML GL3 interface");
@@ -49,8 +49,8 @@ Interface::Interface (Window* owner) : owner (owner) {
 	Rml::SetRenderInterface (&renderInterface);
 	Rml::SetSystemInterface (&systemInterface);
 
-	systemInterface.SetWindow (owner->sdlWindow);
-	renderInterface.SetViewport (owner->size.x, owner->size.y);
+	systemInterface.SetWindow (owner.sdlWindow);
+	renderInterface.SetViewport (owner.size.x, owner.size.y);
 
 	if (!Rml::Initialise())
 		log.fatal ("Failed to initialize RML");

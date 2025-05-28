@@ -2,10 +2,10 @@
 
 #include <memory>
 
+#include <RmlUi/Debugger.h>
+
 #include "Engine.hpp"
 #include "Scene.hpp"
-
-#include <RmlUi/Debugger.h>
 
 /* For this example, we'll embed the RML UI document.
  * Normally you'd want to load the document from a file. */
@@ -56,7 +56,9 @@ class SceneMain : public Based::Scene {
 public:
 	SceneMain (Based::Engine& engine, Based::Lua::File& conf) : Based::Scene(engine) {
 		if (!engine.client) return; // no client (headless)
-		rml = engine.client->window()->rml.get();
+		Based::WindowHandle window = engine.client->window();
+
+		rml = window->rml.get();
 		if (!rml) return;
 
 		/* For this demo, we'll retrieve the label position from the Lua config
@@ -71,22 +73,30 @@ public:
 
 		/* Data Model must be defined before loading documents */
 		rmodel = rctx->add_model ("modelMain", Based::RML::BindTypes::Geometry);
+		if (!rmodel)
+			Based::log.fatal ("Failed to create RML data model!");
 		rmodel->constructor.Bind ("labelRect", &labelRect);
 
 		/* RML debugger is useful for adjusting the layout of your UI */
-		rml->init_debugger (rctx, SDLK_F12);
+		rml->init_rml_debugger (rctx, SDLK_F12);
+
+		/* Debug overlay can show various information (FPS etc.) */
+		window->debugOverlay.init ({"rmlui-debugger-font", Rml::Style::FontStyle::Normal,
+		                           Rml::Style::FontWeight::Normal, 18, "white"}, SDLK_F3);
 
 		/* Finally, add a document to the context and show it */
 		rdoc = rctx->add_document_from_string ("docMain", document_rml);
+		if (!rdoc)
+			Based::log.fatal ("Failed to create RML document!");
 		rdoc->doc->Show();
 	}
 
 	/* called only in client mode */
-	void handle_events (SDL_Event *event) override final {
+	void handle_event (SDL_Event *event) override final {
 		switch (event->type) {
 			case SDL_EVENT_MOUSE_BUTTON_UP:
 				if (!Rml::Debugger::IsVisible())
-					engine.stop(); /* same as engine->sceneManager.schedule_next (nullptr) */
+					engine.stop(); /* same as engine.sceneManager.schedule_next (nullptr) */
 				else
 					break;
 			case SDL_EVENT_QUIT:

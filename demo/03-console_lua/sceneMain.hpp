@@ -9,7 +9,7 @@ public:
 		if (!engine.client) return;
 	}
 
-	void handle_events (SDL_Event *event) override final {
+	void handle_event (SDL_Event *event) override final {
 		switch (event->type) {
 			case SDL_EVENT_MOUSE_BUTTON_UP:
 				engine.stop();

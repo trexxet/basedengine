@@ -19,7 +19,7 @@ Engine::Engine () {
 void Engine::enable_client () {
 	if (client)
 		log.fatal ("Can't create multiple clients!");
-	client = std::make_unique<EngineClient> (this);
+	client = std::make_unique<EngineClient> (*this);
 	log.write ("Client enabled");
 }
 
@@ -27,11 +27,11 @@ bool Engine::tick () {
 	if (client)
 		client->tick();
 	else
-		tickUpdate();
+		tick_update();
 	return sceneManager.commit_scheduled();
 }
 
-void Engine::tickUpdate () {
+void Engine::tick_update () {
 	sceneManager.update();
 }
 
