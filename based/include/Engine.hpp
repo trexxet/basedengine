@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <cstdint>
 
 #include "EngineClient.hpp"
 #include "Defs.hpp"
@@ -21,6 +22,8 @@ public:
 	void enable_client ();
 	bool tick ();
 	void stop ();
+
+	static uint16_t get_ticks_per_second ();
 
 	BASED_CLASS_NO_COPY_MOVE (Engine);
 };

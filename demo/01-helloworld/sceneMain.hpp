@@ -65,9 +65,6 @@ public:
 		 * and pass it to the RmlUI. */
 		labelRect = conf["labelRect"];
 
-		/* Fonts must be loaded before documents */
-		Based::RML::Interface::load_fonts ({"../demo/assets/common/courbd.ttf"});
-
 		/* Create RML context */
 		rctx = rml->make_context ("sceneMain");
 
@@ -79,10 +76,6 @@ public:
 
 		/* RML debugger is useful for adjusting the layout of your UI */
 		rml->init_rml_debugger (rctx, SDLK_F12);
-
-		/* Debug overlay can show various information (FPS etc.) */
-		window->debugOverlay.init ({"rmlui-debugger-font", Rml::Style::FontStyle::Normal,
-		                           Rml::Style::FontWeight::Normal, 18, "white"}, SDLK_F3);
 
 		/* Finally, add a document to the context and show it */
 		rdoc = rctx->add_document_from_string ("docMain", document_rml);

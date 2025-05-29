@@ -19,7 +19,7 @@ static const char* debugOverlayRmlDoc = R"(
 	}
 </style>
 </head>
-<body id="body">
+<body>
 	<p id="based_version"></p>
 </body>
 </rml>

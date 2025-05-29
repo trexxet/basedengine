@@ -48,14 +48,28 @@ Window::~Window () {
 		SDL_DestroyWindow (sdlWindow);
 }
 
-void Window::DebugOverlay::init (const RML::Font& font, SDL_Keycode _toggleKey) {
+void Window::render () {
+	SDL_GL_SwapWindow(sdlWindow);
+}
+
+void Window::resize (const Vec2D<int>& size) {
+	_size = size;
+	_rect = {size};
+	_aspect = (GLfloat) size.x / size.y;
+	_ortho = glm::ortho<GLfloat> (0, size.x, size.y, 0);
+
+	// TODO: Handle resize for RML
+}
+
+bool Window::DebugOverlay::init (const RML::Font& font, SDL_Keycode _toggleKey) {
 	if (!window.rml) {
 		log.warn ("Can't initialize debug overlay - initialize RML first");
-		return;
+		return false;
 	}
 
 	debugOverlay = RML::DebugOverlay::make (window.engineClient.engine, *window.rml.get(), font);
 	toggleKey = _toggleKey;
+	return true;
 }
 
 void Window::DebugOverlay::handle_event (SDL_Event *event) {
@@ -69,19 +83,6 @@ void Window::DebugOverlay::handle_event (SDL_Event *event) {
 
 	if (visible) [[unlikely]]
 		debugOverlay->handle_event (event);
-}
-
-void Window::render () {
-	SDL_GL_SwapWindow(sdlWindow);
-}
-
-void Window::resize (const Vec2D<int>& size) {
-	_size = size;
-	_rect = {size};
-	_aspect = (GLfloat) size.x / size.y;
-	_ortho = glm::ortho<GLfloat> (0, size.x, size.y, 0);
-
-	// TODO: Handle resize for RML
 }
 
 }

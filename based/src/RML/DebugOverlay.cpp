@@ -34,7 +34,6 @@ DebugOverlay::DebugOverlay (Engine& engine, Interface& rml, const Font& font) : 
 	doc->Show();
 }
 
-
 std::unique_ptr<DebugOverlay> DebugOverlay::make (Engine& engine, Interface& rml, const Font& font) {
 	return std::make_unique<DebugOverlay> (engine, rml, font);
 }

@@ -50,6 +50,13 @@ public:
 
 	RML::InterfaceStorage rml {nullptr};
 
+	void render ();
+
+	Window (EngineClient& engineClient, const std::string& title, const Vec2D<int>& size, const Flags flags);
+	~Window ();
+
+	BASED_CLASS_NO_COPY_MOVE (Window);
+
 	class DebugOverlay {
 		Window& window;
 	public:
@@ -59,7 +66,7 @@ public:
 		SDL_Keycode toggleKey = SDLK_UNKNOWN;
 		bool visible = false;
 
-		void init (const RML::Font& font, SDL_Keycode toggleKey = SDLK_F3);
+		bool init (const RML::Font& font, SDL_Keycode toggleKey = SDLK_F3);
 		inline void toggle () { visible = !visible; }
 		inline void render () { if (debugOverlay && visible) [[unlikely]] debugOverlay->render(); }
 		void handle_event (SDL_Event *event);
@@ -67,13 +74,6 @@ public:
 		DebugOverlay (Window& window) : window(window) { }
 		BASED_CLASS_NO_COPY_MOVE (DebugOverlay);
 	} debugOverlay;
-
-	void render ();
-
-	Window (EngineClient& engineClient, const std::string& title, const Vec2D<int>& size, const Flags flags);
-	~Window ();
-
-	BASED_CLASS_NO_COPY_MOVE (Window);
 };
 
 using WindowHandle = Window *;

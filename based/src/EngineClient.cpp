@@ -32,11 +32,12 @@ EngineClient::EngineClient (Engine& engine) : engine(engine) {
 	sdl = std::make_unique<SDL>();
 }
 
-void EngineClient::create_window (const std::string &title, const Vec2D<int>& size, const Window::Flags flags)
+WindowHandle EngineClient::create_window (const std::string &title, const Vec2D<int>& size, const Window::Flags flags)
 {
 	if (sdl->window)
 		log.fatal ("Can't create multiple windows!");
 	sdl->window = std::make_unique<Window> (*this, title, size, flags);
+	return window();
 }
 
 void EngineClient::tick () {

@@ -29,7 +29,7 @@ public:
 
 	EngineClient (Engine& engine);
 
-	void create_window (const std::string& title, const Vec2D<int>& size, const Window::Flags flags = Window::NO_FLAGS);
+	WindowHandle create_window (const std::string& title, const Vec2D<int>& size, const Window::Flags flags = Window::NO_FLAGS);
 	inline WindowHandle window () { return sdl->window.get(); }
 
 	BASED_CLASS_NO_COPY_MOVE (EngineClient);

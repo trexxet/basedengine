@@ -32,9 +32,18 @@ int main (int argv, char** args) {
 			engine.enable_client();
 
 		Based::Lua::File conf (CONFIG_PATH, Based::Lua::BindTypes::Geometry);
+
 		if (ENABLE_CLIENT) {
 			Based::Vec2D<int> windowSize = conf["window"]; 
-			engine.client->create_window (DEMO_NAME, windowSize);
+			Based::WindowHandle window = engine.client->create_window (DEMO_NAME, windowSize);
+
+			/* Fonts must be loaded before RML documents */
+			Based::RML::Interface::load_fonts ({"../demo/assets/common/courbd.ttf"});
+
+			/* Debug overlay can show various information (FPS etc.).
+			 * Debug overlay instantiates it's own RML context and document.*/
+			window->debugOverlay.init ({"Courier New", Rml::Style::FontStyle::Normal,
+			                           Rml::Style::FontWeight::Normal, 18, "white"}, SDLK_F3);
 		}
 
 		SceneMain sceneMain (engine, conf);

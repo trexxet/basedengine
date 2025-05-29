@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "Defs.hpp"
 #include "RML/Context.hpp"
 #include "RML/Document.hpp"
 #include "RML/Font.hpp"
@@ -28,6 +29,8 @@ public:
 	inline void render () { rml.render (rctx); }
 
 	static std::unique_ptr<DebugOverlay> make (Engine& engine, Interface& rml, const Font& font);
+
+	BASED_CLASS_NO_COPY_DEFAULT_MOVE (DebugOverlay);
 };
 
 using DebugOverlayStorage = std::unique_ptr<DebugOverlay>;
