@@ -10,9 +10,8 @@ static const char* debugOverlayRmlDoc = R"(
 		left: 0px; top: 0px; right: 0px; bottom: 0px;
 	}
 	p {
-		display: block;
-		position: absolute;
-		text-align: center;
+		float: left; clear: left;
+		text-align: left;
 	}
 	p:hover {
 		background: #444444;

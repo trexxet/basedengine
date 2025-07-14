@@ -57,7 +57,7 @@ public:
 		rml = engine.client->window()->rml.get();
 		if (rml) {
 			rctx = rml->make_context ("sceneMain");
-			rml->init_debugger (rctx); /* F12 is default key for RML debugger */
+			rml->init_rml_debugger (rctx); /* F12 is default key for RML debugger */
 		}
 
 		/* Textures can be created as a typical Resource (Create -> Load -> Prepare) */

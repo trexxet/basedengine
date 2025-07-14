@@ -23,7 +23,7 @@ public:
 	bool tick ();
 	void stop ();
 
-	static uint16_t get_ticks_per_second ();
+	static uint16_t get_tps ();
 
 	BASED_CLASS_NO_COPY_MOVE (Engine);
 };

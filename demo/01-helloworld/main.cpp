@@ -18,6 +18,7 @@
 #include "Logger.hpp"
 #include "LuaFile.hpp"
 #include "Scene.hpp"
+#include "RML/DebugOverlay.hpp"
 
 #include "sceneMain.hpp"
 
@@ -44,6 +45,7 @@ int main (int argv, char** args) {
 			 * Debug overlay instantiates it's own RML context and document.*/
 			window->debugOverlay.init ({"Courier New", Rml::Style::FontStyle::Normal,
 			                           Rml::Style::FontWeight::Normal, 18, "white"}, SDLK_F3);
+			window->debugOverlay()->addElement (Based::RML::DebugOverlay::Element::Type::TPS);
 		}
 
 		SceneMain sceneMain (engine, conf);

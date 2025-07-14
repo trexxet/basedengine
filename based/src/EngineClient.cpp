@@ -43,6 +43,7 @@ WindowHandle EngineClient::create_window (const std::string &title, const Vec2D<
 void EngineClient::tick () {
 	tick_events();
 	engine.tick_update();
+	window()->debugOverlay.update();
 	tick_render();
 }
 

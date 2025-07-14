@@ -68,6 +68,7 @@ public:
 
 		bool init (const RML::Font& font, SDL_Keycode toggleKey = SDLK_F3);
 		inline void toggle () { visible = !visible; }
+		inline void update () { if (debugOverlay && visible) [[unlikely]] debugOverlay->update(); }
 		inline void render () { if (debugOverlay && visible) [[unlikely]] debugOverlay->render(); }
 		void handle_event (SDL_Event *event);
 
