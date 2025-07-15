@@ -1,5 +1,7 @@
 #include "RML/DebugOverlay/Overlay.hpp"
 
+#include <format>
+
 #include <RmlUi/Core/ElementDocument.h>
 
 #include "Logger.hpp"
@@ -29,20 +31,18 @@ Overlay::Overlay (Engine& engine, Interface& rml, const Font& font) : engine(eng
 	if (!set_font (font))
 		log.fatal ("Can't set debug overlay font!");
 
-	Rml::ElementDocument* doc = rdoc->doc;
-	doc->GetElementById ("based_version")->SetInnerRML (std::string ("Based Engine ") + BASED_VERSION);
+	addCustomElementStatic ("based_version").setInnerRML (std::format ("Based Engine {}", BASED_VERSION));
 
-	doc->Show();
+	rdoc->doc->Show();
 }
 
 void Overlay::update () {
-	for (const ElementFixedUpdate& elem : elems_fixed_update) {
-		if (elem.needs_update_fixed)
-			elem.rml_handle->SetInnerRML (elem.update_cb (engine));
+	for (ElementAlwaysUpdate& elem : elems_always_update) {
+		elem.setInnerRML (elem.update_cb (engine));
 	}
-	for (const ElementDynamicUpdate& elem : elems_dynamic_update) {
+	for (ElementConditionalUpdate& elem : elems_conditional_update) {
 		if (elem.needs_update_cb (engine))
-			elem.rml_handle->SetInnerRML (elem.update_cb (engine));
+			elem.setInnerRML (elem.update_cb (engine));
 	}
 }
 
@@ -58,9 +58,9 @@ Element& Overlay::addElement (Element::Type type) {
 			log.fatal ("Use addCustomElement*() to create a custom debug overlay element");
 			break;
 		case Element::Type::Label:
-			return elems_fixed_update.emplace_back (rdoc->doc, type, "based_label", "", ElementFixedUpdate::update_cb_never_stub, false);
+			return elems_static.emplace_back (rdoc->doc, type, "based_label");
 		case Element::Type::TPS:
-			return elems_fixed_update.emplace_back (rdoc->doc, type, "based_fps", "0", dou_tps, true);
+			return elems_always_update.emplace_back (rdoc->doc, type, "based_tps", dou_tps);
 		default: [[unlikely]]
 			log.fatal ("Wrong type for debug overlay document");
 			break;
@@ -68,16 +68,18 @@ Element& Overlay::addElement (Element::Type type) {
 }
 #pragma GCC diagnostic pop
 
-ElementFixedUpdate& Overlay::addCustomElementFixedUpdate (const std::string& rml_id, const std::string& inner_rml,
-                                                          Element::UpdateCallback update_cb, bool needs_update_fixed)
-{
-	return elems_fixed_update.emplace_back (rdoc->doc, Element::Type::Custom, rml_id, inner_rml, update_cb, needs_update_fixed);
+ElementStatic& Overlay::addCustomElementStatic (const std::string& rml_id) {
+	return elems_static.emplace_back (rdoc->doc, Element::Type::Custom, rml_id);
 }
 
-ElementDynamicUpdate& Overlay::addCustomElementDynamicUpdate (const std::string& rml_id, const std::string& inner_rml,
-                                                              Element::UpdateCallback update_cb, ElementDynamicUpdate::NeedsUpdateCallback needs_update_cb)
+ElementAlwaysUpdate& Overlay::addCustomElementAlwaysUpdate (const std::string& rml_id, ElementDynamic::UpdateCallback update_cb) {
+	return elems_always_update.emplace_back (rdoc->doc, Element::Type::Custom, rml_id, update_cb);
+}
+
+ElementConditionalUpdate& Overlay::addCustomElementConditionalUpdate (const std::string& rml_id, ElementDynamic::UpdateCallback update_cb,
+                                                                      ElementConditionalUpdate::NeedsUpdateCallback needs_update_cb)
 {
-	return elems_dynamic_update.emplace_back (rdoc->doc, Element::Type::Custom, rml_id, inner_rml, update_cb, needs_update_cb);
+	return elems_conditional_update.emplace_back (rdoc->doc, Element::Type::Custom, rml_id, update_cb, needs_update_cb);
 }
 
 }

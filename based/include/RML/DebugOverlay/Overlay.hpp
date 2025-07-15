@@ -32,23 +32,25 @@ public:
 
 	static std::unique_ptr<Overlay> make (Engine& engine, Interface& rml, const Font& font);
 
-	// Use separate vectors to avoid polymorphic calls of needs_update()
-	std::vector<ElementFixedUpdate> elems_fixed_update;
-	std::vector<ElementDynamicUpdate> elems_dynamic_update;
+	// Use separate vectors to avoid polymorphic calls of needsUpdate()
+	std::vector<ElementStatic> elems_static;
+	std::vector<ElementAlwaysUpdate> elems_always_update;
+	std::vector<ElementConditionalUpdate> elems_conditional_update;
 	/// @brief Add a debug overlay element of a built-in type
 	Element& addElement (Element::Type type);
-	/// @brief Add a custom debug overlay element with a fixed need to update
+	/// @brief Add a static custom debug overlay element
 	/// @param rml_id RML id that would be used for the element
-	/// @param inner_rml Initial inner RML of created element
-	/// @param needs_update_fixed If the element needs to be updated by update_cb callback
-	ElementFixedUpdate& addCustomElementFixedUpdate (const std::string& rml_id, const std::string& inner_rml,
-	                                                 Element::UpdateCallback update_cb, bool needs_update_fixed);
+	ElementStatic& addCustomElementStatic (const std::string& rml_id);
+	/// @brief Add a custom debug overlay element which has to be updated every tick
+	/// @param rml_id RML id that would be used for the element
+	/// @param update_cb Callback to update the element's inner RML
+	ElementAlwaysUpdate& addCustomElementAlwaysUpdate (const std::string& rml_id, ElementDynamic::UpdateCallback update_cb);
 	/// @brief Add a custom debug overlay element with a dynamic need to update
 	/// @param rml_id RML id that would be used for the element
-	/// @param inner_rml Initial inner RML of created element
-	/// @param needs_update_fixed If the element needs to be updated by update_cb callback
-	ElementDynamicUpdate& addCustomElementDynamicUpdate (const std::string& rml_id, const std::string& inner_rml,
-	                                                     Element::UpdateCallback update_cb, ElementDynamicUpdate::NeedsUpdateCallback needs_update_cb);
+	/// @param update_cb Callback to update the element's inner RML
+	/// @param needs_update_cb Callback to check if the update is required
+	ElementConditionalUpdate& addCustomElementConditionalUpdate (const std::string& rml_id, ElementDynamic::UpdateCallback update_cb,
+	                                                             ElementConditionalUpdate::NeedsUpdateCallback needs_update_cb);
 
 	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Overlay);
 };

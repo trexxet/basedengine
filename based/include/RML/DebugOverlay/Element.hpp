@@ -13,50 +13,53 @@ namespace Based {
 
 namespace Based::RML::DebugOverlay {
 
+/// @brief Base element class, basically a static element
 struct Element {
 	enum class Type {
 		Custom,
 		Label,
 		TPS
 	};
-	/// @brief Callback to get updated element text
-	using UpdateCallback = const std::string& (&)(Engine& engine);
 
 	Rml::Element* rml_handle;
 	Type type;
 	std::string rml_id;
 
-	virtual bool needs_update (Engine& engine) const = 0;
-	UpdateCallback update_cb;
+	virtual bool needsUpdate (Engine& engine) const { return false; }
+	inline void setInnerRML (const std::string& rml) { rml_handle->SetInnerRML (rml); }
 
-	Element (Rml::ElementDocument* doc, Type type, const std::string& rml_id, const std::string& inner_rml, UpdateCallback update_cb);
+	Element (Rml::ElementDocument* doc, Type type, const std::string& rml_id);
 
 	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Element);
 };
 
-/// @brief Debug overlay element, which has a fixed need to update (e.g. FPS counter, static label etc.)
-struct ElementFixedUpdate : Element {
-	bool needs_update_fixed;
-	bool needs_update (Engine& engine) const override final { return needs_update_fixed; }
+/// @brief Debug overlay element which does not have to be updated (e.g. static label)
+using ElementStatic = Element;
 
-	ElementFixedUpdate (Rml::ElementDocument* doc, Type type, const std::string& rml_id, const std::string& inner_rml,
-	                    UpdateCallback update_cb, bool needs_update_fixed)
-		: Element (doc, type, rml_id, inner_rml, update_cb), needs_update_fixed (needs_update_fixed) { }
+/// @brief Debug overlay element which has to be updated
+struct ElementDynamic : Element {
+	/// @brief Callback to get updated element text
+	using UpdateCallback = const std::string& (&)(Engine& engine);
+	UpdateCallback update_cb;
+	virtual bool needsUpdate (Engine& engine) const override { return true; }
 
-	/// @brief Update callback stub for never updated elements like static labels. Shouldn't get called.
-	static const std::string& update_cb_never_stub (Engine& engine);
+	ElementDynamic (Rml::ElementDocument* doc, Type type, const std::string& rml_id, UpdateCallback update_cb)
+		: Element (doc, type, rml_id), update_cb (update_cb) { }
 };
 
-/// @brief Debug overlay element, which need to update is checked by a callback (e.g. depends on external data)
-struct ElementDynamicUpdate : Element {
+/// @brief Debug overlay element which has to be updated every tick (e.g. FPS/TPS counter)
+using ElementAlwaysUpdate = ElementDynamic;
+
+/// @brief Debug overlay element which need to update is checked by a callback (e.g. depends on external data)
+struct ElementConditionalUpdate : ElementDynamic {
 	/// @brief Callback to check if the element update is needed
 	using NeedsUpdateCallback = bool (&)(Engine& engine);
 	NeedsUpdateCallback needs_update_cb;
-	bool needs_update (Engine& engine) const override final { return needs_update_cb(engine); }
+	bool needsUpdate (Engine& engine) const override final { return needs_update_cb (engine); }
 
-	ElementDynamicUpdate (Rml::ElementDocument* doc, Type type, const std::string& rml_id, const std::string& inner_rml,
-	                      UpdateCallback update_cb, NeedsUpdateCallback needs_update_cb)
-		: Element (doc, type, rml_id, inner_rml, update_cb), needs_update_cb (needs_update_cb) { }
+	ElementConditionalUpdate (Rml::ElementDocument* doc, Type type, const std::string& rml_id, UpdateCallback update_cb,
+	                          NeedsUpdateCallback needs_update_cb)
+		: ElementDynamic (doc, type, rml_id, update_cb), needs_update_cb (needs_update_cb) { }
 };
 
 }
