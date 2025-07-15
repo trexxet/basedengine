@@ -1,7 +1,5 @@
 #include "Engine.hpp"
 
-#include <SDL3/SDL_timer.h>
-
 #include <sol/version.hpp>
 #include <lua.h>
 
@@ -26,6 +24,7 @@ void Engine::enable_client () {
 }
 
 bool Engine::tick () {
+	tps.tick();
 	if (client)
 		client->tick();
 	else
@@ -39,24 +38,6 @@ void Engine::tick_update () {
 
 void Engine::stop () {
 	sceneManager.schedule_next (nullptr);
-}
-
-uint16_t Engine::get_tps () {
-	static thread_local uint16_t tps = 0;
-	static thread_local uint16_t ticks = 0;
-	static thread_local uint64_t measure_last = 0;
-	const uint64_t one_second = 1000; // in ms
-
-	ticks++;
-
-	uint64_t measure = SDL_GetTicks();
-	if (measure - measure_last >= one_second) {
-		measure_last = measure;
-		tps = ticks;
-		ticks = 0;
-	}
-
-	return tps;
 }
 
 }

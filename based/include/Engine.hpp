@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include <cstdint>
 
 #include "EngineClient.hpp"
 #include "Defs.hpp"
 #include "Scene.hpp"
+#include "Util/TPS.hpp"
 
 namespace Based {
 
@@ -23,7 +23,7 @@ public:
 	bool tick ();
 	void stop ();
 
-	static uint16_t get_tps ();
+	Util::TPSCounter tps;
 
 	BASED_CLASS_NO_COPY_MOVE (Engine);
 };

@@ -52,7 +52,7 @@ std::unique_ptr<DebugOverlay> DebugOverlay::make (Engine& engine, Interface& rml
 
 DEBUG_OVERLAY_UPDATE_CB(dou_tps) {
 	thread_local static std::string tps;
-	tps = std::format ("TPS: {}", engine.get_tps());
+	tps = std::format ("TPS: {}", engine.tps.get());
 	return tps;
 }
 
