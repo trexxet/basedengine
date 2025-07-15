@@ -5,13 +5,13 @@
 #include <vector>
 
 #include <RmlUi_Renderer_GL3.h>
-#include <RmlUi_Platform_SDL.h>
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_keycode.h>
 
 #include "RML/Context.hpp"
 #include "RML/Document.hpp"
 #include "RML/Model.hpp"
+#include "RML/SystemInterface_SDL_Based.hpp"
 
 namespace Based {
 	class Window;
@@ -20,7 +20,7 @@ namespace Based {
 namespace Based::RML {
 
 class Interface {
-	SystemInterface_SDL systemInterface;
+	SystemInterface_SDL_Based systemInterface;
 	RenderInterface_GL3 renderInterface;
 	Window& owner;
 public:
