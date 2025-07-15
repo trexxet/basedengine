@@ -13,7 +13,7 @@
 #include "Geometry.hpp"
 #include "RML/Font.hpp"
 #include "RML/Interface.hpp"
-#include "RML/DebugOverlay.hpp"
+#include "RML/DebugOverlay/Overlay.hpp"
 
 namespace Based {
 
@@ -60,8 +60,8 @@ public:
 	class DebugOverlay {
 		Window& window;
 	public:
-		RML::DebugOverlayStorage debugOverlay {nullptr};
-		RML::DebugOverlayHandle operator()() { return debugOverlay.get(); }
+		RML::DebugOverlay::OverlayStorage debugOverlay {nullptr};
+		RML::DebugOverlay::OverlayHandle operator()() { return debugOverlay.get(); }
 		
 		SDL_Keycode toggleKey = SDLK_UNKNOWN;
 		bool visible = false;

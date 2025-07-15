@@ -18,7 +18,7 @@
 #include "Logger.hpp"
 #include "LuaFile.hpp"
 #include "Scene.hpp"
-#include "RML/DebugOverlay.hpp"
+#include "RML/DebugOverlay/Overlay.hpp"
 
 #include "sceneMain.hpp"
 
@@ -41,11 +41,13 @@ int main (int argv, char** args) {
 			/* Fonts must be loaded before RML documents */
 			Based::RML::Interface::load_fonts ({"../demo/assets/common/courbd.ttf"});
 
-			/* Debug overlay can show various information (FPS etc.).
+			/* Debug overlay can show various information (FPS, TPS etc.).
 			 * Debug overlay instantiates it's own RML context and document.*/
 			window->debugOverlay.init ({"Courier New", Rml::Style::FontStyle::Normal,
 			                           Rml::Style::FontWeight::Normal, 18, "white"}, SDLK_F3);
 			window->debugOverlay()->addElement (Based::RML::DebugOverlay::Element::Type::TPS);
+			Based::RML::DebugOverlay::Element& demo_label = window->debugOverlay()->addElement (Based::RML::DebugOverlay::Element::Type::Label);
+			demo_label.rml_handle->SetInnerRML (DEMO_NAME);
 		}
 
 		SceneMain sceneMain (engine, conf);

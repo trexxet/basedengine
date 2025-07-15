@@ -67,7 +67,7 @@ bool Window::DebugOverlay::init (const RML::Font& font, SDL_Keycode _toggleKey) 
 		return false;
 	}
 
-	debugOverlay = RML::DebugOverlay::make (window.engineClient.engine, *window.rml.get(), font);
+	debugOverlay = RML::DebugOverlay::Overlay::make (window.engineClient.engine, *window.rml.get(), font);
 	toggleKey = _toggleKey;
 	return true;
 }

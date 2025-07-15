@@ -33,10 +33,11 @@ set(BASED_SOURCES
 	GL/Sprite.cpp
 	GL/Texture.cpp
 	RML/Context.cpp
-	RML/DebugOverlay.cpp
 	RML/Document.cpp
 	RML/Interface.cpp
 	RML/Model.cpp
+	RML/DebugOverlay/Element.cpp
+	RML/DebugOverlay/Overlay.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)
 
