@@ -9,11 +9,11 @@
 
 namespace Based::RML::DebugOverlay {
 
-Element::Element (Rml::ElementDocument* doc, Type type, const std::string& rml_id) : type (type), rml_id (rml_id) {
-	rml_handle = doc->AppendChild (doc->CreateElement ("p"));
-	if (!rml_handle)
-		log.fatal ("Failed to add debug overlay element {}", rml_id);
-	rml_handle->SetId (rml_id);
+Element::Element (Rml::ElementDocument* doc, Type type, const std::string& rmlId) : type (type), rmlId (rmlId) {
+	rmlHandle = doc->AppendChild (doc->CreateElement ("p"));
+	if (!rmlHandle)
+		log.fatal ("Failed to add debug overlay element {}", rmlId);
+	rmlHandle->SetId (rmlId);
 }
 
 /// @brief Update callback for TPS counter

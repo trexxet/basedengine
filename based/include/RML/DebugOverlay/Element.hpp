@@ -21,14 +21,14 @@ struct Element {
 		TPS
 	};
 
-	Rml::Element* rml_handle;
+	Rml::Element* rmlHandle;
 	Type type;
-	std::string rml_id;
+	std::string rmlId;
 
-	virtual bool needsUpdate (Engine& engine) const { return false; }
-	inline void setInnerRML (const std::string& rml) { rml_handle->SetInnerRML (rml); }
+	virtual bool needs_update (Engine& engine) const { return false; }
+	inline void set_inner_rml (const std::string& rml) { rmlHandle->SetInnerRML (rml); }
 
-	Element (Rml::ElementDocument* doc, Type type, const std::string& rml_id);
+	Element (Rml::ElementDocument* doc, Type type, const std::string& rmlId);
 
 	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Element);
 };
@@ -40,11 +40,11 @@ using ElementStatic = Element;
 struct ElementDynamic : Element {
 	/// @brief Callback to get updated element text
 	using UpdateCallback = const std::string& (&)(Engine& engine);
-	UpdateCallback update_cb;
-	virtual bool needsUpdate (Engine& engine) const override { return true; }
+	UpdateCallback updateCb;
+	virtual bool needs_update (Engine& engine) const override { return true; }
 
-	ElementDynamic (Rml::ElementDocument* doc, Type type, const std::string& rml_id, UpdateCallback update_cb)
-		: Element (doc, type, rml_id), update_cb (update_cb) { }
+	ElementDynamic (Rml::ElementDocument* doc, Type type, const std::string& rmlId, UpdateCallback updateCb)
+		: Element (doc, type, rmlId), updateCb (updateCb) { }
 };
 
 /// @brief Debug overlay element which has to be updated every tick (e.g. FPS/TPS counter)
@@ -54,12 +54,12 @@ using ElementAlwaysUpdate = ElementDynamic;
 struct ElementConditionalUpdate : ElementDynamic {
 	/// @brief Callback to check if the element update is needed
 	using NeedsUpdateCallback = bool (&)(Engine& engine);
-	NeedsUpdateCallback needs_update_cb;
-	bool needsUpdate (Engine& engine) const override final { return needs_update_cb (engine); }
+	NeedsUpdateCallback needsUpdateCb;
+	bool needs_update (Engine& engine) const override final { return needsUpdateCb (engine); }
 
-	ElementConditionalUpdate (Rml::ElementDocument* doc, Type type, const std::string& rml_id, UpdateCallback update_cb,
-	                          NeedsUpdateCallback needs_update_cb)
-		: ElementDynamic (doc, type, rml_id, update_cb), needs_update_cb (needs_update_cb) { }
+	ElementConditionalUpdate (Rml::ElementDocument* doc, Type type, const std::string& rmlId, UpdateCallback updateCb,
+	                          NeedsUpdateCallback needsUpdateCb)
+		: ElementDynamic (doc, type, rmlId, updateCb), needsUpdateCb (needsUpdateCb) { }
 };
 
 }

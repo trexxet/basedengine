@@ -45,9 +45,9 @@ int main (int argv, char** args) {
 			 * Debug overlay instantiates it's own RML context and document.*/
 			window->debugOverlay.init ({"Courier New", Rml::Style::FontStyle::Normal,
 			                           Rml::Style::FontWeight::Normal, 18, "white"}, SDLK_F3);
-			window->debugOverlay()->addElement (Based::RML::DebugOverlay::Element::Type::TPS);
-			Based::RML::DebugOverlay::Element& demo_label = window->debugOverlay()->addElement (Based::RML::DebugOverlay::Element::Type::Label);
-			demo_label.setInnerRML (DEMO_NAME);
+			window->debugOverlay()->add_element (Based::RML::DebugOverlay::Element::Type::TPS);
+			Based::RML::DebugOverlay::Element& demoLabel = window->debugOverlay()->add_element (Based::RML::DebugOverlay::Element::Type::Label);
+			demoLabel.set_inner_rml (DEMO_NAME);
 		}
 
 		SceneMain sceneMain (engine, conf);

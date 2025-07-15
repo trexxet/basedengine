@@ -24,5 +24,5 @@
 * There must always be exactly one space between the function name and the opening parenthesis. The exceptions are **calling** a function with no arguments - must have no space before parenthesis, and constructor initializer list - whatever looks better.
 * Every file must end with an empty line
 * Includes are sorted in 3 groups separated by empty line: system headers (`<string>`), dependency library headers (`<glad/gl.h>`) and Based headers (`"Logger.hpp"`). Each group is sorted alphabetically and per-subdirectory. Source file starts with a corresponding include, header file starts with `#pragma once` if needed.
-* No new line for opening curly bracket
+* No new line for opening curly bracket with the exception of function/method + initializer list taking multiple lines.
 * Doxygen comments use triple slash and same indentation as the related code. Commands use @.
