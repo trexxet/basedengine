@@ -3,6 +3,8 @@
 #include <string>
 #include <sol/sol.hpp>
 
+#include "Defs.hpp"
+
 namespace Based::Lua {
 
 enum BindTypes {
@@ -10,7 +12,7 @@ enum BindTypes {
 	Geometry = 0x01
 };
 
-class File {
+class BASED_API File {
 	std::string name;
 public:
 	File (const std::string& filename, int flags = 0);
@@ -31,6 +33,8 @@ public:
 	}
 
 	void bindBasedTypes (BindTypes types);
+
+	BASED_CLASS_NO_COPY_DEFAULT_MOVE (File);
 };
 
 }

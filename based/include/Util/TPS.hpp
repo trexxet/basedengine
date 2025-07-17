@@ -2,12 +2,13 @@
 
 #include <cstdint>
 
+#include "Defs.hpp"
 #include "SDL3/SDL_timer.h"
 
 namespace Based::Util {
 
-class TPSCounter {
-	inline static thread_local uint16_t tps = 0;
+class BASED_API TPSCounter {
+	uint16_t tps = 0;
 public:
 	void tick() {
 		static thread_local uint16_t ticks = 0;

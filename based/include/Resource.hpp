@@ -25,7 +25,7 @@
 
 namespace Based {
 
-struct Resource {
+struct BASED_API Resource {
 	/// @brief Load resource to memory
 	/// @param path path to resource file (if required)
 	virtual void load (const std::string& path) = 0;
@@ -53,7 +53,7 @@ concept ResourceClass = std::derived_from<T, Resource>;
 
 using ResourceMap = std::unordered_map<std::string, std::unique_ptr<Resource>>;
 
-class ResourceManager {
+class BASED_API ResourceManager {
 	ResourceMap resourceMap;
 public:
 	/// @brief Synchronously load single resource to memory

@@ -10,13 +10,14 @@
 namespace Based {
 
 class Engine;
-class EngineClient {
+class BASED_API EngineClient {
 	friend class Engine;
 
-	struct SDL {
+	struct BASED_API SDL {
 		SDL ();
 		~SDL ();
 		std::unique_ptr<Window> window {nullptr};
+		BASED_CLASS_NO_COPY_MOVE (SDL);
 	};
 	std::unique_ptr<SDL> sdl {nullptr};
 

@@ -15,6 +15,18 @@ target_compile_definitions(based PUBLIC
 target_compile_definitions(based PRIVATE
 	$<$<CONFIG:Debug>:BASED_ENABLE_GL_CHECK>
 )
+# MinGW bug #89088, #109380: inline methods of template
+# instances are not exported regardless of dllexport.
+# For now, the workaround is to force it export everything.
+#target_compile_options(based PRIVATE
+#	-fvisibility=hidden
+#)
+#target_link_options(based PRIVATE
+#	-Wl,--exclude-all-symbols
+#)
+target_link_options(based PRIVATE
+	-Wl,--export-all-symbols
+)
 set_target_properties(based PROPERTIES
 	VERSION 0.1
 	SOVERSION 01

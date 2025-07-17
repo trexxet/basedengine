@@ -60,6 +60,6 @@ void Model::bindBasedTypes (BindTypes types) {
 
 #define BASED_RML_ID_DEF(C) template class Rml::Family<C>
 
-BASED_RML_ID_DEF(Based::Rect2D<int>);
+BASED_RML_ID_DEF (Based::Rect2D<int>);
 
 #undef BASED_RML_ID_DEF

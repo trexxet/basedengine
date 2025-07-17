@@ -7,9 +7,11 @@
 #include <RmlUi/Core/Context.h>
 #include <RmlUi/Core/ElementDocument.h>
 
+#include "Defs.hpp"
+
 namespace Based::RML {
 
-class Document {
+class BASED_API Document {
 	bool fromString;
 public:
 	Rml::Context* rctx = nullptr;
@@ -24,6 +26,8 @@ public:
 	static std::unique_ptr<Document> make_from_file (Rml::Context* rctx, const std::string& path);
 	/// @brief Create and load RmlDocument from source string
 	static std::unique_ptr<Document> make_from_string (Rml::Context* rctx, const std::string& src);
+
+	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Document);
 };
 
 using DocumentStorage = std::unique_ptr<Document>;

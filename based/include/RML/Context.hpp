@@ -6,13 +6,14 @@
 #include <RmlUi/Core/Context.h>
 #include <RmlUi/Core/DataTypeRegister.h>
 
+#include "Defs.hpp"
 #include "Geometry.hpp"
 #include "RML/Document.hpp"
 #include "RML/Model.hpp"
 
 namespace Based::RML {
 
-class Context {
+class BASED_API Context {
 	Rml::Context* _rctx = nullptr;
 public:
 	std::string ctxName;
@@ -30,6 +31,8 @@ public:
 	ModelHandle add_model (const std::string& name, int flags = 0);
 
 	static std::unique_ptr<Context> make (const std::string& ctxName, const Vec2D<int>& dimensions);
+
+	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Context);
 };
 
 using ContextStorage = std::unique_ptr<Context>;

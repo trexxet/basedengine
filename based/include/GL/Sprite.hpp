@@ -4,6 +4,7 @@
 
 #include <glm/mat4x4.hpp>
 
+#include "Defs.hpp"
 #include "Geometry.hpp"
 #include "Resource.hpp"
 #include "GL/Polygon.hpp"
@@ -12,7 +13,7 @@
 
 namespace Based::GL {
 
-class Sprite : public Resource {
+class BASED_API Sprite : public Resource {
 	const glm::mat4* mvp {nullptr};
 	bool textureManaged = false;
 public:

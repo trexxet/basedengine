@@ -7,9 +7,11 @@
 #include <print>
 #include <stdexcept>
 
+#include "Defs.hpp"
+
 namespace Based {
 
-class Logger {
+class BASED_API Logger {
 	std::string name;
 	FILE *logfile;
 	uint8_t depth = 0;
@@ -104,7 +106,7 @@ public:
 };
 
 #ifndef _BASED_LOGGER_IMPLEMENT
-extern Logger log;
+BASED_API extern Logger log;
 #endif
 
 }

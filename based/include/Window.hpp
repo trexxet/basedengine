@@ -18,7 +18,7 @@
 namespace Based {
 
 class EngineClient;
-class Window {
+class BASED_API Window {
 public:
 	enum Flags {
 		NO_FLAGS = 0,
@@ -57,7 +57,7 @@ public:
 
 	BASED_CLASS_NO_COPY_MOVE (Window);
 
-	class DebugOverlay {
+	class BASED_API DebugOverlay {
 		Window& window;
 	public:
 		RML::DebugOverlay::OverlayStorage debugOverlay {nullptr};

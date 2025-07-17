@@ -15,7 +15,7 @@ namespace Based::GL {
 using VBOSpan = std::span<const GLfloat>;
 using EBOSpan = std::span<const GLuint>;
 
-class Polygon {
+class BASED_API Polygon {
 	GLuint VAO = 0, VBO = 0, EBO = 0;
 	GLsizei vertexCount = 0;
 	GLenum drawMode;
@@ -63,7 +63,7 @@ template <class T>
 concept ConvexPolygonClass = std::derived_from<T, ConvexPolygon>;
 
 /// @note Any convex polygon can be rendered without EBO using GL_TRIANGLE_FAN
-class ConvexPolygon : public Polygon {
+class BASED_API ConvexPolygon : public Polygon {
 public:
 	ConvexPolygon (GLsizei vertexCount, GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: Polygon (vertexCount, GL_TRIANGLE_FAN, VBO_usage, VBO_array, nullptr, startVAOBatch) { }
@@ -81,13 +81,13 @@ public:
 	}
 };
 
-class ConvexQuad : public ConvexPolygon {
+class BASED_API ConvexQuad : public ConvexPolygon {
 public:
 	ConvexQuad (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: ConvexPolygon (4, VBO_usage, VBO_array, startVAOBatch) { }
 };
 
-class Rect : public ConvexQuad {
+class BASED_API Rect : public ConvexQuad {
 public:
 	Rect (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: ConvexQuad (VBO_usage, VBO_array, startVAOBatch) { }
@@ -105,13 +105,13 @@ public:
 	static std::vector<GLfloat> generateVBO (const Rect2D<GLfloat>& xy, const Rect2D<GLfloat>& st);
 };
 
-class ConvexHex : public ConvexPolygon {
+class BASED_API ConvexHex : public ConvexPolygon {
 public:
 	ConvexHex (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: ConvexPolygon (6, VBO_usage, VBO_array, startVAOBatch) { }
 };
 
-class Hex : public ConvexHex {
+class BASED_API Hex : public ConvexHex {
 public:
 	Hex (GLenum VBO_usage, const VBOSpan* VBO_array, bool startVAOBatch = false)
 		: ConvexHex (VBO_usage, VBO_array, startVAOBatch) { }

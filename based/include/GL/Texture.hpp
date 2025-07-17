@@ -5,12 +5,13 @@
 #include <glad/gl.h>
 #include <SDL3/SDL_surface.h>
 
+#include "Defs.hpp"
 #include "Geometry.hpp"
 #include "Resource.hpp"
 
 namespace Based::GL {
 
-class Texture : public Resource {
+class BASED_API Texture : public Resource {
 	SDL_Surface *surface = nullptr;
 public:
 	GLuint id;

@@ -1,9 +1,17 @@
 #pragma once
 
-#ifdef BASED_DLL_EXPORT
-#define BASED_API __declspec(dllexport)
+#if defined(__MINGW32__) 
+	#ifdef BASED_DLL_EXPORT
+		#define BASED_API __declspec(dllexport)
+	#else
+		#define BASED_API __declspec(dllimport)
+	#endif
 #else
-#define BASED_API __declspec(dllimport)
+	#ifdef BASED_DLL_EXPORT
+		#define BASED_API __attribute__((visibility("default")))
+	#else
+		#define BASED_API
+	#endif
 #endif
 
 #define BASED_CLASS_COPY(c, d) \

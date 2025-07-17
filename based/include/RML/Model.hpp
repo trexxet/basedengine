@@ -8,6 +8,7 @@
 #include <RmlUi/Core/DataModelHandle.h>
 #include <RmlUi/Core/DataTypeRegister.h>
 
+#include "Defs.hpp"
 #include "RML/Ids.hpp"
 
 namespace Based::RML {
@@ -17,7 +18,7 @@ enum BindTypes {
 	Geometry = 0x01
 };
 
-class Model {
+class BASED_API Model {
 	void bindBasedTypes (BindTypes types);
 public:
 	std::string name;
@@ -31,6 +32,8 @@ public:
 
 	static std::unique_ptr<Model> make (Rml::Context* rctx, const std::string& name, int flags = 0,
 	                                    Rml::DataTypeRegister* dataTypeRegister = nullptr);
+
+	BASED_CLASS_NO_COPY_DEFAULT_MOVE (Model);
 };
 
 using ModelStorage = std::unique_ptr<Model>;

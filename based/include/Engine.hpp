@@ -9,7 +9,7 @@
 
 namespace Based {
 
-class Engine {
+class BASED_API Engine {
 	friend class EngineClient;
 	void tick_update ();
 public:

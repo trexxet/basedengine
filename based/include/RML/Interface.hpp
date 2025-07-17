@@ -8,6 +8,7 @@
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_keycode.h>
 
+#include "Defs.hpp"
 #include "RML/Context.hpp"
 #include "RML/Document.hpp"
 #include "RML/Model.hpp"
@@ -19,7 +20,7 @@ namespace Based {
 
 namespace Based::RML {
 
-class Interface {
+class BASED_API Interface {
 	SystemInterface_SDL_Based systemInterface;
 	RenderInterface_GL3 renderInterface;
 	Window& owner;
@@ -41,6 +42,8 @@ public:
 
 	Interface (Window& owner);
 	~Interface ();
+
+	BASED_CLASS_NO_COPY_MOVE (Interface);
 };
 
 using InterfaceStorage = std::unique_ptr<Interface>;

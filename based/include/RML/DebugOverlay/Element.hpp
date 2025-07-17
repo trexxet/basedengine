@@ -14,7 +14,7 @@ namespace Based {
 namespace Based::RML::DebugOverlay {
 
 /// @brief Base element class, basically a static element
-struct Element {
+struct BASED_API Element {
 	enum class Type {
 		Custom,
 		Label,
@@ -37,7 +37,7 @@ struct Element {
 using ElementStatic = Element;
 
 /// @brief Debug overlay element which has to be updated
-struct ElementDynamic : Element {
+struct BASED_API ElementDynamic : Element {
 	/// @brief Callback to get updated element text
 	using UpdateCallback = const std::string& (&)(Engine& engine);
 	UpdateCallback updateCb;
@@ -51,7 +51,7 @@ struct ElementDynamic : Element {
 using ElementAlwaysUpdate = ElementDynamic;
 
 /// @brief Debug overlay element which need to update is checked by a callback (e.g. depends on external data)
-struct ElementConditionalUpdate : ElementDynamic {
+struct BASED_API ElementConditionalUpdate : ElementDynamic {
 	/// @brief Callback to check if the element update is needed
 	using NeedsUpdateCallback = bool (&)(Engine& engine);
 	NeedsUpdateCallback needsUpdateCb;

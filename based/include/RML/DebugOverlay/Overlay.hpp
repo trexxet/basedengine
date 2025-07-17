@@ -16,7 +16,7 @@ namespace Based {
 
 namespace Based::RML::DebugOverlay {
 
-class Overlay {
+class BASED_API Overlay {
 	Engine& engine;
 	Interface& rml;
 	ContextStorage rctx {nullptr};

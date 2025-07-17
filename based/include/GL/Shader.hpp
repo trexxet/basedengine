@@ -13,7 +13,7 @@
 
 namespace Based::GL {
 
-class Shader : public Resource {
+class BASED_API Shader : public Resource {
 	GLenum type;
 	std::string source;
 public:
@@ -39,7 +39,7 @@ public:
 
 using ShaderVec = std::vector<Shader *>;
 
-class ShaderProgram : public Resource {
+class BASED_API ShaderProgram : public Resource {
 	ShaderVec units;
 
 	GLint get_uniform_location_from_gl (const GLchar *name);
@@ -95,7 +95,7 @@ enum ShaderProgramID {
 	SP_2D_MVPSampler
 };
 
-struct Shaders {
+struct BASED_API Shaders {
 	std::unordered_map<ShaderID, Shader> shaders;
 	std::unordered_map<ShaderProgramID, ShaderProgram> shaderPrograms;
 
