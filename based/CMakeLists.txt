@@ -35,6 +35,7 @@ set_target_properties(based PROPERTIES
 set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 
 set(BASED_SOURCES
+	Console.cpp
 	Engine.cpp
 	EngineClient.cpp
 	LuaFile.cpp
@@ -50,6 +51,7 @@ set(BASED_SOURCES
 	RML/Model.cpp
 	RML/DebugOverlay/Element.cpp
 	RML/DebugOverlay/Overlay.cpp
+	Util/AutocompleteTrie.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)
 
