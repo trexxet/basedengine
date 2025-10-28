@@ -39,6 +39,7 @@ set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
 	LuaFile.cpp
+	Thread.cpp
 	Window.cpp
 	GL/GL_Util.cpp
 	GL/Polygon.cpp

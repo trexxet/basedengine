@@ -28,7 +28,7 @@ class SceneMain : public Based::Scene {
 	/* Also, note that all Textures are created and loaded being binded to texture unit 0.
 	 * We can use other units for rendering though. */
 	enum {
-		texUnit_default =0,
+		texUnit_default = 0,
 		texUnit_hex
 	};
 	/* Polygons are wrappers for VBO/VAO/EBO. GL::Rect is one of them. */
@@ -170,7 +170,7 @@ public:
 		/* 5) Bind VAO and draw polygon */
 		rectBackground->bind_draw();
 		/* 6) Subsequent draws can be made starting from step 3 (or 4, if no texture unit switch required) */
-		texture1->use ();
+		texture1->use();
 		rect1->bind_draw();
 		/* 7) Alternatively, Sprite can be used. It performs steps 1-5 for GL::Rect and SP_2D_MVPSampler. */
 		sprite1->draw();

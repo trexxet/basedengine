@@ -3,17 +3,21 @@
 #include <sol/version.hpp>
 #include <lua.h>
 
-#define _BASED_LOGGER_IMPLEMENT
+#define _BASED_GLOBAL_IMPLEMENT
 #include "Logger.hpp"
-#undef _BASED_LOGGER_IMPLEMENT
+#undef _BASED_GLOBAL_IMPLEMENT
+#include <iostream>
 
 namespace Based {
 
 Logger log ("log.txt");
 
-Engine::Engine () {
+Engine::Engine () : console (*this) {
 	log.write_inc ("Based Engine {}", BASED_VERSION);
 	log.write_dec ("Using {}, Sol {}", LUA_RELEASE, SOL_VERSION_STRING);
+
+	threadManager.create("test");
+	threadManager["test"].assign([](){ std::cout << "TEST THREAD"; });
 }
 
 void Engine::enable_client () {

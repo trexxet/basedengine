@@ -62,18 +62,21 @@ public:
 	/// @return If the resource loaded succesfully
 	template <ResourceClass T, typename... _Args>
 	bool load (const std::string& name, const std::string& path, _Args&&... args) {
-		if (resourceMap.contains (name))
-			return true;
 		try {
-			resourceMap.emplace (name, std::make_unique<T>(std::forward<_Args> (args)...));
-			resourceMap[name]->load (path);
+			auto [it, emplaced] = resourceMap.try_emplace (name, std::make_unique<T>(std::forward<_Args> (args)...));
+			if (!emplaced) {
+				log.warn ("Resource {} already exists", name);
+				return false;
+			}
+			it->second->load(path);
+			log.write ("Loaded resource {}", name);
+			return true;
 		}
 		catch (const std::exception &e) {
 			log.warn ("Failed to load resource {}", name);
+			resourceMap.erase(name);
 			return false;
 		}
-		log.write ("Loaded resource {}", name);
-		return true;
 	}
 
 	/// @brief Synchronously prepare single loaded resource for use

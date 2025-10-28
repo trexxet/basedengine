@@ -61,6 +61,7 @@ public:
 
 #define DOWRITE { dowrite (make_message ("", __fmt, std::forward<_Args>(__args)...)); }
 #define LOGGER_FUNCTION(name) template<typename... _Args> void name (std::format_string<_Args...> __fmt, _Args&&... __args)
+#define LOGGER_NORETURN_FUNCTION(name) template<typename... _Args> [[noreturn]] void name (std::format_string<_Args...> __fmt, _Args&&... __args)
 
 	LOGGER_FUNCTION(write)  {
 		DOWRITE;
@@ -93,7 +94,7 @@ public:
 		depth = depth_save;
 	}
 
-	LOGGER_FUNCTION(fatal) {
+	LOGGER_NORETURN_FUNCTION(fatal) {
 		depth = 0;
 		std::string msg = std::format (__fmt, std::forward<_Args>(__args)...);
 		dowrite (make_message ("ERROR: ", "{}", msg), true);
@@ -105,7 +106,7 @@ public:
 
 };
 
-#ifndef _BASED_LOGGER_IMPLEMENT
+#ifndef _BASED_GLOBAL_IMPLEMENT
 BASED_API extern Logger log;
 #endif
 

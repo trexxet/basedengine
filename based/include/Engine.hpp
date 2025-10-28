@@ -2,9 +2,11 @@
 
 #include <memory>
 
-#include "EngineClient.hpp"
+#include "Console.hpp"
 #include "Defs.hpp"
+#include "EngineClient.hpp"
 #include "Scene.hpp"
+#include "Thread.hpp"
 #include "Util/TPS.hpp"
 
 namespace Based {
@@ -16,6 +18,7 @@ public:
 	std::unique_ptr<EngineClient> client {nullptr};
 
 	SceneManager sceneManager;
+	ThreadManager threadManager;
 
 	Engine ();
 
@@ -24,6 +27,8 @@ public:
 	void stop ();
 
 	Util::TPSCounter tps;
+
+	Console console;
 
 	BASED_CLASS_NO_COPY_MOVE (Engine);
 };

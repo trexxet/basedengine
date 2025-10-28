@@ -8,6 +8,8 @@ class Engine;
 
 class BASED_API Console {
 	Engine& engine;
+public:
+	Console (Engine& engine);
 
 	BASED_CLASS_NO_COPY_MOVE (Console);
 };
