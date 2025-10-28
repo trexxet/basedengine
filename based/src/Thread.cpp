@@ -10,11 +10,11 @@ namespace Based {
 
 Thread::Thread (const std::string& name) : _name(name) {
 	if (name == BASED_MAIN_THREAD_NAME) {
-		ThreadManager::_current = name;
+		ThreadManager::current = _name.c_str();
 		return;
 	}
 	t = std::thread([this, name]() {
-		ThreadManager::_current = name;
+		ThreadManager::current = _name.c_str();
 		std::unique_lock lock (mtx);
 		cv.wait (lock, [this]() { return assigned || cancelled; });
 		if (cancelled) return;
@@ -43,7 +43,7 @@ Thread::~Thread () {
 	}
 }
 
-thread_local std::string ThreadManager::_current;
+thread_local const char* ThreadManager::current;
 
 Thread& ThreadManager::create (const std::string& name) {
 	try {

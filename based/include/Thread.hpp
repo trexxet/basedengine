@@ -38,9 +38,8 @@ using ThreadMap = std::unordered_map<std::string, Thread>;
 class BASED_API ThreadManager {
 	friend class Thread;
 	ThreadMap threadMap;
-	static thread_local std::string _current;
 public:
-	const decltype((_current)) current = _current;
+	static thread_local const char* current;
 
 	Thread& create (const std::string& name);
 	inline Thread& operator[] (const std::string& name) {
