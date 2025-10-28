@@ -17,7 +17,7 @@ Engine::Engine () : console (*this) {
 	log.write_dec ("Using {}, Sol {}", LUA_RELEASE, SOL_VERSION_STRING);
 
 	threadManager.create("test");
-	threadManager["test"].assign([](){ std::cout << "TEST THREAD"; });
+	threadManager["test"].assign([](const std::stop_token&) { std::cout << "TEST THREAD"; });
 }
 
 void Engine::enable_client () {

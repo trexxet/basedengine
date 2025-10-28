@@ -1,6 +1,7 @@
 #include "Thread.hpp"
 
 #include <exception>
+#include <stop_token>
 
 #include "Logger.hpp"
 
@@ -13,12 +14,14 @@ Thread::Thread (const std::string& name) : _name(name) {
 		ThreadManager::current = _name.c_str();
 		return;
 	}
-	t = std::thread([this, name]() {
+	t = std::jthread([this, name] (std::stop_token stop) {
 		ThreadManager::current = _name.c_str();
+
 		std::unique_lock lock (mtx);
-		cv.wait (lock, [this]() { return assigned || cancelled; });
-		if (cancelled) return;
-		if (fn) fn();
+		cv.wait (lock, [this, stop]() { return fn || stop.stop_requested(); });
+		if (stop.stop_requested()) return;
+
+		if (fn) fn (stop);
 	});
 }
 
@@ -26,24 +29,19 @@ void Thread::assign (decltype(Thread::fn) task) {
 	{
 		std::lock_guard lock (mtx);
 		fn = std::move (task);
-		assigned = true;
 	}
 	cv.notify_one();
 }
 
 Thread::~Thread () {
-	if (name != BASED_MAIN_THREAD_NAME && t.joinable()) {
-		{
-			std::lock_guard lock (mtx);
-			cancelled = true;
-		}
+	if (name != BASED_MAIN_THREAD_NAME) {
+		t.request_stop();
 		cv.notify_one();
-		t.join();
 		log.write ("Thread {} shutdown", name);
 	}
 }
 
-thread_local const char* ThreadManager::current;
+thread_local const char* ThreadManager::current = nullptr;
 
 Thread& ThreadManager::create (const std::string& name) {
 	try {

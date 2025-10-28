@@ -15,12 +15,10 @@ class BASED_API Thread {
 	friend class ThreadManager;
 	std::string _name;
 
-	bool assigned = false;
-	bool cancelled = false;
-	std::function<void()> fn;  // TODO: consider using fixed function
+	std::function<void(const std::stop_token&)> fn;  // TODO: consider using fixed function for better performance
 	std::mutex mtx;
 	std::condition_variable cv;
-	std::thread t;
+	std::jthread t;
 public:
 	const decltype((_name)) name = _name;
 
@@ -36,7 +34,6 @@ public:
 using ThreadMap = std::unordered_map<std::string, Thread>;
 
 class BASED_API ThreadManager {
-	friend class Thread;
 	ThreadMap threadMap;
 public:
 	static thread_local const char* current;
