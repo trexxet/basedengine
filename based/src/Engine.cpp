@@ -5,11 +5,13 @@
 
 #define _BASED_GLOBAL_IMPLEMENT
 #include "Logger.hpp"
+#include "ThreadLogger.hpp"
 #undef _BASED_GLOBAL_IMPLEMENT
 
 namespace Based {
 
 Logger log ("log.txt");
+ThreadLogger threadlog;
 
 Engine::Engine () : console (*this) {
 	log.write ("Based Engine {}", BASED_VERSION);

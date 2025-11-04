@@ -78,6 +78,7 @@ public:
 		throw std::runtime_error (msg);
 	}
 
+	BASED_CLASS_NO_COPY_MOVE (Logger);
 };
 
 #ifndef _BASED_GLOBAL_IMPLEMENT
