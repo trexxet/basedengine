@@ -1,6 +1,6 @@
 #pragma once
 
-// TODO: make Logger more thread-safe (depth etc.)
+// TODO: make Logger console flag more thread-safe
 
 #include <cstdint>
 #include <cstdlib>
@@ -16,8 +16,7 @@ namespace Based {
 class BASED_API Logger {
 	std::string name;
 	FILE *logfile;
-	uint8_t depth = 0;
-	
+
 	// std::chrono is absolutely retarded under mingw
 	inline std::string get_date_time () {
 		char timestrbuf[32] = {0};
@@ -30,9 +29,8 @@ class BASED_API Logger {
 
 	template<typename... _Args>
 	std::string make_message (const std::string& prefix, std::format_string<_Args...> __fmt, _Args&&... __args) {
-		return std::format ("{} |    {}{}{}\n",
+		return std::format ("{} |    {}{}\n",
 			get_date_time(),
-			std::string (depth * 8, ' '),
 			prefix,
 			std::format (__fmt, std::forward<_Args>(__args)...));
 	}
@@ -44,6 +42,8 @@ class BASED_API Logger {
 	}
 
 public:
+	bool console = false;
+
 	Logger (const char *filename) : name(filename) {
 		logfile = fopen (filename, "w");
 		if (!logfile)
@@ -52,59 +52,31 @@ public:
 	}
 
 	~Logger () {
-		depth = 0;
 		dowrite (make_message ("", "Closing log {}", name));
 		fclose (logfile);
 	}
 
-	bool console = false;
-	inline void inc_depth () { if (depth < 7) depth++; }
-	inline void dec_depth () { if (depth > 0) depth--; }
-
-#define DOWRITE { dowrite (make_message ("", __fmt, std::forward<_Args>(__args)...)); }
-#define LOGGER_FUNCTION(name) template<typename... _Args> void name (std::format_string<_Args...> __fmt, _Args&&... __args)
-#define LOGGER_NORETURN_FUNCTION(name) template<typename... _Args> [[noreturn]] void name (std::format_string<_Args...> __fmt, _Args&&... __args)
-
-	LOGGER_FUNCTION(write)  {
-		DOWRITE;
+	template<typename... _Args>
+	void write (std::format_string<_Args...> __fmt, _Args&&... __args) {
+		dowrite (make_message ("", __fmt, std::forward<_Args>(__args)...));
 	}
 
-	LOGGER_FUNCTION(write_inc)  { // print and increase depth
-		DOWRITE;
-		inc_depth();
+	template<typename... _Args>
+	void write_depth (uint8_t depth, std::format_string<_Args...> __fmt, _Args&&... __args) {
+		dowrite (make_message (std::string (depth * 8, ' '), __fmt, std::forward<_Args>(__args)...));
 	}
 
-	LOGGER_FUNCTION(inc_write)  { // increase depth and print
-		inc_depth();
-		DOWRITE;
-	}
-
-	LOGGER_FUNCTION(write_dec)  { // print and decrease depth
-		DOWRITE;
-		dec_depth();
-	}
-
-	LOGGER_FUNCTION(dec_write)  { // decrease depth and print
-		dec_depth();
-		DOWRITE;
-	}
-
-	LOGGER_FUNCTION(warn) {
-		auto depth_save = depth;
-		depth = 0;
+	template<typename... _Args>
+	void warn (std::format_string<_Args...> __fmt, _Args&&... __args) {
 		dowrite (make_message ("WARN: ", __fmt, std::forward<_Args>(__args)...), true);
-		depth = depth_save;
 	}
 
-	LOGGER_NORETURN_FUNCTION(fatal) {
-		depth = 0;
+	template<typename... _Args> [[noreturn]]
+	void fatal (std::format_string<_Args...> __fmt, _Args&&... __args) {
 		std::string msg = std::format (__fmt, std::forward<_Args>(__args)...);
 		dowrite (make_message ("ERROR: ", "{}", msg), true);
 		throw std::runtime_error (msg);
 	}
-
-#undef LOGGER_FUNCTION
-#undef DOWRITE
 
 };
 

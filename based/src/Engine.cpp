@@ -12,8 +12,8 @@ namespace Based {
 Logger log ("log.txt");
 
 Engine::Engine () : console (*this) {
-	log.write_inc ("Based Engine {}", BASED_VERSION);
-	log.write_dec ("Using {}, Sol {}", LUA_RELEASE, SOL_VERSION_STRING);
+	log.write ("Based Engine {}", BASED_VERSION);
+	log.write_depth (1, "Using {}, Sol {}", LUA_RELEASE, SOL_VERSION_STRING);
 }
 
 void Engine::enable_client () {

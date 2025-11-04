@@ -29,8 +29,8 @@ Window::Window (EngineClient& engineClient, const std::string &title, const Vec2
 	log.write ("OpenGL loader: glad {}", GLAD_GENERATOR_VERSION);
 	if (!gladLoadGL ((GLADloadfunc) SDL_GL_GetProcAddress))
 		log.fatal ("Failed to load OpenGL!");
-	log.write_inc ("OpenGL loaded: {}", (const char*) glGetString (GL_VERSION));
-	log.write_dec ("Render device: {}", (const char*) glGetString (GL_RENDERER));
+	log.write ("OpenGL loaded: {}", (const char*) glGetString (GL_VERSION));
+	log.write_depth (1, "Render device: {}", (const char*) glGetString (GL_RENDERER));
 
 	glClearColor (0, 0, 0, 1);
 	if (glGetError () != GL_NO_ERROR)
