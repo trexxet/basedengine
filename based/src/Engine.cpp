@@ -5,7 +5,7 @@
 
 #define _BASED_GLOBAL_IMPLEMENT
 #include "Logger.hpp"
-#include "ThreadLogger.hpp"
+#include "Thread/ThreadLogger.hpp"
 #undef _BASED_GLOBAL_IMPLEMENT
 
 namespace Based {

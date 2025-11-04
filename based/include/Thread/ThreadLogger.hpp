@@ -4,7 +4,7 @@
 
 #include "Defs.hpp"
 #include "Logger.hpp"
-#include "Thread.hpp"
+#include "Thread/Thread.hpp"
 
 namespace Based {
 

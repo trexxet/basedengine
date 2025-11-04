@@ -6,7 +6,7 @@
 #include "Defs.hpp"
 #include "EngineClient.hpp"
 #include "Scene.hpp"
-#include "Thread.hpp"
+#include "Thread/Thread.hpp"
 #include "Util/TPS.hpp"
 
 namespace Based {

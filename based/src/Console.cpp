@@ -1,8 +1,8 @@
 #include "Console.hpp"
 
 #include "Engine.hpp"
-#include "Thread.hpp"
-#include "ThreadNames.hpp"
+#include "Thread/Thread.hpp"
+#include "Thread/Names.hpp"
 
 namespace Based {
 

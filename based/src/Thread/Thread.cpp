@@ -1,10 +1,10 @@
-#include "Thread.hpp"
+#include "Thread/Thread.hpp"
 
 #include <exception>
 #include <stop_token>
 
 #include "Logger.hpp"
-#include "ThreadNames.hpp"
+#include "Thread/Names.hpp"
 
 namespace Based {
 

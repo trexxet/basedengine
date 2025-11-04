@@ -39,7 +39,6 @@ set(BASED_SOURCES
 	Engine.cpp
 	EngineClient.cpp
 	LuaFile.cpp
-	Thread.cpp
 	Window.cpp
 	GL/GL_Util.cpp
 	GL/Polygon.cpp
@@ -52,6 +51,7 @@ set(BASED_SOURCES
 	RML/Model.cpp
 	RML/DebugOverlay/Element.cpp
 	RML/DebugOverlay/Overlay.cpp
+	Thread/Thread.cpp
 	Util/AutocompleteTrie.cpp
 )
 list(TRANSFORM BASED_SOURCES PREPEND src/)
