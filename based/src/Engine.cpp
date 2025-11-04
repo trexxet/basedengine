@@ -14,6 +14,7 @@ Logger log ("log.txt");
 ThreadLogger threadlog;
 
 Engine::Engine () : console (*this) {
+	std::lock_guard lock (log.mtx);
 	log.write ("Based Engine {}", BASED_VERSION);
 	log.write_depth (1, "Using {}, Sol {}", LUA_RELEASE, SOL_VERSION_STRING);
 }

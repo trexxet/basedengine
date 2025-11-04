@@ -13,6 +13,7 @@ Thread::Thread (const std::string& name) : _name(name) {
 		ThreadManager::current = _name.c_str();
 		return;
 	}
+
 	t = std::jthread([this, name] (std::stop_token stop) {
 		ThreadManager::current = _name.c_str();
 
@@ -36,7 +37,7 @@ Thread::~Thread () {
 	if (name != BASED_MAIN_THREAD_NAME) {
 		t.request_stop();
 		cv.notify_one();
-		log.write ("Thread {} shutdown", name);
+		log.write ("Thread <{}> shutdown", name);
 	}
 }
 
@@ -47,12 +48,21 @@ Thread& ThreadManager::create (const std::string& name) {
 		auto [it, emplaced] = threadMap.try_emplace (name, name);
 		if (!emplaced)
 			log.fatal ("Thread {} already exists", name);
-		log.write ("Created thread {}", name);
+		log.write ("Created thread <{}>", name);
 		return it->second;
 	}
 	catch (const std::exception &e) {
-		log.fatal ("Failed to create thread {}", name);
+		log.fatal ("Failed to create thread <{}>", name);
 	}
+}
+
+bool ThreadManager::kill (const std::string& name) {
+	bool result = (bool) threadMap.erase (name);
+	if (result) [[likely]]
+		log.write ("Killed thread <{}>", name);
+	else
+		log.warn ("Failed to kill thread <{}>: no such thread", name);
+	return result;
 }
 
 ThreadManager::ThreadManager () {

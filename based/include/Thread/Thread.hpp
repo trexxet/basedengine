@@ -39,6 +39,7 @@ public:
 	static thread_local const char* current;
 
 	Thread& create (const std::string& name);
+	bool kill (const std::string& name);
 	inline Thread& operator[] (const std::string& name) {
 		return threadMap.at(name);
 	}

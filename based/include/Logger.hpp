@@ -1,11 +1,10 @@
 #pragma once
 
-// TODO: make Logger console flag more thread-safe
-
 #include <cstdint>
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
+#include <mutex>
 #include <print>
 #include <stdexcept>
 
@@ -42,6 +41,7 @@ class BASED_API Logger {
 	}
 
 public:
+	std::mutex mtx;
 	bool console = false;
 
 	Logger (const char *filename) : name(filename) {

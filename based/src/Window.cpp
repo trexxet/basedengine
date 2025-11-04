@@ -11,6 +11,7 @@ namespace Based {
 Window::Window (EngineClient& engineClient, const std::string &title, const Vec2D<int>& size, const Flags flags)
 	: engineClient (engineClient), flags (flags), debugOverlay (*this)
 {
+	std::lock_guard lock (log.mtx);
 	sdlWindow  = SDL_CreateWindow (title.c_str(), size.x, size.y, SDL_WINDOW_OPENGL);
 	if (!sdlWindow)
 		log.fatal ("Window \"{}\" could not be created!", title);
