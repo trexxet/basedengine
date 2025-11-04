@@ -6,7 +6,6 @@
 #define _BASED_GLOBAL_IMPLEMENT
 #include "Logger.hpp"
 #undef _BASED_GLOBAL_IMPLEMENT
-#include <iostream>
 
 namespace Based {
 
@@ -15,9 +14,6 @@ Logger log ("log.txt");
 Engine::Engine () : console (*this) {
 	log.write_inc ("Based Engine {}", BASED_VERSION);
 	log.write_dec ("Using {}, Sol {}", LUA_RELEASE, SOL_VERSION_STRING);
-
-	threadManager.create("test");
-	threadManager["test"].assign([](const std::stop_token&) { std::cout << "TEST THREAD"; });
 }
 
 void Engine::enable_client () {

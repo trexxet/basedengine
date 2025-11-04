@@ -4,8 +4,7 @@
 #include <stop_token>
 
 #include "Logger.hpp"
-
-#define BASED_MAIN_THREAD_NAME "based::mainThread"
+#include "ThreadNames.hpp"
 
 namespace Based {
 

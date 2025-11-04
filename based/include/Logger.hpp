@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: make Logger more thread-safe (depth etc.)
+
 #include <cstdint>
 #include <cstdlib>
 #include <cstdio>
